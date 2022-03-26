@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@wfw3p1)%ub%a0&8uwfvvux@c9d(tpyadx$kk(i9)_133cb8%g"
+SECRET_KEY = os.environ.get("WINDA_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("WINDA_DEBUG_VALUE")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["winda-database.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -119,8 +119,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "dcjm1j65n022fd",
+        "USER": "dclufubilsijtx",
+        "HOST": "ec2-44-194-92-192.compute-1.amazonaws.com:5432",
+        "PORT": 5432,
+        "PASSWORD": "77a8626f3431b82866dea3a993f33dcc380f8115ca8351281f88c7c225dd9399",
     }
 }
 
