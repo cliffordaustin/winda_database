@@ -122,7 +122,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "dcjm1j65n022fd",
         "USER": "dclufubilsijtx",
-        "HOST": "ec2-44-194-92-192.compute-1.amazonaws.com:5432",
+        "HOST": "ec2-44-194-92-192.compute-1.amazonaws.com",
         "PORT": 5432,
         "PASSWORD": "77a8626f3431b82866dea3a993f33dcc380f8115ca8351281f88c7c225dd9399",
     }
