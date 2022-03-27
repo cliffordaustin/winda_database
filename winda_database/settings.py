@@ -119,14 +119,15 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "dcknj071il65c9",
-        "USER": "zrpmzzpdztmavn",
-        "HOST": "ec2-52-73-155-171.compute-1.amazonaws.com",
-        "PORT": 5432,
-        "PASSWORD": "7f6f9e805284e71e8f5bce3db4cce66242d67d864266d662a4ccb59f91aaf747",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+
+import dj_database_url
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES["default"].update(db_from_env)
 
 
 # Password validation
