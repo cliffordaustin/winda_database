@@ -120,11 +120,11 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "dcjm1j65n022fd",
-        "USER": "dclufubilsijtx",
-        "HOST": "ec2-44-194-92-192.compute-1.amazonaws.com",
+        "NAME": "dcknj071il65c9",
+        "USER": "zrpmzzpdztmavn",
+        "HOST": "ec2-52-73-155-171.compute-1.amazonaws.com",
         "PORT": 5432,
-        "PASSWORD": "77a8626f3431b82866dea3a993f33dcc380f8115ca8351281f88c7c225dd9399",
+        "PASSWORD": "7f6f9e805284e71e8f5bce3db4cce66242d67d864266d662a4ccb59f91aaf747",
     }
 }
 
