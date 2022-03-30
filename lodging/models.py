@@ -6,17 +6,22 @@ from imagekit.processors import ResizeToFill
 from core.utils import lodge_image_thumbnail
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
+
 PRICING_TYPE = (
     ("PER PERSON", "PER PERSON"),
     ("PER ROOM", "PER ROOM"),
     ("WHOLE PLACE", "WHOLE PLACE"),
 )
 
+TYPE_OF_STAY = (("LODGE", "LODGE"), ("HOUSE", "HOUSE"), ("UNIQUE SPACE", "UNIQUE SPACE"), ("CAMPSITE", "CAMPSITE"),
+                ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"))
+
 
 class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True)
     name = models.CharField(max_length=250)
+    type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
     type_of_lodge = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
