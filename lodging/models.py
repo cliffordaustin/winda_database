@@ -23,19 +23,19 @@ class Stays(models.Model):
     name = models.CharField(max_length=250)
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
     best_describes_lodge = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True), default=list
+        models.CharField(max_length=500, blank=True, null=True), blank=True, null=True, default=list
     )
     best_describes_house = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True), default=list
+        models.CharField(max_length=500, blank=True, null=True), blank=True, null=True, default=list
     )
     best_describes_unique_space = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True), default=list
+        models.CharField(max_length=500, blank=True, null=True), blank=True, null=True, default=list
     )
     best_describes_campsite = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True), default=list
+        models.CharField(max_length=500, blank=True, null=True), blank=True, null=True, default=list
     )
     best_describes_boutique_hotel = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True), default=list
+        models.CharField(max_length=500, blank=True, null=True), blank=True, null=True, default=list
     )
     location = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -48,7 +48,7 @@ class Stays(models.Model):
         max_length=100, choices=ROOM_IS_ENSUITE, blank=True
     )
     amenities = ArrayField(
-        models.CharField(max_length=250, blank=True, null=True), default=list
+        models.CharField(max_length=250, blank=True, null=True), blank=True, null=True, default=list
     )
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
