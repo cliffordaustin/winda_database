@@ -22,19 +22,19 @@ class Stays(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True)
     name = models.CharField(max_length=250)
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
-    type_of_lodge = ArrayField(
+    best_describes_lodge = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
-    type_of_house = ArrayField(
+    best_describes_house = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
-    type_of_unique_space = ArrayField(
+    best_describes_unique_space = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
-    type_of_campsite = ArrayField(
+    best_describes_campsite = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
-    type_of_boutique_hotel = ArrayField(
+    best_describes_boutique_hotel = ArrayField(
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
     location = models.CharField(max_length=350, blank=True, null=True)
