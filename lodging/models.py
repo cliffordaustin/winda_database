@@ -19,7 +19,7 @@ TYPE_OF_STAY = (("LODGE", "LODGE"), ("HOUSE", "HOUSE"), ("UNIQUE SPACE", "UNIQUE
 
 class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    slug = models.SlugField(max_length=255, blank=True, null=True)
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     name = models.CharField(max_length=250)
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
     best_describes_lodge = ArrayField(
