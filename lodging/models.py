@@ -34,6 +34,8 @@ class Stays(models.Model):
         models.CharField(max_length=500, blank=True, null=True), default=list
     )
     location = models.CharField(max_length=350, blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
     num_of_capacity = models.IntegerField(blank=True, null=True)
     rooms = models.IntegerField(blank=True, null=True)
     beds = models.IntegerField(blank=True, null=True)
