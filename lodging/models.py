@@ -44,9 +44,7 @@ class Stays(models.Model):
     rooms = models.IntegerField(blank=True, null=True)
     beds = models.IntegerField(blank=True, null=True)
     bathrooms = models.IntegerField(blank=True, null=True)
-    room_is_ensuite = models.CharField(
-        max_length=100, choices=ROOM_IS_ENSUITE, blank=True
-    )
+    room_is_ensuite = models.BooleanField(default=False)
     amenities = ArrayField(
         models.CharField(max_length=250, blank=True, null=True), blank=True, null=True, default=list
     )
@@ -74,6 +72,19 @@ class StayImage(models.Model):
         format="JPEG",
         options={"quality": 60},
     )
+    main = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            saved_image = self.image
+            self.image = None
+            super(StayImage, self).save(*args, **kwargs)
+
+            self.image = saved_image
+            if "force_insert" in kwargs:
+                kwargs.pop("force_insert")
+
+        super(StayImage, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.stay.user} - {self.stay.name}"
