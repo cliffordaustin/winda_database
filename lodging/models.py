@@ -5,7 +5,6 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from core.utils import lodge_image_thumbnail
 
-
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 PRICING_TYPE = (
     ("PER PERSON", "PER PERSON"),
