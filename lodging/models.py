@@ -4,6 +4,7 @@ from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from core.utils import lodge_image_thumbnail
+from django.utils import timezone
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 
@@ -54,6 +55,7 @@ class Stays(models.Model):
     pricing_per_person = models.IntegerField(blank=True, null=True)
     pricing_per_room = models.IntegerField(blank=True, null=True)
     pricing_per_whole_place = models.IntegerField(blank=True, null=True)
+    date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user} - {self.name}"
