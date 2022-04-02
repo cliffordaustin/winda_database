@@ -16,3 +16,7 @@ def profile_image_thumbnail(instance, filename):
 
 def lodge_image_thumbnail(instance, filename):
     return f"lodge_images/{instance.id}/{filename}"
+
+
+def activities_image_thumbnail(instance, filename):
+    return f"lodge_images/{instance.id}/{filename}"

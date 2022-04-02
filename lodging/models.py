@@ -21,9 +21,10 @@ TYPE_OF_STAY = (("LODGE", "LODGE"), ("HOUSE", "HOUSE"), ("UNIQUE SPACE", "UNIQUE
 class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
-    name = models.CharField(max_length=250,
+    name = models.CharField(max_length=100,
                             help_text="If no name, enter a short description of the " +
-                                      "accommodation. Eg A lovely place located at the lake side"
+                                      "accommodation. Eg A lovely place located at the lake side",
+                            verbose_name="Name or description"
                             )
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
     best_describes_lodge = ArrayField(
@@ -49,7 +50,7 @@ class Stays(models.Model):
     location = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
-    num_of_capacity = models.IntegerField(blank=True, null=True)
+    capacity = models.IntegerField(blank=True, null=True)
     rooms = models.IntegerField(blank=True, null=True)
     beds = models.IntegerField(blank=True, null=True)
     bathrooms = models.IntegerField(blank=True, null=True)
@@ -64,7 +65,7 @@ class Stays(models.Model):
     pricing_per_person = models.IntegerField(blank=True, null=True)
     pricing_per_room = models.IntegerField(blank=True, null=True)
     pricing_per_whole_place = models.IntegerField(blank=True, null=True)
-    date_posted = models.DateTimeField(default=timezone.now)
+    date_posted = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
         return f"{self.user} - {self.name}"

@@ -49,10 +49,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
     profile_pic = ProcessedImageField(
         upload_to=profile_image_thumbnail,
-        default="profile_images/default_profile_pic.png",
         processors=[ResizeToFill(700, 450)],
         format="JPEG",
         options={"quality": 60},
+        blank=True,
+        null=True
     )
 
     USERNAME_FIELD = "email"
