@@ -37,10 +37,12 @@ class StaysSerializer(serializers.ModelSerializer):
             ip = x_forwarded_for_s.split(",")[-1].strip()
 
         else:
-            url = "http://ipinfo.io/json"
-            response = urlopen(url)
-            data = json.load(response)
-            ip = data["ip"]
+            # url = "http://ipinfo.io/json"
+            # response = urlopen(url)
+            # data = json.load(response)
+            # ip = data["ip"]
+
+            ip = ""
 
         # client_ip, _ = get_client_ip(request)
 
@@ -56,11 +58,6 @@ class StaysSerializer(serializers.ModelSerializer):
         # response = urlopen(url)
         # data = json.load(response)
         # ip = data["ip"]
-
-        # u = miniupnpc.UPnP()
-        # u.discoverdelay = 200
-        # u.discover()
-        # u.selectigd()
 
         # # ip = requests.get("https://api.ipify.org").content.decode("utf8")
 
