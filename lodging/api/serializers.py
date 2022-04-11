@@ -39,18 +39,10 @@ class StaysSerializer(serializers.ModelSerializer):
         loc = geocoder.ipinfo(ip)
         loc = loc.latlng
 
-        # latitiude = loc[0]
-        # longitute = loc[1]
+        latitiude = loc[0]
+        longitute = loc[1]
 
-        # user_loc = (latitiude, longitute)
-        # stay_loc = (obj.latitude, obj.longitude)
+        user_loc = (latitiude, longitute)
+        stay_loc = (obj.latitude, obj.longitude)
 
-        print(loc)
-
-        return loc
-
-        # return geodesic(user_loc, stay_loc).km
-
-        # ip = self.get_user_ip(self.context["request"])
-
-        # return ip
+        return geodesic(user_loc, stay_loc).km
