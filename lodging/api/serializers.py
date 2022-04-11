@@ -1,8 +1,10 @@
+import string
 from rest_framework import serializers
 from lodging.models import Stays, StayImage
 from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
+import geocoder
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -25,22 +27,25 @@ class StaysSerializer(serializers.ModelSerializer):
         if x_forwarded_for:
             ip = x_forwarded_for.split(",")[-1].strip()
         else:
-            ip = request.META.get("REMOTE_ADDR")
+            url = "http://ipinfo.io/json"
+            response = urlopen(url)
+            data = json.load(response)
+            ip = data["ip"]
+
         return ip
 
     def get_user_distance(self, obj):
-        url = "http://ipinfo.io/json"
-        response = urlopen(url)
-        data = json.load(response)
-        loc = data["loc"]
+        ip = self.get_user_ip(self.context["request"])
+        loc = geocoder.ipinfo(ip)
+        loc = loc.latlng
 
-        location = loc.split(",")
+        # latitiude = loc[0]
+        # longitute = loc[1]
 
-        latitiude = float(location[0])
-        longitute = float(location[1])
+        # user_loc = (latitiude, longitute)
+        # stay_loc = (obj.latitude, obj.longitude)
 
-        user_loc = (latitiude, longitute)
-        stay_loc = (obj.latitude, obj.longitude)
+        print(loc)
 
         return loc
 
