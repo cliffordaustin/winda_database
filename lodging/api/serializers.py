@@ -44,6 +44,6 @@ class StaysSerializer(serializers.ModelSerializer):
 
         # return geodesic(user_loc, stay_loc).km
 
-        ip = self.get_user_ip(self.request)
+        ip = self.get_user_ip(self.context["request"])
 
         return ip
