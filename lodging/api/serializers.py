@@ -36,13 +36,15 @@ class StaysSerializer(serializers.ModelSerializer):
 
     def get_user_distance(self, obj):
         ip = self.get_user_ip(self.context["request"])
-        loc = geocoder.ipinfo(ip)
-        loc = loc.latlng
+        # loc = geocoder.ipinfo(ip)
+        # loc = loc.latlng
 
-        latitiude = loc[0]
-        longitute = loc[1]
+        # latitiude = loc[0]
+        # longitute = loc[1]
 
-        user_loc = (latitiude, longitute)
-        stay_loc = (obj.latitude, obj.longitude)
+        # user_loc = (latitiude, longitute)
+        # stay_loc = (obj.latitude, obj.longitude)
 
-        return geodesic(user_loc, stay_loc).km
+        # return geodesic(user_loc, stay_loc).km
+
+        return ip
