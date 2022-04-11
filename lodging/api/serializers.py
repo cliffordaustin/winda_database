@@ -35,15 +35,22 @@ class StaysSerializer(serializers.ModelSerializer):
         #     data = json.load(response)
         #     ip = data["ip"]
 
-        client_ip, _ = get_client_ip(request)
+        # client_ip, _ = get_client_ip(request)
 
-        if client_ip is None:
-            return ""
+        # if client_ip is None:
+        #     return ""
 
-        else:
-            return client_ip
+        # else:
+        #     return client_ip
         # host_name = socket.gethostname()
         # ip = socket.gethostbyname(host_name)  # Get local machine ip
+
+        url = "http://ipinfo.io/json"
+        response = urlopen(url)
+        data = json.load(response)
+        ip = data["ip"]
+
+        return ip
 
     def get_user_distance(self, obj):
         ip = self.get_user_ip(self.context["request"])
