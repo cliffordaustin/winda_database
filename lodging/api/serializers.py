@@ -28,13 +28,9 @@ class StaysSerializer(serializers.ModelSerializer):
 
     def get_user_ip(self, request):
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        x_forwarded_for_s = request.META.get("HTTPS_X_FORWARDED_FOR")
 
         if x_forwarded_for:
             ip = x_forwarded_for.split(",")[-1].strip()
-
-        elif x_forwarded_for_s:
-            ip = x_forwarded_for_s.split(",")[-1].strip()
 
         else:
             # url = "http://ipinfo.io/json"
