@@ -9,6 +9,7 @@ import socket
 from ipware import get_client_ip
 import whatismyip
 import requests
+import miniupnpc
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -27,15 +28,20 @@ class StaysSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_user_ip(self, request):
-        # x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        # print(x_forwarded_for)
-        # if x_forwarded_for:
-        #     ip = x_forwarded_for.split(",")[-1].strip()
-        # else:
-        #     url = "http://ipinfo.io/json"
-        #     response = urlopen(url)
-        #     data = json.load(response)
-        #     ip = data["ip"]
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+        x_forwarded_for_s = request.META.get("HTTPS_X_FORWARDED_FOR")
+
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(",")[-1].strip()
+
+        elif x_forwarded_for_s:
+            ip = x_forwarded_for_s.split(",")[-1].strip()
+
+        else:
+            url = "http://ipinfo.io/json"
+            response = urlopen(url)
+            data = json.load(response)
+            ip = data["ip"]
 
         # client_ip, _ = get_client_ip(request)
 
@@ -52,7 +58,14 @@ class StaysSerializer(serializers.ModelSerializer):
         # data = json.load(response)
         # ip = data["ip"]
 
-        ip = requests.get("https://api.ipify.org").content.decode("utf8")
+        # u = miniupnpc.UPnP()
+        # u.discoverdelay = 200
+        # u.discover()
+        # u.selectigd()
+
+        # # ip = requests.get("https://api.ipify.org").content.decode("utf8")
+
+        # ip = u.externalipaddress()
 
         return ip
 
