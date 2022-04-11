@@ -5,6 +5,7 @@ from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
 import geocoder
+import socket
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -23,14 +24,17 @@ class StaysSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_user_ip(self, request):
-        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(",")[-1].strip()
-        else:
-            url = "http://ipinfo.io/json"
-            response = urlopen(url)
-            data = json.load(response)
-            ip = data["ip"]
+        # x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+        # if x_forwarded_for:
+        #     ip = x_forwarded_for.split(",")[-1].strip()
+        # else:
+        #     url = "http://ipinfo.io/json"
+        #     response = urlopen(url)
+        #     data = json.load(response)
+        #     ip = data["ip"]
+
+        host_name = socket.gethostname()
+        ip = socket.gethostbyname(host_name)  # Get local machine ip
 
         return ip
 
