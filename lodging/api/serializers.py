@@ -20,18 +20,30 @@ class StaysSerializer(serializers.ModelSerializer):
         model = Stays
         fields = "__all__"
 
+    def get_user_ip(self, request):
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(",")[-1].strip()
+        else:
+            ip = request.META.get("REMOTE_ADDR")
+        return ip
+
     def get_user_distance(self, obj):
-        url = "http://ipinfo.io/json"
-        response = urlopen(url)
-        data = json.load(response)
-        loc = data["loc"]
+        # url = "http://ipinfo.io/json"
+        # response = urlopen(url)
+        # data = json.load(response)
+        # loc = data["loc"]
 
-        location = loc.split(",")
+        # location = loc.split(",")
 
-        latitiude = float(location[0])
-        longitute = float(location[1])
+        # latitiude = float(location[0])
+        # longitute = float(location[1])
 
-        user_loc = (latitiude, longitute)
-        stay_loc = (obj.latitude, obj.longitude)
+        # user_loc = (latitiude, longitute)
+        # stay_loc = (obj.latitude, obj.longitude)
 
-        return geodesic(user_loc, stay_loc).km
+        # return geodesic(user_loc, stay_loc).km
+
+        ip = self.get_user_ip(self.request)
+
+        return ip
