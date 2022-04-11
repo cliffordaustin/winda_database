@@ -7,6 +7,7 @@ from geopy.distance import geodesic
 import geocoder
 import socket
 from ipware import get_client_ip
+import whatismyip
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -45,10 +46,12 @@ class StaysSerializer(serializers.ModelSerializer):
         # host_name = socket.gethostname()
         # ip = socket.gethostbyname(host_name)  # Get local machine ip
 
-        url = "http://ipinfo.io/json"
-        response = urlopen(url)
-        data = json.load(response)
-        ip = data["ip"]
+        # url = "http://ipinfo.io/json"
+        # response = urlopen(url)
+        # data = json.load(response)
+        # ip = data["ip"]
+
+        ip = whatismyip.whatismyip()
 
         return ip
 
