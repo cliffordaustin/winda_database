@@ -9,7 +9,6 @@ import socket
 from ipware import get_client_ip
 import whatismyip
 import requests
-import miniupnpc
 
 
 class StayImageSerializer(serializers.ModelSerializer):
