@@ -52,7 +52,7 @@ class StaysSerializer(serializers.ModelSerializer):
         # data = json.load(response)
         # ip = data["ip"]
 
-        ip = requests.get("http://wtfismyip.com/text").text
+        ip = requests.get("https://api.ipify.org").content.decode("utf8")
 
         return ip
 
