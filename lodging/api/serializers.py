@@ -8,6 +8,7 @@ import geocoder
 import socket
 from ipware import get_client_ip
 import whatismyip
+import requests
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -51,7 +52,7 @@ class StaysSerializer(serializers.ModelSerializer):
         # data = json.load(response)
         # ip = data["ip"]
 
-        ip = whatismyip.whatismyip()
+        ip = requests.get("http://wtfismyip.com/text").text
 
         return ip
 
