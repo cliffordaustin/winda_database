@@ -86,9 +86,7 @@ class Stays(models.Model):
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
     pricing_type = models.CharField(max_length=100, choices=PRICING_TYPE, blank=True)
-    pricing_per_person = models.IntegerField(blank=True, null=True)
-    pricing_per_room = models.IntegerField(blank=True, null=True)
-    pricing_per_whole_place = models.IntegerField(blank=True, null=True)
+    price = models.FloatField(blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
