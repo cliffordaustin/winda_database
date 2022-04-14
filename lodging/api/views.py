@@ -6,6 +6,8 @@ from rest_framework.exceptions import PermissionDenied
 from .permissions import IsUserStayInstance, ObjectPermission
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from .filterset import StayFilter
+from django.db.models import Q
 
 
 class StaysCreateView(generics.CreateAPIView):
@@ -34,6 +36,7 @@ class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
 class StaysListView(generics.ListAPIView):
     serializer_class = StaysSerializer
     queryset = Stays.objects.all()
+    filterset_class = StayFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
         "date_posted",
