@@ -15,7 +15,7 @@ def multiple_search(queryset, name, value):
     return queryset
 
 
-class ItemInFilter(filters.BaseInFilter, filters.CharFilter):
+class CharInFilter(filters.BaseInFilter, filters.CharFilter):
 
     pass
 
@@ -29,9 +29,7 @@ class StayFilter(filters.FilterSet):
     max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
     min_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="gte")
     max_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="lte")
-    type_of_stay = filters.ChoiceFilter(
-        field_name="type_of_stay", lookup_expr="icontains", choices=TYPE_OF_STAY
-    )
+    type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
     # amenities = filters.CharFilter(field_name="amenities", lookup_expr="icontains")
 
     class Meta:
