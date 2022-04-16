@@ -82,7 +82,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = ["https://winda-guide.vercel.app/"]
 
 ROOT_URLCONF = "winda_database.urls"
 
