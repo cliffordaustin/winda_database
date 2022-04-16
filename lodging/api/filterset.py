@@ -6,11 +6,11 @@ from django.db.models import Q
 
 def multiple_search(queryset, name, value):
     queryset = queryset.filter(
-        Q(best_describes_lodge__in=value)
-        | Q(best_describes_house__in=value)
-        | Q(best_describes_unique_space__in=value)
-        | Q(best_describes_campsite__in=value)
-        | Q(best_describes_boutique_hotel__in=value)
+        Q(best_describes_lodge__overlap=value)
+        | Q(best_describes_house__overlap=value)
+        | Q(best_describes_unique_space__overlap=value)
+        | Q(best_describes_campsite__overlap=value)
+        | Q(best_describes_boutique_hotel__overlap=value)
     )
     return queryset
 
@@ -20,7 +20,7 @@ class CharInFilter(filters.BaseInFilter, filters.CharFilter):
     pass
 
 
-class NumberInFilter(filters.BaseCSVFilter, filters.NumberFilter):
+class NumberInFilter(filters.BaseInFilter, filters.CharFilter):
     pass
 
 
@@ -30,7 +30,11 @@ class StayFilter(filters.FilterSet):
     min_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="gte")
     max_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="lte")
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
-    # amenities = filters.CharFilter(field_name="amenities", lookup_expr="icontains")
+    theme = CharInFilter(label="Travel Theme", method=multiple_search)
+    amenities = CharInFilter(field_name="ammenities", lookup_expr="overlap")
+    # theme = CharInFilter(
+    #     field_name="best_describes_house", lookups=["overlap", "icontains"]
+    # )
 
     class Meta:
         model = Stays
@@ -40,5 +44,6 @@ class StayFilter(filters.FilterSet):
             "min_rooms",
             "max_rooms",
             "type_of_stay",
-            # "amenities",
+            "theme",
+            "amenities",
         ]
