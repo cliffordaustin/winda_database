@@ -71,18 +71,17 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # My middleware
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = ["https://winda-guide.vercel.app/"]
+CORS_ALLOWED_ORIGINS = ["https://winda-guide.vercel.app/", "http://localhost:3000/"]
 
 ROOT_URLCONF = "winda_database.urls"
 
