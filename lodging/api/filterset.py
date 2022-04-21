@@ -2,6 +2,10 @@ from django_filters import rest_framework as filters
 from rest_framework import fields
 from lodging.models import Stays, TYPE_OF_STAY, PRICING_TYPE
 from django.db.models import Q
+from lodging.models import Review
+
+
+RATES = (("1", "1"), ("2", "2"), ("3" "3"), ("4", "4"), ("5", "5"))
 
 
 def multiple_search(queryset, name, value):
@@ -47,3 +51,11 @@ class StayFilter(filters.FilterSet):
             "theme",
             "amenities",
         ]
+
+
+class ReviewFilter(filters.FilterSet):
+    rate = filters.ChoiceFilter(field_name="rate", choices=RATES)
+
+    class Meta:
+        model = Review
+        fields = ["rate"]

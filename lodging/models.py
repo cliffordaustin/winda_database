@@ -5,6 +5,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from core.utils import lodge_image_thumbnail
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 
@@ -124,9 +125,25 @@ class StayImage(models.Model):
         return f"{self.stay.user} - {self.stay.name}"
 
 
-# class UserLocation(models.Model):
-#     user_ip = models.TextField(default=None)
-#     stay = models.ForeignKey(Stays, related_name="location", on_delete=models.CASCADE)
+class Views(models.Model):
+    user_ip = models.TextField(default=None)
+    stay = models.ForeignKey(Stays, related_name="views", on_delete=models.CASCADE)
 
-#     def __str__(self):
-#         return f"{ self.stay.name }"
+    def __str__(self):
+        return f"{ self.stay.user }"
+
+    class Meta:
+        verbose_name = "Stay Views"
+
+
+class Review(models.Model):
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rate = models.IntegerField(
+        blank=True, null=True, validators=(MinValueValidator(0), MaxValueValidator(5))
+    )
+    message = models.CharField(max_length=500, blank=True, null=True)
+    date_posted = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.rate)
