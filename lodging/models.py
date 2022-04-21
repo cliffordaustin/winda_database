@@ -139,7 +139,7 @@ class Views(models.Model):
 class Review(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    rate = models.IntegerField(
+    rate = models.FloatField(
         blank=True, null=True, validators=(MinValueValidator(0), MaxValueValidator(5))
     )
     message = models.CharField(max_length=500, blank=True, null=True)
