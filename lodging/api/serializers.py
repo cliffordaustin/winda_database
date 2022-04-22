@@ -22,6 +22,7 @@ class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)
     is_user_stay = serializers.SerializerMethodField()
+    has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
 
     class Meta:
@@ -38,6 +39,15 @@ class StaysSerializer(serializers.ModelSerializer):
 
     def get_views(self, instance):
         return instance.views.count()
+
+    def get_has_user_reviewed(self, instance):
+        request = self.context.get("request")
+        try:
+            has_user_reviewed = True if instance.reviews.filter(
+                user=request.user).exists() else False
+        except:
+            has_user_reviewed = False
+        return has_user_reviewed
 
 
 class StayViewsSerializer(serializers.ModelSerializer):
