@@ -142,8 +142,9 @@ class Review(models.Model):
     rate = models.IntegerField(
         blank=True, null=True, validators=(MinValueValidator(0), MaxValueValidator(5))
     )
-    message = models.CharField(max_length=500, blank=True, null=True)
+    title = models.CharField(max_length=120, blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
     date_posted = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return str(self.rate)
+        return str(self.rate) + " - " + str(self.title)
