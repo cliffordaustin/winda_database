@@ -55,6 +55,13 @@ class Stays(models.Model):
         default=list,
         help_text="Separate each description by using ' , '. Eg Boathouse, Bus",
     )
+    essential_information = ArrayField(
+        models.CharField(max_length=500, blank=True, null=True),
+        blank=True,
+        null=True,
+        default=list,
+        help_text="Separate each essential information by using ' , '. Eg Covid-19 compliance",
+    )
     best_describes_campsite = ArrayField(
         models.CharField(max_length=500, blank=True, null=True),
         blank=True,

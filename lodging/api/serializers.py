@@ -10,6 +10,7 @@ from ipware import get_client_ip
 import whatismyip
 import requests
 from lodging.models import Review
+from django.db.models import Sum
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -24,6 +25,34 @@ class StaysSerializer(serializers.ModelSerializer):
     is_user_stay = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
+    num_of_five_Stars = serializers.SerializerMethodField()
+    num_of_four_Stars = serializers.SerializerMethodField()
+    num_of_three_Stars = serializers.SerializerMethodField()
+    num_of_two_Stars = serializers.SerializerMethodField()
+    num_of_one_Stars = serializers.SerializerMethodField()
+    total_num_of_reviews = serializers.SerializerMethodField()
+    count_total_review_rates = serializers.SerializerMethodField()
+
+    def get_count_total_review_rates(self, instance):
+        return instance.reviews.aggregate(Sum("rate"))["rate__sum"]
+
+    def get_total_num_of_reviews(self, instance):
+        return instance.reviews.count()
+
+    def get_num_of_one_Stars(self, instance):
+        return instance.reviews.filter(rate=1).count()
+
+    def get_num_of_two_Stars(self, instance):
+        return instance.reviews.filter(rate=2).count()
+
+    def get_num_of_three_Stars(self, instance):
+        return instance.reviews.filter(rate=3).count()
+
+    def get_num_of_four_Stars(self, instance):
+        return instance.reviews.filter(rate=4).count()
+
+    def get_num_of_five_Stars(self, instance):
+        return instance.reviews.filter(rate=5).count()
 
     class Meta:
         model = Stays
@@ -43,8 +72,9 @@ class StaysSerializer(serializers.ModelSerializer):
     def get_has_user_reviewed(self, instance):
         request = self.context.get("request")
         try:
-            has_user_reviewed = True if instance.reviews.filter(
-                user=request.user).exists() else False
+            has_user_reviewed = (
+                True if instance.reviews.filter(user=request.user).exists() else False
+            )
         except:
             has_user_reviewed = False
         return has_user_reviewed

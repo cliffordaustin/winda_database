@@ -97,7 +97,7 @@ class StayImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ReviewListView(generics.ListAPIView):
     serializer_class = ReviewSerializer
     filterset_class = ReviewFilter
-    pagination_class = None
+    # pagination_class = None
 
     def get_queryset(self):
         queryset = Review.objects.all()
