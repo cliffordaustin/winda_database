@@ -25,11 +25,11 @@ class StaysSerializer(serializers.ModelSerializer):
     is_user_stay = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
-    num_of_five_Stars = serializers.SerializerMethodField()
-    num_of_four_Stars = serializers.SerializerMethodField()
-    num_of_three_Stars = serializers.SerializerMethodField()
-    num_of_two_Stars = serializers.SerializerMethodField()
-    num_of_one_Stars = serializers.SerializerMethodField()
+    num_of_five_stars = serializers.SerializerMethodField()
+    num_of_four_stars = serializers.SerializerMethodField()
+    num_of_three_stars = serializers.SerializerMethodField()
+    num_of_two_stars = serializers.SerializerMethodField()
+    num_of_one_stars = serializers.SerializerMethodField()
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
 
@@ -39,19 +39,19 @@ class StaysSerializer(serializers.ModelSerializer):
     def get_total_num_of_reviews(self, instance):
         return instance.reviews.count()
 
-    def get_num_of_one_Stars(self, instance):
+    def get_num_of_one_stars(self, instance):
         return instance.reviews.filter(rate=1).count()
 
-    def get_num_of_two_Stars(self, instance):
+    def get_num_of_two_stars(self, instance):
         return instance.reviews.filter(rate=2).count()
 
-    def get_num_of_three_Stars(self, instance):
+    def get_num_of_three_stars(self, instance):
         return instance.reviews.filter(rate=3).count()
 
-    def get_num_of_four_Stars(self, instance):
+    def get_num_of_four_stars(self, instance):
         return instance.reviews.filter(rate=4).count()
 
-    def get_num_of_five_Stars(self, instance):
+    def get_num_of_five_stars(self, instance):
         return instance.reviews.filter(rate=5).count()
 
     class Meta:
