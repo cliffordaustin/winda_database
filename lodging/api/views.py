@@ -1,3 +1,4 @@
+from lodging.api.pagination import Pagination
 from .serializers import StayViewsSerializer, StaysSerializer, StayImageSerializer
 from lodging.models import Stays, StayImage, Views
 from rest_framework import generics
@@ -97,7 +98,7 @@ class StayImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ReviewListView(generics.ListAPIView):
     serializer_class = ReviewSerializer
     filterset_class = ReviewFilter
-    # pagination_class = None
+    pagination_class = Pagination
 
     def get_queryset(self):
         queryset = Review.objects.all()
