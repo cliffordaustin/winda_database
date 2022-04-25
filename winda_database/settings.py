@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,6 +83,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = ["https://winda-guide.vercel.app", "http://localhost:3000"]
+
+CORS_ALLOW_HEADERS = list(default_headers) + ["count", "page_size", "next", "previous"]
 
 ROOT_URLCONF = "winda_database.urls"
 
