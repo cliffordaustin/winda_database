@@ -1,6 +1,11 @@
 from lodging.api.pagination import Pagination
-from .serializers import StayViewsSerializer, StaysSerializer, StayImageSerializer
-from lodging.models import Stays, StayImage, Views
+from .serializers import (
+    CartSerializer,
+    StayViewsSerializer,
+    StaysSerializer,
+    StayImageSerializer,
+)
+from lodging.models import Cart, Stays, StayImage, Views
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -12,6 +17,9 @@ from django.db.models import Q
 from lodging.models import Review
 from .serializers import ReviewSerializer
 from rest_framework.validators import ValidationError
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import generics, serializers, status
 
 
 class StaysCreateView(generics.CreateAPIView):
@@ -169,3 +177,36 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
             queryset = Review.objects.filter(stay=stay)
 
         return queryset
+
+
+class CartItemAPIView(APIView):
+    serializer_class = CartSerializer
+
+    permission_classes = [IsAuthenticated, ObjectPermission]
+
+    def post(self, request, stay_slug, pk=None):
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+        cart = Cart.objects.create(user=request.user, stay=stay)
+        cart.save()
+
+        serializer_context = {"request": request}
+        serializer = self.serializer_class(cart, context=serializer_context)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CartListView(generics.ListAPIView):
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+
+class CartDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CartSerializer
+
+    permission_classes = [IsAuthenticated, ObjectPermission]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)

@@ -143,6 +143,16 @@ class Views(models.Model):
         verbose_name = "Stay Views"
 
 
+class Cart(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user"
+    )
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="stay")
+
+    def __str__(self):
+        return f"{self.stay.name}"
+
+
 class Review(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -1,6 +1,6 @@
 import string
 from rest_framework import serializers
-from lodging.models import Stays, StayImage, Views
+from lodging.models import Cart, Stays, StayImage, Views
 from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
@@ -84,6 +84,15 @@ class StayViewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Views
         exclude = ["stay"]
+
+
+class CartSerializer(serializers.ModelSerializer):
+    stay = StaysSerializer(read_only=True)
+
+    class Meta:
+        model = Cart
+        exclude = ["user"]
+        read_only_fields = ("ordered",)
 
 
 class ReviewSerializer(serializers.ModelSerializer):

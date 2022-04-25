@@ -10,6 +10,9 @@ from .views import (
     ReviewDetailView,
     ReviewListView,
     CreateStayViews,
+    CartListView,
+    CartDetailView,
+    CartItemAPIView,
 )
 
 
@@ -48,4 +51,11 @@ urlpatterns = [
         ReviewCreateView.as_view(),
         name="reviews-create",
     ),
+    path("stays/<stay_slug>/add-to-cart/", CartItemAPIView.as_view(), name="add-cart"),
+    path(
+        "user-cart/<int:pk>/",
+        CartDetailView.as_view(),
+        name="detail-cart-item",
+    ),
+    path("user-cart/", CartListView.as_view(), name="user-cart-items"),
 ]
