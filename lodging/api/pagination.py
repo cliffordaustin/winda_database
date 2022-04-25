@@ -8,9 +8,12 @@ class Pagination(PageNumberPagination):
     max_page_size = 2
 
     def get_paginated_response(self, data):
-        response = Response(data)
-        response["count"] = self.page.paginator.count
-        response["page_size"] = self.page_size
-        response["next"] = self.get_next_link()
-        response["previous"] = self.get_previous_link()
-        return response
+        return Response(
+            {
+                "next": self.get_next_link(),
+                "previous": self.get_previous_link(),
+                "page_size": self.page_size,
+                "count": self.page.paginator.count,
+                "results": data,
+            }
+        )
