@@ -1,11 +1,12 @@
 from lodging.api.pagination import Pagination
 from .serializers import (
     CartSerializer,
+    OrderSerializer,
     StayViewsSerializer,
     StaysSerializer,
     StayImageSerializer,
 )
-from lodging.models import Cart, Stays, StayImage, Views
+from lodging.models import Cart, Order, Stays, StayImage, Views
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -210,3 +211,31 @@ class CartDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user)
+
+
+class OrderCreateView(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        serializer.save(user=self.request.user, stay=stay)
+
+
+class OrderListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, ObjectPermission]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)

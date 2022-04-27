@@ -147,10 +147,25 @@ class Cart(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user"
     )
-    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="stay")
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="cart")
+    ordered = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stay.name}"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="order")
+    from_date = models.DateField()
+    to_date = models.DateField()
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Order for { self.stay.name } by {self.user}"
 
 
 class Review(models.Model):

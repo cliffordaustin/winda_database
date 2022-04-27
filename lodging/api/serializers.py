@@ -1,6 +1,6 @@
 import string
 from rest_framework import serializers
-from lodging.models import Cart, Stays, StayImage, Views
+from lodging.models import Cart, Order, Stays, StayImage, Views
 from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
@@ -114,3 +114,29 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_profile_pic(self, instance):
         return instance.user.profile_pic.url if instance.user.profile_pic else None
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    stay = StaysSerializer(read_only=True)
+    user_has_reviewed = serializers.SerializerMethodField()
+    days = serializers.SerializerMethodField()
+    total_order_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+    def get_days(self, instance):
+        delta = instance.to_date - instance.from_date
+        return delta.days
+
+    def get_total_order_price(self, instance):
+        return self.get_days(instance) * instance.stay.price
+
+    def get_user_has_reviewed(self, instance):
+        request = self.context.get("request")
+
+        order_review = Review.objects.filter(stay=instance.stay, user=request.user)
+
+        return order_review.exists()

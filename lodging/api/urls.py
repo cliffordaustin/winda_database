@@ -13,6 +13,9 @@ from .views import (
     CartListView,
     CartDetailView,
     CartItemAPIView,
+    OrderListView,
+    OrderDetailView,
+    OrderCreateView,
 )
 
 
@@ -58,4 +61,11 @@ urlpatterns = [
         name="detail-cart-item",
     ),
     path("user-cart/", CartListView.as_view(), name="user-cart-items"),
+    path("user-orders/", OrderListView.as_view(), name="orders-list"),
+    path("user-orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
+    path(
+        "stays/<stay_slug>/add-to-order/",
+        OrderCreateView.as_view(),
+        name="order-create",
+    ),
 ]
