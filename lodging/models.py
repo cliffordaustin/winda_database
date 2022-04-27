@@ -5,6 +5,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from core.utils import lodge_image_thumbnail
 from django.utils import timezone
+from datetime import datetime, timedelta, date
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
@@ -22,6 +23,8 @@ TYPE_OF_STAY = (
     ("CAMPSITE", "CAMPSITE"),
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
 )
+
+tomorrow_time = date.today() + timedelta(days=1)
 
 
 class Stays(models.Model):
@@ -158,8 +161,8 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="order")
-    from_date = models.DateField()
-    to_date = models.DateField()
+    from_date = models.DateField(default=date.today())
+    to_date = models.DateField(default=tomorrow_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
