@@ -61,7 +61,10 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ("is_admin", "is_superuser")
     fieldsets = (
         (None, {"fields": ("email", "password", "first_name", "last_name")}),
-        ("Personal info", {"fields": ["profile_pic"]}),
+        (
+            "Personal info",
+            {"fields": ["profile_pic", "instagram_username", "tiktok_username"]},
+        ),
         ("Permissions", {"fields": ("is_admin", "is_staff", "is_superuser")}),
     )
 
@@ -73,6 +76,8 @@ class UserAdmin(BaseUserAdmin):
                 "fields": (
                     "first_name",
                     "last_name",
+                    "instagram_username",
+                    "tiktok_username",
                     "email",
                     "profile_pic",
                     "password1",

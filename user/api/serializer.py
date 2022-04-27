@@ -9,7 +9,15 @@ from user.models import CustomUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["id", "email", "first_name", "last_name", "profile_pic"]
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "profile_pic",
+            "instagram_username",
+            "tiktok_username",
+        ]
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -23,6 +31,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
+            "instagram_username",
+            "tiktok_username",
             "profile_pic",
             "password1",
             "password2",
@@ -53,6 +63,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return {
             "first_name": self.validated_data.get("first_name", ""),
             "last_name": self.validated_data.get("last_name", ""),
+            "instagram_username": self.validated_data.get("instagram_username", ""),
+            "tiktok_username": self.validated_data.get("tiktok_username", ""),
             "profile_pic": self.validated_data.get("profile_pic", ""),
             "password1": self.validated_data.get("password1", ""),
             "email": self.validated_data.get("email", ""),

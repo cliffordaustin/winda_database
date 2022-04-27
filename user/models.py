@@ -41,6 +41,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    instagram_username = models.CharField(max_length=120, blank=True, null=True)
+    tiktok_username = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -53,7 +55,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         format="JPEG",
         options={"quality": 60},
         blank=True,
-        null=True
+        null=True,
     )
 
     USERNAME_FIELD = "email"
