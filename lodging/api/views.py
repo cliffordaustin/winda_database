@@ -230,7 +230,15 @@ class OrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user, paid=False)
+
+
+class OrderPaidListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user, paid=True)
 
 
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):

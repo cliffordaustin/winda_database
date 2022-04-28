@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    OrderPaidListView,
     StaysListView,
     StaysCreateView,
     StaysDetailView,
@@ -62,6 +63,7 @@ urlpatterns = [
     ),
     path("user-cart/", CartListView.as_view(), name="user-cart-items"),
     path("user-orders/", OrderListView.as_view(), name="orders-list"),
+    path("user-orders/paid/", OrderPaidListView.as_view(), name="orders-paid-list"),
     path("user-orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
     path(
         "stays/<stay_slug>/add-to-order/",
