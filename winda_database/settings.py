@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "imagekit",
     "user",
     "lodging",
+    "activities",
     "django_cleanup.apps.CleanupConfig",
 ]
 

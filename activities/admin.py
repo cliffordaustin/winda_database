@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Activities, ActivitiesImage, Cart, Order, Review
 
-# Register your models here.
+admin.site.register(Activities)
+admin.site.register(ActivitiesImage)
+admin.site.register(Cart)
+admin.site.register(Order)
+admin.site.register(Review)

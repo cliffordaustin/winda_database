@@ -19,4 +19,4 @@ def lodge_image_thumbnail(instance, filename):
 
 
 def activities_image_thumbnail(instance, filename):
-    return f"lodge_images/{instance.id}/{filename}"
+    return f"activities_images/{instance.id}/{filename}"
