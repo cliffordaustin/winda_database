@@ -13,7 +13,7 @@ from activities.models import Activities, ActivitiesImage, Cart, Order, Review, 
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from .permissions import IsUserStayInstance, ObjectPermission
+from .permissions import IsUserActivityInstance, ObjectPermission
 from rest_framework.validators import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -90,7 +90,7 @@ class ActivityImageCreateView(generics.CreateAPIView):
 
 class ActivityImageDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActivityImageSerializer
-    permission_classes = [IsUserStayInstance]
+    permission_classes = [IsUserActivityInstance]
 
     def get_queryset(self):
 

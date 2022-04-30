@@ -6,7 +6,7 @@ from core.utils import generate_random_string
 
 
 @receiver(pre_save, sender=Activities)
-def create_stay_slug(sender, instance, *args, **kwargs):
+def create_activity_slug(sender, instance, *args, **kwargs):
     if instance and not instance.slug:
         slug = slugify(instance.name)
         random_string = generate_random_string()

@@ -5,14 +5,14 @@ from django.db.models import Sum
 
 class ActivityImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Activities
-        exclude = ["stay"]
+        model = ActivitiesImage
+        exclude = ["activity"]
 
 
 class ActivitySerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
-    stay_images = ActivityImageSerializer(many=True, read_only=True)
-    is_user_stay = serializers.SerializerMethodField()
+    activity_images = ActivityImageSerializer(many=True, read_only=True)
+    is_user_activity = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
     num_of_five_stars = serializers.SerializerMethodField()
@@ -44,7 +44,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     def get_num_of_five_stars(self, instance):
         return instance.activity_reviews.filter(rate=5).count()
 
-    def get_is_user_stay(self, instance):
+    def get_is_user_activity(self, instance):
         request = self.context.get("request")
         try:
             is_user = True if instance.user == request.user else False
@@ -68,7 +68,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         return has_user_reviewed
 
     class Meta:
-        model = ActivitiesImage
+        model = Activities
         fields = "__all__"
 
 
