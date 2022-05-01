@@ -25,7 +25,7 @@ urlpatterns = [
     path("create-activity/", ActivityCreateView.as_view(), name="activities-create"),
     path("activities/<slug>/", ActivityDetailView.as_view(), name="activities-detail"),
     path(
-        "activities/<slug>/add-view/",
+        "activities/<activity_slug>/add-view/",
         CreateActivityViews.as_view(),
         name="add-view-to-activities",
     ),
