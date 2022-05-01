@@ -16,6 +16,7 @@ from .views import (
     ReviewCreateView,
     ReviewDetailView,
     ReviewListView,
+    CreateActivityViews,
 )
 
 
@@ -23,6 +24,11 @@ urlpatterns = [
     path("activities/", ActivityListView.as_view(), name="activities-list"),
     path("create-activity/", ActivityCreateView.as_view(), name="activities-create"),
     path("activities/<slug>/", ActivityDetailView.as_view(), name="activities-detail"),
+    path(
+        "activities/<slug>/add-view/",
+        CreateActivityViews.as_view(),
+        name="add-view-to-activities",
+    ),
     path(
         "activities/<activity_slug>/images/",
         ActivityImageListView.as_view(),
