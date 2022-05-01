@@ -1,5 +1,5 @@
 from activities.api.filterset import ActivitiesFilter
-from lodging.api.filterset import ReviewFilter
+from .filterset import ReviewFilter
 from lodging.api.pagination import Pagination
 from .serializers import (
     ActivityImageSerializer,

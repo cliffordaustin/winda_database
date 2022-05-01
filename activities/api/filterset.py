@@ -1,5 +1,7 @@
 from django_filters import rest_framework as filters
-from activities.models import Activities
+from activities.models import Activities, Review
+
+RATES = (("1", "1"), ("2", "2"), ("3" "3"), ("4", "4"), ("5", "5"))
 
 
 class CharInFilter(filters.BaseInFilter, filters.CharFilter):
@@ -25,3 +27,11 @@ class ActivitiesFilter(filters.FilterSet):
             "type_of_activities",
             "gear_or_equipments",
         ]
+
+
+class ReviewFilter(filters.FilterSet):
+    rate = filters.ChoiceFilter(field_name="rate", choices=RATES)
+
+    class Meta:
+        model = Review
+        fields = ["rate"]
