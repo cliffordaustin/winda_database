@@ -19,6 +19,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from django.db.models import F, Value, CharField
 
 
 class ActivityCreateView(generics.CreateAPIView):
@@ -46,7 +47,6 @@ class ActivityDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class ActivityListView(generics.ListAPIView):
     serializer_class = ActivitySerializer
-    queryset = Activities.objects.all()
     filterset_class = ActivitiesFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
@@ -54,7 +54,17 @@ class ActivityListView(generics.ListAPIView):
         "price",
         "capacity",
     ]
-    search_fields = ["location"]
+
+    def get_queryset(self):
+        queryset = Activities.objects.all()
+
+        querystring = self.request.GET.get("search")
+        if querystring:
+            queryset = Activities.objects.annotate(
+                querystring=Value(querystring, output_field=CharField())
+            ).filter(querystring__icontains=F("location"))
+
+        return queryset
 
 
 class ActivityImageListView(generics.ListAPIView):

@@ -21,6 +21,7 @@ from rest_framework.validators import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, serializers, status
+from django.db.models import F, Value, CharField
 
 
 class StaysCreateView(generics.CreateAPIView):
@@ -48,7 +49,6 @@ class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class StaysListView(generics.ListAPIView):
     serializer_class = StaysSerializer
-    queryset = Stays.objects.all()
     filterset_class = StayFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
@@ -58,7 +58,17 @@ class StaysListView(generics.ListAPIView):
         "beds",
         "bathrooms",
     ]
-    search_fields = ["location"]
+
+    def get_queryset(self):
+        queryset = Stays.objects.all()
+
+        querystring = self.request.GET.get("search")
+        if querystring:
+            queryset = Stays.objects.annotate(
+                querystring=Value(querystring, output_field=CharField())
+            ).filter(querystring__icontains=F("location"))
+
+        return queryset
 
 
 class StayImageListView(generics.ListAPIView):

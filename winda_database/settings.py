@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("WINDA_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("WINDA_DEBUG_VALUE")
 
-ALLOWED_HOSTS = ["winda-database.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["winda-database.herokuapp.com", "127.0.0.1", "localhost"]
 
 
 INSTALLED_APPS = [

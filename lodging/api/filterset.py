@@ -36,9 +36,6 @@ class StayFilter(filters.FilterSet):
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
     theme = CharInFilter(label="Travel Theme", method=multiple_search)
     amenities = CharInFilter(field_name="ammenities", lookup_expr="overlap")
-    # theme = CharInFilter(
-    #     field_name="best_describes_house", lookups=["overlap", "icontains"]
-    # )
 
     class Meta:
         model = Stays
