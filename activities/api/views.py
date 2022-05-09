@@ -1,3 +1,4 @@
+import re
 from activities.api.filterset import ActivitiesFilter
 from .filterset import ReviewFilter
 from lodging.api.pagination import Pagination
@@ -19,7 +20,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from django.db.models import F, Value, CharField
+from django.db.models import F, Value, CharField, Q
 
 
 class ActivityCreateView(generics.CreateAPIView):
@@ -60,9 +61,12 @@ class ActivityListView(generics.ListAPIView):
 
         querystring = self.request.GET.get("search")
         if querystring:
-            queryset = Activities.objects.annotate(
-                querystring=Value(querystring, output_field=CharField())
-            ).filter(querystring__icontains=F("location"))
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= Q(location__icontains=word)
+            queryset = Activities.objects.filter(query).all()
 
         return queryset
 

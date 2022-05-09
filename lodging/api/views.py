@@ -1,3 +1,4 @@
+import re
 from lodging.api.pagination import Pagination
 from .serializers import (
     CartSerializer,
@@ -64,9 +65,12 @@ class StaysListView(generics.ListAPIView):
 
         querystring = self.request.GET.get("search")
         if querystring:
-            queryset = Stays.objects.annotate(
-                querystring=Value(querystring, output_field=CharField())
-            ).filter(querystring__icontains=F("location"))
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= Q(location__icontains=word)
+            queryset = Stays.objects.filter(query).all()
 
         return queryset
 
