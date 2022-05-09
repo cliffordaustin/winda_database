@@ -58,6 +58,7 @@ class StaysListView(generics.ListAPIView):
         "beds",
         "bathrooms",
     ]
+    search_fields = ["location"]
 
 
 class StayImageListView(generics.ListAPIView):

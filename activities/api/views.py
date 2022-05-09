@@ -54,6 +54,7 @@ class ActivityListView(generics.ListAPIView):
         "price",
         "capacity",
     ]
+    search_fields = ["location"]
 
 
 class ActivityImageListView(generics.ListAPIView):
