@@ -165,6 +165,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
+    date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"Order for { self.stay.name } by {self.user}"
