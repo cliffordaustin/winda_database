@@ -33,7 +33,11 @@ class Activities(models.Model):
         default=list,
         help_text="Separate each activities by using ' , '. Eg Active Adventures, Wellness experiences",
     )
-    location = models.CharField(max_length=350, blank=True, null=True)
+    location = models.CharField(
+        max_length=350, blank=True, null=True, verbose_name="Address"
+    )
+    city = models.CharField(max_length=350, blank=True, null=True)
+    country = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     capacity = models.IntegerField(blank=True, null=True)
