@@ -24,7 +24,7 @@ TYPE_OF_STAY = (
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
 )
 
-tomorrow_time = date.today() + timedelta(days=1)
+next_time = date.today() + timedelta(days=3)
 
 
 class Stays(models.Model):
@@ -164,12 +164,13 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="order")
-    from_date = models.DateField(default=date.today())
-    to_date = models.DateField(default=tomorrow_time)
+    from_date = models.DateTimeField(default=date.today())
+    to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return f"Order for { self.stay.name } by {self.user}"

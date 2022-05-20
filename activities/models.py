@@ -15,7 +15,7 @@ PRICING_TYPE = (
     ("PER SESSION", "PER SESSION"),
 )
 
-tomorrow_time = date.today() + timedelta(days=1)
+next_time = date.today() + timedelta(days=3)
 
 
 class Activities(models.Model):
@@ -138,12 +138,13 @@ class Order(models.Model):
     activity = models.ForeignKey(
         Activities, on_delete=models.CASCADE, related_name="activity_order"
     )
-    from_date = models.DateField(default=date.today())
-    to_date = models.DateField(default=tomorrow_time)
+    from_date = models.DateTimeField(default=date.today())
+    to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return f"Order for { self.activity.name } by {self.user}"
