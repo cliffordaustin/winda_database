@@ -41,7 +41,7 @@ class TransportationAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Enterntainment",
+            "Entertainment",
             {
                 "fields": [
                     "fm_radio",
