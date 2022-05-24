@@ -41,14 +41,20 @@ urlpatterns = [
         CartItemAPIView.as_view(),
         name="add-cart",
     ),
-    path("user-cart/<int:pk>/", CartDetailView.as_view(), name="cart-detail"),
-    path("user-cart/", CartListView.as_view(), name="cart-list"),
-    path("user-orders/", OrderListView.as_view(), name="orders-list"),
-    path("user-orders/<int:pk>/", OrderDetailView.as_view(), name="orders-detail"),
+    path("user-transport-cart/<int:pk>/", CartDetailView.as_view(), name="cart-detail"),
+    path("user-transport-cart/", CartListView.as_view(), name="cart-list"),
+    path("user-transport-orders/", OrderListView.as_view(), name="orders-list"),
+    path(
+        "user-transport-orders/<int:pk>/",
+        OrderDetailView.as_view(),
+        name="orders-detail",
+    ),
     path(
         "transport/<transport_slug>/add-to-order/",
         OrderCreateView.as_view(),
         name="orders-create",
     ),
-    path("user-orders/paid/", OrderPaidListView.as_view(), name="orders-paid"),
+    path(
+        "user-transport-orders/paid/", OrderPaidListView.as_view(), name="orders-paid"
+    ),
 ]
