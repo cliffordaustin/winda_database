@@ -195,20 +195,16 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
-class CartItemAPIView(APIView):
+class CartItemAPIView(generics.CreateAPIView):
     serializer_class = CartSerializer
-
+    queryset = Cart.objects.all()
     permission_classes = [IsAuthenticated, ObjectPermission]
 
-    def post(self, request, transport_slug, pk=None):
+    def perform_create(self, serializer):
+        transport_slug = self.kwargs.get("transport_slug")
         transport = generics.get_object_or_404(Transportation, slug=transport_slug)
-        cart = Cart.objects.create(user=request.user, transport=transport)
-        cart.save()
 
-        serializer_context = {"request": request}
-        serializer = self.serializer_class(cart, context=serializer_context)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.save(user=self.request.user, transport=transport)
 
 
 class CartListView(generics.ListAPIView):
