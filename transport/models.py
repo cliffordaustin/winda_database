@@ -104,6 +104,8 @@ class Cart(models.Model):
     transport = models.ForeignKey(
         Transportation, on_delete=models.CASCADE, related_name="transport_cart"
     )
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
+    destination = models.CharField(max_length=250, blank=True, null=True)
     distance = models.FloatField(blank=True, null=True)
 
     def __str__(self):
