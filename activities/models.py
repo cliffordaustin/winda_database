@@ -4,7 +4,7 @@ from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from core.utils import activities_image_thumbnail
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, tzinfo
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -15,7 +15,7 @@ PRICING_TYPE = (
     ("PER SESSION", "PER SESSION"),
 )
 
-next_time = date.today() + timedelta(days=3)
+next_time = timezone.now() + timezone.timedelta(days=3)
 
 
 class Activities(models.Model):
@@ -138,7 +138,7 @@ class Order(models.Model):
     activity = models.ForeignKey(
         Activities, on_delete=models.CASCADE, related_name="activity_order"
     )
-    from_date = models.DateTimeField(default=date.today())
+    from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)

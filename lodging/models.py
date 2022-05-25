@@ -24,7 +24,7 @@ TYPE_OF_STAY = (
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
 )
 
-next_time = date.today() + timedelta(days=3)
+next_time = timezone.now() + timezone.timedelta(days=3)
 
 
 class Stays(models.Model):
@@ -164,7 +164,7 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="order")
-    from_date = models.DateTimeField(default=date.today())
+    from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
