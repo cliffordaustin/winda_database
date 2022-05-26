@@ -24,3 +24,11 @@ def transportation_image_thumbnail(instance, filename):
 
 def activities_image_thumbnail(instance, filename):
     return f"activities_images/{instance.id}/{filename}"
+
+
+def trip_image_thumbnail(instance, filename):
+    return f"trip_images/{instance.id}/{filename}"
+
+
+def group_trip_image_thumbnail(instance, filename):
+    return f"group_trip_images/{instance.id}/{filename}"

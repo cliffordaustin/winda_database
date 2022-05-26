@@ -12,6 +12,7 @@ from ipware import get_client_ip
 import whatismyip
 import requests
 from lodging.models import Review
+from activities.models import Review as ActivityReview
 from django.db.models import Sum
 
 from transport.api.serializers import TransportSerializer
@@ -147,9 +148,11 @@ class OrderSerializer(serializers.ModelSerializer):
         allow_null=True,
         default=None,
     )
-    user_has_reviewed = serializers.SerializerMethodField()
+    user_has_reviewed_stay = serializers.SerializerMethodField()
+    user_has_reviewed_activity = serializers.SerializerMethodField()
     days = serializers.SerializerMethodField()
-    total_order_price = serializers.SerializerMethodField()
+    total_order_price_stay = serializers.SerializerMethodField()
+    total_order_price_activity = serializers.SerializerMethodField()
 
     def create(self, validated_data):
         stay = validated_data.pop("stay_id")
@@ -168,12 +171,26 @@ class OrderSerializer(serializers.ModelSerializer):
         delta = instance.to_date - instance.from_date
         return delta.days
 
-    def get_total_order_price(self, instance):
-        return self.get_days(instance) * instance.stay.price
+    def get_total_order_price_stay(self, instance):
+        return (
+            (self.get_days(instance) * instance.stay.price) if instance.stay else None
+        )
 
-    def get_user_has_reviewed(self, instance):
+    def get_user_has_reviewed_stay(self, instance):
         request = self.context.get("request")
 
         order_review = Review.objects.filter(stay=instance.stay, user=request.user)
+
+        return order_review.exists()
+
+    def get_total_order_price_activity(self, instance):
+        return instance.activity.price if instance.activity else None
+
+    def get_user_has_reviewed_activity(self, instance):
+        request = self.context.get("request")
+
+        order_review = ActivityReview.objects.filter(
+            activity=instance.activity, user=request.user
+        )
 
         return order_review.exists()

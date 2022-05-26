@@ -79,5 +79,4 @@ admin.site.register(Transportation, TransportationAdmin)
 
 admin.site.register(Order)
 admin.site.register(Cart)
-admin.site.register(Views)
 admin.site.register(Review)
