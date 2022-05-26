@@ -172,7 +172,9 @@ class Order(models.Model):
         Stays, on_delete=models.SET_NULL, null=True, related_name="order"
     )
     activity = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True)
-    transport = models.ForeignKey(Transportation, on_delete=models.SET_NULL, null=True)
+    transport = models.ForeignKey(
+        Transportation, on_delete=models.SET_NULL, null=True, related_name="transport"
+    )
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
@@ -180,6 +182,12 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
     starting_point = models.CharField(max_length=250, blank=True, null=True)
+    transport_back = models.ForeignKey(
+        Transportation,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="transport_back",
+    )
 
     def __str__(self):
         return f"Order for { self.stay.name if self.stay else self.activity.name } by {self.user}"

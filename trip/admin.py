@@ -14,21 +14,18 @@ from .models import *
 
 
 class TripAdmin(admin.ModelAdmin):
-    # inlines = (TripImageInline,)
+
+    search_fields = ("user__email",)
+    ordering = ("updated_at",)
+
+
+class GroupTripAdmin(admin.ModelAdmin):
 
     list_filter = ("is_public",)
     search_fields = ("user__email",)
     ordering = ("updated_at",)
 
 
-# class GroupTripAdmin(admin.ModelAdmin):
-#     inlines = (GroupTripImageInline,)
-
-#     list_filter = ("is_public",)
-#     search_fields = ("user__email",)
-#     ordering = ("updated_at",)
-
-
 admin.site.register(Trip, TripAdmin)
 
-# admin.site.register(GroupTrip, GroupTripAdmin)
+admin.site.register(GroupTrip, GroupTripAdmin)
