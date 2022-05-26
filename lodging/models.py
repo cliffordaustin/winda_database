@@ -1,12 +1,17 @@
+from asyncio import transports
+from os import access
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from activities.models import Activities
 from core.utils import lodge_image_thumbnail
 from django.utils import timezone
 from datetime import datetime, timedelta, date
 from django.core.validators import MinValueValidator, MaxValueValidator
+
+from transport.models import Transportation
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 
@@ -163,7 +168,11 @@ class Cart(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="order")
+    stay = models.ForeignKey(
+        Stays, on_delete=models.SET_NULL, null=True, related_name="order"
+    )
+    activity = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True)
+    transport = models.ForeignKey(Transportation, on_delete=models.SET_NULL, null=True)
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
@@ -173,7 +182,7 @@ class Order(models.Model):
     starting_point = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
-        return f"Order for { self.stay.name } by {self.user}"
+        return f"Order for { self.stay.name if self.stay else self.activity.name } by {self.user}"
 
 
 class Review(models.Model):

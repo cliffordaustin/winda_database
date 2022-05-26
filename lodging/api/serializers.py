@@ -1,5 +1,7 @@
 import string
 from rest_framework import serializers
+from activities.api.serializers import ActivitySerializer
+from activities.models import Activities
 from lodging.models import Cart, Order, Stays, StayImage, Views
 from urllib.request import urlopen
 import json
@@ -11,6 +13,9 @@ import whatismyip
 import requests
 from lodging.models import Review
 from django.db.models import Sum
+
+from transport.api.serializers import TransportSerializer
+from transport.models import Transportation
 
 
 class StayImageSerializer(serializers.ModelSerializer):
@@ -119,9 +124,41 @@ class ReviewSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
+    stay_id = serializers.PrimaryKeyRelatedField(
+        queryset=Stays.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+        default=None,
+    )
+    activity = ActivitySerializer(read_only=True)
+    activity_id = serializers.PrimaryKeyRelatedField(
+        queryset=Activities.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+        default=None,
+    )
+    transport = TransportSerializer(read_only=True)
+    transport_id = serializers.PrimaryKeyRelatedField(
+        queryset=Transportation.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+        default=None,
+    )
     user_has_reviewed = serializers.SerializerMethodField()
     days = serializers.SerializerMethodField()
     total_order_price = serializers.SerializerMethodField()
+
+    def create(self, validated_data):
+        stay = validated_data.pop("stay_id")
+        activity = validated_data.pop("activity_id")
+        transport = validated_data.pop("transport_id")
+        order = Order.objects.create(
+            stay=stay, activity=activity, transport=transport, **validated_data
+        )
+        return order
 
     class Meta:
         model = Order
