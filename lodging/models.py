@@ -169,11 +169,17 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     stay = models.ForeignKey(
-        Stays, on_delete=models.SET_NULL, null=True, related_name="order"
+        Stays, on_delete=models.SET_NULL, blank=True, null=True, related_name="order"
     )
-    activity = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True)
+    activity = models.ForeignKey(
+        Activities, on_delete=models.SET_NULL, blank=True, null=True
+    )
     transport = models.ForeignKey(
-        Transportation, on_delete=models.SET_NULL, null=True, related_name="transport"
+        Transportation,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="transport",
     )
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
@@ -185,12 +191,13 @@ class Order(models.Model):
     transport_back = models.ForeignKey(
         Transportation,
         on_delete=models.SET_NULL,
+        blank=True,
         null=True,
         related_name="transport_back",
     )
 
     def __str__(self):
-        return f"Order for { self.stay.name if self.stay else self.activity.name } by {self.user}"
+        return f"Order by {self.user}"
 
 
 class Review(models.Model):
