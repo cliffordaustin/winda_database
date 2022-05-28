@@ -21,6 +21,8 @@ class Trip(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
+    number_of_people = models.IntegerField(default=1)
+    nights = models.IntegerField(default=3)
     activity = models.ForeignKey(
         Activities, on_delete=models.SET_NULL, null=True, blank=True
     )
