@@ -23,7 +23,7 @@ class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
-class GroupTripUpdateView(generics.UpdateAPIView):
+class GroupTripUpdateView(generics.RetrieveUpdateAPIView):
     queryset = GroupTrip.objects.all()
     serializer_class = GroupTripSerializer
     permission_classes = (IsAuthenticated,)
