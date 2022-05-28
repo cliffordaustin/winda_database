@@ -55,6 +55,7 @@ class TripSerializer(serializers.ModelSerializer):
 class GroupTripSerializer(serializers.ModelSerializer):
     trip = TripSerializer(read_only=True, many=True)
     user = serializers.StringRelatedField(read_only=True)
+    transport_back = TransportSerializer(read_only=True)
     transport_id = serializers.PrimaryKeyRelatedField(
         queryset=Transportation.objects.all(),
         write_only=True,
