@@ -43,6 +43,10 @@ class TripSerializer(serializers.ModelSerializer):
         instance.stay = validated_data.get("stay_id", instance.stay)
         instance.from_date = validated_data.get("from_date", instance.from_date)
         instance.to_date = validated_data.get("to_date", instance.to_date)
+        instance.nights = validated_data.get("nights", instance.nights)
+        instance.number_of_people = validated_data.get(
+            "number_of_people", instance.number_of_people
+        )
 
         instance.save()
         return instance
@@ -51,8 +55,26 @@ class TripSerializer(serializers.ModelSerializer):
 class GroupTripSerializer(serializers.ModelSerializer):
     trip = TripSerializer(read_only=True, many=True)
     user = serializers.StringRelatedField(read_only=True)
+    transport_id = serializers.PrimaryKeyRelatedField(
+        queryset=Transportation.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = GroupTrip
         fields = "__all__"
         depth = 1
+
+    def update(self, instance, validated_data):
+        instance.transport_back = validated_data.get(
+            "transport_id", instance.transport_back
+        )
+        instance.starting_point = validated_data.get(
+            "starting_point", instance.starting_point
+        )
+        instance.paid = validated_data.get("paid", instance.paid)
+        instance.save()
+
+        return instance

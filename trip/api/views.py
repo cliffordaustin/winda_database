@@ -23,6 +23,21 @@ class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
+class GroupTripUpdateView(generics.UpdateAPIView):
+    queryset = GroupTrip.objects.all()
+    serializer_class = GroupTripSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = GroupTrip.objects.all()
+        slug = self.kwargs.get("slug")
+
+        if slug is not None:
+            queryset = GroupTrip.objects.filter(slug=slug)
+        return queryset
+
+
 class TripView(APIView):
     serializer_class = GroupTripSerializer
     permission_classes = (IsAuthenticated,)
