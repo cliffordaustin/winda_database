@@ -15,16 +15,20 @@ next_time = timezone.now() + timezone.timedelta(days=3)
 class Trip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    transport = models.ForeignKey(Transportation, on_delete=models.SET_NULL, null=True)
-    stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True)
+    transport = models.ForeignKey(
+        Transportation, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
-    activity = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True)
+    activity = models.ForeignKey(
+        Activities, on_delete=models.SET_NULL, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Created by ${self.user}"
+        return f"Created by {self.user}"
 
     class Meta:
         ordering = ["-created_at"]
@@ -36,9 +40,9 @@ class GroupTrip(models.Model):
         settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
     )
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
-    trip = models.ManyToManyField(Trip)
+    trip = models.ManyToManyField(Trip, blank=True)
     transport_back = models.ForeignKey(
-        Transportation, on_delete=models.SET_NULL, null=True
+        Transportation, on_delete=models.SET_NULL, null=True, blank=True
     )
     paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,7 +53,7 @@ class GroupTrip(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"Created by ${self.user}"
+        return f"Created by {self.user}"
 
 
 # class TripImage(models.Model):
