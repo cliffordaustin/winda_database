@@ -37,7 +37,7 @@ class TripView(APIView):
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
 
-        stay = (None,)
+        stay = None
         activity = None
         transport = None
 
