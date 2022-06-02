@@ -42,7 +42,7 @@ class TripSerializer(serializers.ModelSerializer):
         instance.activity = validated_data.get("activity_id", instance.activity)
         instance.stay = validated_data.get("stay_id", instance.stay)
         instance.from_date = validated_data.get("from_date", instance.from_date)
-        instance.activity_from_date = validated_data(
+        instance.activity_from_date = validated_data.get(
             "activity_from_date", instance.activity_from_date
         )
         instance.to_date = validated_data.get("to_date", instance.to_date)
