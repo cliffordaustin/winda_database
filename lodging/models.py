@@ -160,6 +160,8 @@ class Cart(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user"
     )
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="cart")
+    from_date = models.DateTimeField(default=timezone.now)
+    to_date = models.DateTimeField(default=next_time)
 
     def __str__(self):
         return f"{self.stay.name}"

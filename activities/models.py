@@ -125,6 +125,8 @@ class Cart(models.Model):
     activity = models.ForeignKey(
         Activities, on_delete=models.CASCADE, related_name="activity_cart"
     )
+    from_date = models.DateTimeField(default=timezone.now)
+    to_date = models.DateTimeField(default=next_time)
 
     def __str__(self):
         return f"{self.activity.name}"
