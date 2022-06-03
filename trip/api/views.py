@@ -43,7 +43,7 @@ class TripView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        group_trip = GroupTrip.objects.all()
+        group_trip = GroupTrip.objects.filter(user=self.request.user, paid=False)
         serializer = GroupTripSerializer(group_trip, many=True)
         return Response(serializer.data)
 
@@ -51,7 +51,7 @@ class TripView(APIView):
         stay_id = request.data.get("stay_id", None)
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
-        nights = request.data.get("nights", None)
+        nights = request.data.get("nights", 3)
 
         stay = None
         activity = None
