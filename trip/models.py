@@ -30,10 +30,10 @@ class Trip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        self.activity_from_date = self.from_date + timezone.timedelta(days=3)
+    # def save(self, *args, **kwargs):
+    #     self.activity_from_date = self.from_date + timezone.timedelta(days=3)
 
-        super(Trip, self).save(*args, **kwargs)
+    #     super(Trip, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Created by {self.user}"
