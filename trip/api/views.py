@@ -53,6 +53,8 @@ class TripView(APIView):
         transport_id = request.data.get("transport_id", None)
         nights = request.data.get("nights", 3)
         from_date = request.data.get("from_date", timezone.now())
+        activity_from_date = request.data.get("activity_from_date", timezone.now())
+        number_of_people = request.data.get("number_of_people", 1)
 
         stay = None
         activity = None
@@ -74,6 +76,8 @@ class TripView(APIView):
             transport=transport,
             nights=nights,
             from_date=from_date,
+            activity_from_date=activity_from_date,
+            number_of_people=number_of_people,
         )
 
         group_trip = GroupTrip.objects.get_or_create(
