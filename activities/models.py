@@ -127,6 +127,7 @@ class Cart(models.Model):
     )
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
+    number_of_people = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.activity.name}"
