@@ -56,6 +56,11 @@ class TripSerializer(serializers.ModelSerializer):
         instance.number_of_days = validated_data.get(
             "number_of_days", instance.number_of_days
         )
+        instance.starting_point = validated_data.get(
+            "starting_point", instance.starting_point
+        )
+        instance.destination = validated_data.get("destination", instance.destination)
+        instance.distance = validated_data.get("distance", instance.distance)
 
         instance.save()
         return instance

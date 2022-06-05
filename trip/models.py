@@ -19,6 +19,11 @@ class Trip(models.Model):
         Transportation, on_delete=models.SET_NULL, null=True, blank=True
     )
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
+
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
+    destination = models.CharField(max_length=250, blank=True, null=True)
+    distance = models.FloatField(blank=True, null=True)
+
     from_date = models.DateTimeField(default=timezone.now)
     activity_from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)

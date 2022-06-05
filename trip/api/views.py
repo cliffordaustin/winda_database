@@ -57,6 +57,9 @@ class TripView(APIView):
         user_need_a_driver = request.data.get("user_need_a_driver", False)
         number_of_people = request.data.get("number_of_people", 1)
         number_of_days = request.data.get("number_of_days", None)
+        starting_point = request.data.get("starting_point", None)
+        destination = request.data.get("destination", None)
+        distance = request.data.get("distance", None)
 
         stay = None
         activity = None
@@ -82,6 +85,9 @@ class TripView(APIView):
             number_of_people=number_of_people,
             user_need_a_driver=user_need_a_driver,
             number_of_days=number_of_days,
+            starting_point=starting_point,
+            destination=destination,
+            distance=distance,
         )
 
         group_trip = GroupTrip.objects.get_or_create(
