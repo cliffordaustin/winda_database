@@ -10,10 +10,18 @@ class TransportationImageInline(admin.TabularInline):
 
 class TransportationAdmin(admin.ModelAdmin):
     inlines = (TransportationImageInline,)
-    list_display = ("user", "type_of_car", "price", "price_per_day", "date_posted")
+    list_display = (
+        "user",
+        "type_of_car",
+        "price",
+        "price_per_day",
+        "additional_price_with_a_driver",
+        "date_posted",
+    )
     list_filter = (
         "price",
         "price_per_day",
+        "additional_price_with_a_driver",
         "date_posted",
         "type_of_car",
         "vehicle_make",
@@ -30,6 +38,7 @@ class TransportationAdmin(admin.ModelAdmin):
                     "vehicle_color",
                     "price",
                     "price_per_day",
+                    "additional_price_with_a_driver",
                 )
             },
         ),
@@ -73,8 +82,20 @@ class TransportationAdmin(admin.ModelAdmin):
         ),
     )
 
-    search_fields = ("user", "type_of_car", "price", "price_per_day", "date_posted")
-    ordering = ("date_posted", "price", "price_per_day")
+    search_fields = (
+        "user",
+        "type_of_car",
+        "price",
+        "price_per_day",
+        "additional_price_with_a_driver",
+        "date_posted",
+    )
+    ordering = (
+        "date_posted",
+        "price",
+        "price_per_day",
+        "additional_price_with_a_driver",
+    )
 
 
 admin.site.register(Transportation, TransportationAdmin)
