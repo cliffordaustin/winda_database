@@ -113,7 +113,7 @@ class Cart(models.Model):
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
     distance = models.FloatField(blank=True, null=True)
-    is_per_day = models.BooleanField(default=False)
+    number_of_days = models.IntegerField(null=True, blank=True)
     user_need_a_driver = models.BooleanField(default=False)
 
     def __str__(self):
@@ -133,7 +133,7 @@ class Order(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
-    is_per_day = models.BooleanField(default=False)
+    number_of_days = models.IntegerField(null=True, blank=True)
     user_need_a_driver = models.BooleanField(default=False)
     distance = models.FloatField(blank=True, null=True)
 

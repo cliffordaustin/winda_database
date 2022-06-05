@@ -53,8 +53,8 @@ class TripSerializer(serializers.ModelSerializer):
         instance.user_need_a_driver = validated_data.get(
             "user_need_a_driver", instance.user_need_a_driver
         )
-        instance.is_transport_per_day = validated_data.get(
-            "is_transport_per_day", instance.is_transport_per_day
+        instance.number_of_days = validated_data.get(
+            "number_of_days", instance.number_of_days
         )
 
         instance.save()
