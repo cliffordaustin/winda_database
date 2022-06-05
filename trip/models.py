@@ -22,6 +22,8 @@ class Trip(models.Model):
     from_date = models.DateTimeField(default=timezone.now)
     activity_from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
+    is_transport_per_day = models.BooleanField(default=False)
+    user_need_a_driver = models.BooleanField(default=False)
     number_of_people = models.IntegerField(default=1)
     nights = models.IntegerField(default=3)
     activity = models.ForeignKey(

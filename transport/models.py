@@ -27,6 +27,12 @@ class Transportation(models.Model):
         max_length=100, blank=True, null=True, help_text="eg. Red or #FF0000"
     )
     price = models.FloatField(blank=True, null=True, help_text="Price per 10km")
+    price_per_day = models.FloatField(
+        blank=True, null=True, help_text="Price per day, if available"
+    )
+    additional_price_with_a_driver = models.FloatField(
+        blank=True, null=True, help_text="Price when a user needs a driver"
+    )
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     has_air_condition = models.BooleanField(default=False)
     fm_radio = models.BooleanField(default=False)
@@ -107,6 +113,8 @@ class Cart(models.Model):
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
     distance = models.FloatField(blank=True, null=True)
+    is_per_day = models.BooleanField(default=False)
+    user_need_a_driver = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.transport.user} - {self.transport.type_of_car}"
@@ -125,6 +133,8 @@ class Order(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
+    is_per_day = models.BooleanField(default=False)
+    user_need_a_driver = models.BooleanField(default=False)
     distance = models.FloatField(blank=True, null=True)
 
     def __str__(self):
