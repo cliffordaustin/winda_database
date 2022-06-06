@@ -54,6 +54,7 @@ class TripView(APIView):
         nights = request.data.get("nights", 3)
         from_date = request.data.get("from_date", timezone.now())
         activity_from_date = request.data.get("activity_from_date", timezone.now())
+        transport_from_date = request.data.get("transport_from_date", timezone.now())
         user_need_a_driver = request.data.get("user_need_a_driver", False)
         number_of_people = request.data.get("number_of_people", 1)
         number_of_days = request.data.get("number_of_days", None)
@@ -82,6 +83,7 @@ class TripView(APIView):
             nights=nights,
             from_date=from_date,
             activity_from_date=activity_from_date,
+            transport_from_date=transport_from_date,
             number_of_people=number_of_people,
             user_need_a_driver=user_need_a_driver,
             number_of_days=number_of_days,

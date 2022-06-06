@@ -25,6 +25,7 @@ class Trip(models.Model):
     distance = models.FloatField(blank=True, null=True)
 
     from_date = models.DateTimeField(default=timezone.now)
+    transport_from_date = models.DateTimeField(default=timezone.now)
     activity_from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     number_of_days = models.IntegerField(null=True, blank=True)
