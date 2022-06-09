@@ -192,10 +192,49 @@ class Stays(models.Model):
         default=list,
         help_text="Separate each amenities by using ' , '. Eg Swimming Pool, Hot tub",
     )
+    super_delux = models.BooleanField(default=False)
+    super_delux_capacity = models.IntegerField(blank=True, null=True)
+    super_delux_price = models.FloatField(blank=True, null=True)
+
+    delux = models.BooleanField(default=False)
+    delux_capacity = models.IntegerField(blank=True, null=True)
+    delux_price = models.FloatField(blank=True, null=True)
+
+    standard = models.BooleanField(default=True)
+    standard_capacity = models.IntegerField(default=2)
+    price = models.FloatField(blank=True, null=True)
+
+    studio = models.BooleanField(default=False)
+    studio_capacity = models.IntegerField(blank=True, null=True)
+    studio_price = models.FloatField(blank=True, null=True)
+
+    double_room = models.BooleanField(default=False)
+    double_room_capacity = models.IntegerField(blank=True, null=True)
+    double_room_price = models.FloatField(blank=True, null=True)
+
+    tripple_room = models.BooleanField(default=False)
+    tripple_room_capacity = models.IntegerField(blank=True, null=True)
+    tripple_room_price = models.FloatField(blank=True, null=True)
+
+    quad_room = models.BooleanField(default=False)
+    quad_room_capacity = models.IntegerField(blank=True, null=True)
+    quad_room_price = models.FloatField(blank=True, null=True)
+
+    queen_room = models.BooleanField(default=False)
+    queen_room_capacity = models.IntegerField(blank=True, null=True)
+    queen_room_price = models.FloatField(blank=True, null=True)
+
+    king_room = models.BooleanField(default=False)
+    king_room_capacity = models.IntegerField(blank=True, null=True)
+    king_room_price = models.FloatField(blank=True, null=True)
+
+    twin_room = models.BooleanField(default=False)
+    twin_room_capacity = models.IntegerField(blank=True, null=True)
+    twin_room_price = models.FloatField(blank=True, null=True)
+
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
     pricing_type = models.CharField(max_length=100, choices=PRICING_TYPE, blank=True)
-    price = models.FloatField(blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
@@ -251,6 +290,8 @@ class Cart(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="cart")
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
+    num_of_adults = models.IntegerField(default=1)
+    num_of_children = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.stay.name}"
@@ -274,6 +315,8 @@ class Order(models.Model):
     )
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
+    num_of_adults = models.IntegerField(default=1)
+    num_of_children = models.IntegerField(default=0)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
