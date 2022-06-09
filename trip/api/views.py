@@ -61,6 +61,9 @@ class TripView(APIView):
         starting_point = request.data.get("starting_point", None)
         destination = request.data.get("destination", None)
         distance = request.data.get("distance", None)
+        stay_num_of_adults = request.data.get("stay_num_of_adults", 1)
+        stay_num_of_children = request.data.get("stay_num_of_children", 0)
+        stay_plan = request.data.get("stay_plan", "STANDARD")
 
         stay = None
         activity = None
@@ -90,6 +93,9 @@ class TripView(APIView):
             starting_point=starting_point,
             destination=destination,
             distance=distance,
+            stay_num_of_adults=stay_num_of_adults,
+            stay_num_of_children=stay_num_of_children,
+            stay_plan=stay_plan,
         )
 
         group_trip = GroupTrip.objects.get_or_create(

@@ -11,6 +11,19 @@ from django.utils import timezone
 
 next_time = timezone.now() + timezone.timedelta(days=3)
 
+PLAN_TYPE = (
+    ("STANDARD", "STANDARD"),
+    ("DELUXE", "DELUXE"),
+    ("SUPER DELUXE", "SUPER DELUXE"),
+    ("STUDIO", "STUDIO"),
+    ("DOUBLE ROOM", "DOUBLE ROOM"),
+    ("TRIPLE ROOM", "TRIPLE ROOM"),
+    ("QUAD ROOM", "QUAD ROOM"),
+    ("KING ROOM", "KING ROOM"),
+    ("QUEEN ROOM", "QUEEN ROOM"),
+    ("TWIN ROOM", "TWIN ROOM"),
+)
+
 
 class Trip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
@@ -26,6 +39,9 @@ class Trip(models.Model):
 
     from_date = models.DateTimeField(default=timezone.now)
     transport_from_date = models.DateTimeField(default=timezone.now)
+    stay_num_of_adults = models.IntegerField(default=1)
+    stay_num_of_children = models.IntegerField(default=0)
+    stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     activity_from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
     number_of_days = models.IntegerField(null=True, blank=True)

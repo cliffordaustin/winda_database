@@ -29,6 +29,20 @@ TYPE_OF_STAY = (
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
 )
 
+PLAN_TYPE = (
+    ("STANDARD", "STANDARD"),
+    ("DELUXE", "DELUXE"),
+    ("SUPER DELUXE", "SUPER DELUXE"),
+    ("STUDIO", "STUDIO"),
+    ("DOUBLE ROOM", "DOUBLE ROOM"),
+    ("TRIPLE ROOM", "TRIPLE ROOM"),
+    ("QUAD ROOM", "QUAD ROOM"),
+    ("KING ROOM", "KING ROOM"),
+    ("QUEEN ROOM", "QUEEN ROOM"),
+    ("TWIN ROOM", "TWIN ROOM"),
+)
+
+
 next_time = timezone.now() + timezone.timedelta(days=3)
 
 
@@ -192,13 +206,14 @@ class Stays(models.Model):
         default=list,
         help_text="Separate each amenities by using ' , '. Eg Swimming Pool, Hot tub",
     )
-    super_delux = models.BooleanField(default=False)
-    super_delux_capacity = models.IntegerField(blank=True, null=True)
-    super_delux_price = models.FloatField(blank=True, null=True)
 
-    delux = models.BooleanField(default=False)
-    delux_capacity = models.IntegerField(blank=True, null=True)
-    delux_price = models.FloatField(blank=True, null=True)
+    super_deluxe = models.BooleanField(default=False)
+    super_deluxe_capacity = models.IntegerField(blank=True, null=True)
+    super_deluxe_price = models.FloatField(blank=True, null=True)
+
+    deluxe = models.BooleanField(default=False)
+    deluxe_capacity = models.IntegerField(blank=True, null=True)
+    deluxe_price = models.FloatField(blank=True, null=True)
 
     standard = models.BooleanField(default=True)
     standard_capacity = models.IntegerField(default=2)
@@ -289,6 +304,7 @@ class Cart(models.Model):
     )
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="cart")
     from_date = models.DateTimeField(default=timezone.now)
+    plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     to_date = models.DateTimeField(default=next_time)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
@@ -317,6 +333,7 @@ class Order(models.Model):
     to_date = models.DateTimeField(default=next_time)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
+    plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
