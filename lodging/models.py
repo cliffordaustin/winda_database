@@ -99,6 +99,15 @@ class Stays(models.Model):
         help_text="Separate each description by using ' , '. Eg Historical building, Resort",
     )
 
+    experiences_included = ArrayField(
+        models.CharField(max_length=500, blank=True, null=True),
+        blank=True,
+        null=True,
+        default=list,
+        help_text="Experiences included in this package ' , '. Eg Camping, Fishing, Hiking",
+    )
+
+
     # Lodge
     tented_camp = models.BooleanField(default=False)
     permanent_structures = models.BooleanField(default=False)
