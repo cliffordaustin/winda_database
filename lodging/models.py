@@ -40,7 +40,7 @@ PLAN_TYPE = (
     ("KING ROOM", "KING ROOM"),
     ("QUEEN ROOM", "QUEEN ROOM"),
     ("TWIN ROOM", "TWIN ROOM"),
-    ("FAMILY", "FAMILY"),
+    ("FAMILY ROOM", "FAMILY ROOM"),
 )
 
 
