@@ -8,21 +8,9 @@ from transport.models import Transportation
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.utils import timezone
+from lodging.models import PLAN_TYPE
 
 next_time = timezone.now() + timezone.timedelta(days=3)
-
-PLAN_TYPE = (
-    ("STANDARD", "STANDARD"),
-    ("DELUXE", "DELUXE"),
-    ("SUPER DELUXE", "SUPER DELUXE"),
-    ("STUDIO", "STUDIO"),
-    ("DOUBLE ROOM", "DOUBLE ROOM"),
-    ("TRIPLE ROOM", "TRIPLE ROOM"),
-    ("QUAD ROOM", "QUAD ROOM"),
-    ("KING ROOM", "KING ROOM"),
-    ("QUEEN ROOM", "QUEEN ROOM"),
-    ("TWIN ROOM", "TWIN ROOM"),
-)
 
 
 class Trip(models.Model):
