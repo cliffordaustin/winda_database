@@ -40,6 +40,7 @@ class Trip(models.Model):
     from_date = models.DateTimeField(default=timezone.now)
     transport_from_date = models.DateTimeField(default=timezone.now)
     stay_num_of_adults = models.IntegerField(default=1)
+    stay_non_resident = models.BooleanField(default=False)
     stay_num_of_children = models.IntegerField(default=0)
     stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     activity_from_date = models.DateTimeField(default=timezone.now)

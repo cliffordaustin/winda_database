@@ -40,6 +40,7 @@ PLAN_TYPE = (
     ("KING ROOM", "KING ROOM"),
     ("QUEEN ROOM", "QUEEN ROOM"),
     ("TWIN ROOM", "TWIN ROOM"),
+    ("FAMILY", "FAMILY"),
 )
 
 
@@ -106,7 +107,6 @@ class Stays(models.Model):
         default=list,
         help_text="Experiences included in this package ' , '. Eg Camping, Fishing, Hiking",
     )
-
 
     # Lodge
     tented_camp = models.BooleanField(default=False)
@@ -219,42 +219,57 @@ class Stays(models.Model):
     super_deluxe = models.BooleanField(default=False)
     super_deluxe_capacity = models.IntegerField(blank=True, null=True)
     super_deluxe_price = models.FloatField(blank=True, null=True)
+    super_deluxe_price_non_resident = models.FloatField(blank=True, null=True)
 
     deluxe = models.BooleanField(default=False)
     deluxe_capacity = models.IntegerField(blank=True, null=True)
     deluxe_price = models.FloatField(blank=True, null=True)
+    deluxe_price_non_resident = models.FloatField(blank=True, null=True)
 
     standard = models.BooleanField(default=True)
     standard_capacity = models.IntegerField(default=2)
     price = models.FloatField(blank=True, null=True)
+    price_non_resident = models.FloatField(blank=True, null=True)
 
     studio = models.BooleanField(default=False)
     studio_capacity = models.IntegerField(blank=True, null=True)
     studio_price = models.FloatField(blank=True, null=True)
+    studio_price_non_resident = models.FloatField(blank=True, null=True)
 
     double_room = models.BooleanField(default=False)
     double_room_capacity = models.IntegerField(blank=True, null=True)
     double_room_price = models.FloatField(blank=True, null=True)
+    double_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     tripple_room = models.BooleanField(default=False)
     tripple_room_capacity = models.IntegerField(blank=True, null=True)
     tripple_room_price = models.FloatField(blank=True, null=True)
+    tripple_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     quad_room = models.BooleanField(default=False)
     quad_room_capacity = models.IntegerField(blank=True, null=True)
     quad_room_price = models.FloatField(blank=True, null=True)
+    quad_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     queen_room = models.BooleanField(default=False)
     queen_room_capacity = models.IntegerField(blank=True, null=True)
     queen_room_price = models.FloatField(blank=True, null=True)
+    queen_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     king_room = models.BooleanField(default=False)
     king_room_capacity = models.IntegerField(blank=True, null=True)
     king_room_price = models.FloatField(blank=True, null=True)
+    king_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     twin_room = models.BooleanField(default=False)
     twin_room_capacity = models.IntegerField(blank=True, null=True)
     twin_room_price = models.FloatField(blank=True, null=True)
+    twin_room_price_non_resident = models.FloatField(blank=True, null=True)
+
+    family_room = models.BooleanField(default=False)
+    family_room_capacity = models.IntegerField(blank=True, null=True)
+    family_room_price = models.FloatField(blank=True, null=True)
+    family_room_price_non_resident = models.FloatField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
@@ -315,6 +330,7 @@ class Cart(models.Model):
     from_date = models.DateTimeField(default=timezone.now)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     to_date = models.DateTimeField(default=next_time)
+    non_resident = models.BooleanField(default=False)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
 
@@ -339,6 +355,7 @@ class Order(models.Model):
         related_name="transport",
     )
     from_date = models.DateTimeField(default=timezone.now)
+    non_resident = models.BooleanField(default=False)
     to_date = models.DateTimeField(default=next_time)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
