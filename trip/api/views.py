@@ -65,6 +65,11 @@ class TripView(APIView):
         stay_num_of_children = request.data.get("stay_num_of_children", 0)
         stay_plan = request.data.get("stay_plan", "STANDARD")
         stay_non_resident = request.data.get("stay_non_resident", False)
+        activity_non_resident = request.data.get("activity_non_resident", False)
+        activity_pricing_type = request.data.get("activity_pricing_type", "PER PERSON")
+        activity_number_of_poeple = request.data.get("activity_number_of_people", 1)
+        activity_number_of_sessions = request.data.get("activity_number_of_sessions", 1)
+        activity_number_of_groups = request.data.get("activity_number_of_groups", 1)
 
         stay = None
         activity = None
@@ -98,6 +103,11 @@ class TripView(APIView):
             stay_num_of_children=stay_num_of_children,
             stay_plan=stay_plan,
             stay_non_resident=stay_non_resident,
+            activity_non_resident=activity_non_resident,
+            activity_pricing_type=activity_pricing_type,
+            activity_number_of_people=activity_number_of_poeple,
+            activity_number_of_sessions=activity_number_of_sessions,
+            activity_number_of_groups=activity_number_of_groups,
         )
 
         group_trip = GroupTrip.objects.get_or_create(

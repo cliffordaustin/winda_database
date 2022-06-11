@@ -41,34 +41,56 @@ class Activities(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     capacity = models.IntegerField(blank=True, null=True)
-    gear_or_equipments = ArrayField(
+    equipments_provided = ArrayField(
         models.CharField(max_length=500, blank=True, null=True),
         blank=True,
         null=True,
         default=list,
         help_text="What gear or equipment is needed? Separate each gear or equipments by using ' , '",
     )
-    will_you_provide_gear_or_equipments = models.BooleanField(default=False)
-    time_taken_for_activities = models.CharField(
-        max_length=350,
+    equipments_required_by_user_to_bring = ArrayField(
+        models.CharField(max_length=500, blank=True, null=True),
         blank=True,
         null=True,
-        help_text="Input should be in format, eg '4 hours', '12 hours'," + " '2 days'",
+        default=list,
+        help_text="What gear or equipment is needed and won't be provided by you? Separate each gear or equipments by using ' , '",
     )
+    duration_of_activity = models.DurationField(blank=True, null=True)
     description = models.TextField(
         blank=True,
         null=True,
         help_text="what makes this activity special, describe how"
         + " it will take place",
     )
-    pricing_type = models.CharField(max_length=100, choices=PRICING_TYPE, blank=True)
-    max_number_of_groups = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        help_text="Enter this field if the pricing plan is per group",
-    )
+
+    price_per_person = models.BooleanField(default=True)
     price = models.FloatField(blank=True, null=True)
+    price_non_resident = models.FloatField(blank=True, null=True)
+    max_number_of_people = models.PositiveIntegerField(default=1)
+
+    price_per_session = models.BooleanField(default=False)
+    session_price = models.FloatField(blank=True, null=True)
+    session_price_non_resident = models.FloatField(blank=True, null=True)
+    max_number_of_sessions = models.PositiveIntegerField(default=1)
+
+    price_per_group = models.BooleanField(default=False)
+    group_price = models.FloatField(blank=True, null=True)
+    group_price_non_resident = models.FloatField(blank=True, null=True)
+    max_number_of_people_in_a_group = models.PositiveIntegerField(default=4)
+    max_number_of_groups = models.PositiveIntegerField(default=1)
+
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
+
+    check_in_time = models.TimeField(blank=True, null=True)
+    check_out_time = models.TimeField(blank=True, null=True)
+    refaundable = models.BooleanField(default=False)
+    refund_policy = models.CharField(max_length=500, blank=True, null=True)
+    damage_policy = models.CharField(max_length=500, blank=True, null=True)
+    children_allowed = models.BooleanField(default=False)
+    pets_allowed = models.BooleanField(default=False)
+    smoking_allowed = models.BooleanField(default=False)
+    covid_19_compliance = models.BooleanField(default=False)
+    covid_19_compliance_details = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user} - {self.name}"
@@ -127,7 +149,14 @@ class Cart(models.Model):
     )
     from_date = models.DateTimeField(default=timezone.now)
     to_date = models.DateTimeField(default=next_time)
-    number_of_people = models.IntegerField(default=1)
+
+    non_resident = models.BooleanField(default=False)
+    pricing_type = models.CharField(
+        max_length=50, choices=PRICING_TYPE, default="PER PERSON"
+    )
+    number_of_poeple = models.IntegerField(default=1)
+    number_of_sessions = models.IntegerField(default=1)
+    number_of_groups = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.activity.name}"
@@ -147,7 +176,14 @@ class Order(models.Model):
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
-    starting_point = models.CharField(max_length=250, blank=True, null=True)
+
+    non_resident = models.BooleanField(default=False)
+    pricing_type = models.CharField(
+        max_length=50, choices=PRICING_TYPE, default="PER PERSON"
+    )
+    number_of_poeple = models.IntegerField(default=1)
+    number_of_sessions = models.IntegerField(default=1)
+    number_of_groups = models.IntegerField(default=1)
 
     def __str__(self):
         return f"Order for { self.activity.name } by {self.user}"

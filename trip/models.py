@@ -9,6 +9,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.utils import timezone
 from lodging.models import PLAN_TYPE
+from activities.models import PRICING_TYPE
 
 next_time = timezone.now() + timezone.timedelta(days=3)
 
@@ -40,6 +41,15 @@ class Trip(models.Model):
     activity = models.ForeignKey(
         Activities, on_delete=models.SET_NULL, null=True, blank=True
     )
+
+    activity_non_resident = models.BooleanField(default=False)
+    activity_pricing_type = models.CharField(
+        max_length=50, choices=PRICING_TYPE, default="PER PERSON"
+    )
+    activity_number_of_poeple = models.IntegerField(default=1)
+    activity_number_of_sessions = models.IntegerField(default=1)
+    activity_number_of_groups = models.IntegerField(default=1)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
