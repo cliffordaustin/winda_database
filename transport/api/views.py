@@ -45,7 +45,9 @@ class TransportListView(generics.ListAPIView):
             query = Q()  # empty Q object
             for word in words:
                 # 'or' the queries together
-                query |= Q(dropoff_city__icontains=word)
+                query |= Q(dropoff_city__icontains=word) | Q(
+                    dropoff_country__icontains=word
+                )
             queryset = Transportation.objects.filter(query).all()
 
         return queryset
