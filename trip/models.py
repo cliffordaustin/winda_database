@@ -46,7 +46,7 @@ class Trip(models.Model):
     activity_pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
-    activity_number_of_poeple = models.IntegerField(default=1)
+    activity_number_of_people = models.IntegerField(default=1)
     activity_number_of_sessions = models.IntegerField(default=1)
     activity_number_of_groups = models.IntegerField(default=1)
 

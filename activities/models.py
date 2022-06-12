@@ -154,7 +154,7 @@ class Cart(models.Model):
     pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
-    number_of_poeple = models.IntegerField(default=1)
+    number_of_people = models.IntegerField(default=1)
     number_of_sessions = models.IntegerField(default=1)
     number_of_groups = models.IntegerField(default=1)
 
@@ -181,7 +181,7 @@ class Order(models.Model):
     pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
-    number_of_poeple = models.IntegerField(default=1)
+    number_of_people = models.IntegerField(default=1)
     number_of_sessions = models.IntegerField(default=1)
     number_of_groups = models.IntegerField(default=1)
 

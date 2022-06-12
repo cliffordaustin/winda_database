@@ -77,8 +77,8 @@ class TripSerializer(serializers.ModelSerializer):
         instance.activity_pricing_type = validated_data.get(
             "activity_pricing_type", instance.activity_pricing_type
         )
-        instance.activity_number_of_poeple = validated_data.get(
-            "activity_number_of_poeple", instance.activity_number_of_poeple
+        instance.activity_number_of_people = validated_data.get(
+            "activity_number_of_people", instance.activity_number_of_people
         )
         instance.activity_number_of_sessions = validated_data.get(
             "activity_number_of_sessions", instance.activity_number_of_sessions
