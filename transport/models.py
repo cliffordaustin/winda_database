@@ -56,6 +56,15 @@ class Transportation(models.Model):
     dropoff_city = models.CharField(max_length=350, blank=True, null=True)
     dropoff_country = models.CharField(max_length=350, blank=True, null=True)
 
+    # policies
+    refaundable = models.BooleanField(default=False)
+    refund_policy = models.CharField(max_length=500, blank=True, null=True)
+    damage_policy = models.CharField(max_length=500, blank=True, null=True)
+    children_allowed = models.BooleanField(default=False)
+    pets_allowed = models.BooleanField(default=False)
+    covid_19_compliance = models.BooleanField(default=False)
+    covid_19_compliance_details = models.TextField(blank=True, null=True)
+
     def __str__(self):
         return f"{self.user} - {self.type_of_car}"
 

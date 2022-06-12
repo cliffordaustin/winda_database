@@ -77,6 +77,20 @@ class TransportationAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Policies",
+            {
+                "fields": [
+                    "refaundable",
+                    "refund_policy",
+                    "damage_policy",
+                    "children_allowed",
+                    "pets_allowed",
+                    "covid_19_compliance",
+                    "covid_19_compliance_details",
+                ]
+            },
+        ),
+        (
             "Other",
             {"fields": ["dropoff_city", "dropoff_country"]},
         ),
