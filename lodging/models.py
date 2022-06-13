@@ -186,7 +186,7 @@ class Stays(models.Model):
     # Policies
     check_in_time = models.TimeField(blank=True, null=True)
     check_out_time = models.TimeField(blank=True, null=True)
-    refaundable = models.BooleanField(default=False)
+    refundable = models.BooleanField(default=False)
     refund_policy = models.CharField(max_length=500, blank=True, null=True)
     damage_policy = models.CharField(max_length=500, blank=True, null=True)
     children_allowed = models.BooleanField(default=False)

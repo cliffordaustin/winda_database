@@ -80,7 +80,7 @@ class TransportationAdmin(admin.ModelAdmin):
             "Policies",
             {
                 "fields": [
-                    "refaundable",
+                    "refundable",
                     "refund_policy",
                     "damage_policy",
                     "children_allowed",
