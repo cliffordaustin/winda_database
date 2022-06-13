@@ -168,6 +168,7 @@ class Stays(models.Model):
     air_conditioning = models.BooleanField(default=False)
     heating = models.BooleanField(default=False)
     kitchen = models.BooleanField(default=False)
+    fridge = models.BooleanField(default=False)
     laundry = models.BooleanField(default=False)
     washing_machine = models.BooleanField(default=False)
     dedicated_working_area = models.BooleanField(default=False)
