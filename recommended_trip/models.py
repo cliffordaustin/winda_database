@@ -22,7 +22,7 @@ class SingleTrip(models.Model):
     description = models.TextField(blank=True, null=True)
 
     honeymoon = models.BooleanField(default=False)
-    familiy = models.BooleanField(default=False)
+    family = models.BooleanField(default=False)
     couples = models.BooleanField(default=False)
     friends = models.BooleanField(default=False)
     beach = models.BooleanField(default=False)
