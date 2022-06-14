@@ -21,12 +21,7 @@ class SingleTripAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {
-                "fields": (
-                    "user",
-                    "name",
-                )
-            },
+            {"fields": ("user", "name", "description")},
         ),
         (
             "Stay",
