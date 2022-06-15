@@ -117,6 +117,7 @@ class GroupTripSerializer(serializers.ModelSerializer):
         instance.starting_point = validated_data.get(
             "starting_point", instance.starting_point
         )
+        instance.name = validated_data.get("name", instance.name)
         instance.paid = validated_data.get("paid", instance.paid)
         instance.save()
 

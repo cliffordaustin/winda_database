@@ -21,8 +21,7 @@ class TripAdmin(admin.ModelAdmin):
 
 class GroupTripAdmin(admin.ModelAdmin):
 
-    list_filter = ("is_public",)
-    search_fields = ("user__email",)
+    search_fields = ("user__email", "name")
     ordering = ("updated_at",)
 
 

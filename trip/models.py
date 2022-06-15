@@ -70,6 +70,7 @@ class GroupTrip(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
     )
+    name = models.CharField(max_length=250, default="Untitled Trip")
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     trip = models.ManyToManyField(Trip, blank=True)
     transport_back = models.ForeignKey(
@@ -78,7 +79,6 @@ class GroupTrip(models.Model):
     paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_public = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-created_at"]

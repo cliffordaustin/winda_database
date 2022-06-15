@@ -1,3 +1,4 @@
+from requests import delete
 from .serializers import *
 from trip.models import *
 from lodging.models import *
@@ -38,6 +39,14 @@ class GroupTripUpdateView(generics.RetrieveUpdateAPIView):
         return queryset
 
 
+class GroupTripPaidView(generics.ListAPIView):
+    serializer_class = GroupTripSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return GroupTrip.objects.filter(user=self.request.user, paid=False)
+
+
 class TripView(APIView):
     serializer_class = GroupTripSerializer
     permission_classes = (IsAuthenticated,)
@@ -47,7 +56,18 @@ class TripView(APIView):
         serializer = GroupTripSerializer(group_trip, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def delete(self, request, slug):
+        if slug is not None:
+            group_trip = generics.get_object_or_404(GroupTrip, slug=slug)
+
+            for trip in group_trip.trip.all():
+                trip.delete()
+
+            group_trip.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request, slug):
         stay_id = request.data.get("stay_id", None)
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
@@ -110,18 +130,21 @@ class TripView(APIView):
             activity_number_of_groups=activity_number_of_groups,
         )
 
-        group_trip = GroupTrip.objects.get_or_create(
-            user=self.request.user, paid=False
-        )[0]
+        if slug is not None:
+            group_trip = generics.get_object_or_404(GroupTrip, slug=slug)
 
-        group_trip.trip.add(trip)
+            group_trip.trip.add(trip)
 
-        group_trip.save()
+            group_trip.save()
 
-        # serializer_context = {"request": request}
-        # serializer = self.serializer_class(GroupTrip, context=serializer_context)
+        else:
+            group_trip = GroupTrip.objects.create(user=self.request.user, paid=False)
 
-        all_trips = GroupTrip.objects.all()
+            group_trip.trip.add(trip)
+
+            group_trip.save()
+
+        all_trips = GroupTrip.objects.filter(user=self.request.user)
         serializer = GroupTripSerializer(all_trips, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

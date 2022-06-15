@@ -21,6 +21,7 @@ class SingleTrip(models.Model):
     )
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
+    how_long_is_trip = models.IntegerField(default=3)
 
     honeymoon = models.BooleanField(default=False)
     family = models.BooleanField(default=False)
