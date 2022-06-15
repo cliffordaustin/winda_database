@@ -64,7 +64,7 @@ class SingleTripAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "honeymoon",
-                    "familiy",
+                    "family",
                     "couples",
                     "friends",
                     "beach",
