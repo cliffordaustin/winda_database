@@ -56,7 +56,7 @@ class TripView(APIView):
         serializer = GroupTripSerializer(group_trip, many=True)
         return Response(serializer.data)
 
-    def delete(self, request, slug):
+    def delete(self, request, slug=None):
         if slug is not None:
             group_trip = generics.get_object_or_404(GroupTrip, slug=slug)
 
@@ -67,7 +67,7 @@ class TripView(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def post(self, request, slug):
+    def post(self, request, slug=None):
         stay_id = request.data.get("stay_id", None)
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
