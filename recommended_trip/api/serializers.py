@@ -8,7 +8,13 @@ from transport.api.serializers import TransportSerializer
 class SingleTripImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = SingleTripImage
-        fields = "__all__"
+        exclude = ["trip"]
+
+
+class RecommendedMonthsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecommendedMonths
+        exclude = ["trip"]
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -17,6 +23,7 @@ class TripSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
     transport = TransportSerializer(read_only=True)
     single_trip_images = SingleTripImageSerializer(many=True, read_only=True)
+    months = RecommendedMonthsSerializer(many=True, read_only=True)
 
     stay_id = serializers.PrimaryKeyRelatedField(
         queryset=Stays.objects.all(),

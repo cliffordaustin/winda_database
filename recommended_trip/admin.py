@@ -7,8 +7,13 @@ class SingleTripImageInline(admin.TabularInline):
     extra = 1
 
 
+class RecommendedMonthsInline(admin.TabularInline):
+    model = RecommendedMonths
+    extra = 1
+
+
 class SingleTripAdmin(admin.ModelAdmin):
-    inlines = (SingleTripImageInline,)
+    inlines = (SingleTripImageInline, RecommendedMonthsInline)
 
     list_display = (
         "user",

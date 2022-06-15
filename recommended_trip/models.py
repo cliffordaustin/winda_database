@@ -6,6 +6,7 @@ from core.utils import trip_image_thumbnail
 from lodging.models import *
 from transport.models import Transportation
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class SingleTrip(models.Model):
@@ -80,6 +81,20 @@ class SingleTrip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class RecommendedMonths(models.Model):
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.CASCADE, related_name="months"
+    )
+    month = models.IntegerField(
+        default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+        help_text="Format should be a number. It should be between 1 and 12",
+    )
+
+    def __str__(self):
+        return f"{self.trip} - {self.month}"
 
 
 class SingleTripImage(models.Model):

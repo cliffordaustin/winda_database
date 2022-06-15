@@ -22,6 +22,7 @@ class RecommendedTripFilter(filters.FilterSet):
     treehouse = filters.BooleanFilter(field_name="treehouse")
     boat = filters.BooleanFilter(field_name="boat")
     creative_space = filters.BooleanFilter(field_name="creative_space")
+    months = filters.NumberFilter(field_name="months")
 
     class Meta:
         model = SingleTrip
@@ -44,4 +45,5 @@ class RecommendedTripFilter(filters.FilterSet):
             "treehouse",
             "boat",
             "creative_space",
+            "months",
         ]
