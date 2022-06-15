@@ -85,7 +85,7 @@ class TripView(APIView):
         stay_non_resident = request.data.get("stay_non_resident", False)
         activity_non_resident = request.data.get("activity_non_resident", False)
         activity_pricing_type = request.data.get("activity_pricing_type", "PER PERSON")
-        activity_number_of_people = request.data.get("activity_number_of_people", None)
+        activity_number_of_people = request.data.get("activity_number_of_people", 1)
         activity_number_of_sessions = request.data.get(
             "activity_number_of_sessions", None
         )
