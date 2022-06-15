@@ -21,7 +21,7 @@ class SingleTrip(models.Model):
     )
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    how_long_is_trip = models.IntegerField(default=3)
+    # how_long_is_trip = models.IntegerField(default=3)
 
     honeymoon = models.BooleanField(default=False)
     family = models.BooleanField(default=False)
@@ -49,30 +49,30 @@ class SingleTrip(models.Model):
         help_text="suggested starting point of the trip",
     )
 
-    stay_num_of_adults = models.IntegerField(default=1)
-    stay_non_resident = models.BooleanField(default=False)
-    stay_num_of_children = models.IntegerField(default=0)
-    stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
-    number_of_people = models.IntegerField(default=1)
-    user_need_a_driver = models.BooleanField(default=False)
-    nights = models.IntegerField(default=3)
+    # stay_num_of_adults = models.IntegerField(default=1)
+    # stay_non_resident = models.BooleanField(default=False)
+    # stay_num_of_children = models.IntegerField(default=0)
+    # stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
+    # number_of_people = models.IntegerField(default=1)
+    # user_need_a_driver = models.BooleanField(default=False)
+    # nights = models.IntegerField(default=3)
 
-    activity_non_resident = models.BooleanField(default=False)
-    activity_pricing_type = models.CharField(
-        max_length=50, choices=PRICING_TYPE, default="PER PERSON"
-    )
-    activity_number_of_people = models.IntegerField(
-        default=1,
-        help_text="Set the default number of people coming for this experience. Make sure the experience supports a pricing plan of per person.",
-    )
-    activity_number_of_sessions = models.IntegerField(
-        default=0,
-        help_text="Set the default number of sessions for this experience. Make sure the experience supports a pricing plan of per session.",
-    )
-    activity_number_of_groups = models.IntegerField(
-        default=0,
-        help_text="Set the default number of group coming for this experience. Make sure the experience supports a pricing plan of per group.",
-    )
+    # activity_non_resident = models.BooleanField(default=False)
+    # activity_pricing_type = models.CharField(
+    #     max_length=50, choices=PRICING_TYPE, default="PER PERSON"
+    # )
+    # activity_number_of_people = models.IntegerField(
+    #     default=1,
+    #     help_text="Set the default number of people coming for this experience. Make sure the experience supports a pricing plan of per person.",
+    # )
+    # activity_number_of_sessions = models.IntegerField(
+    #     default=0,
+    #     help_text="Set the default number of sessions for this experience. Make sure the experience supports a pricing plan of per session.",
+    # )
+    # activity_number_of_groups = models.IntegerField(
+    #     default=0,
+    #     help_text="Set the default number of group coming for this experience. Make sure the experience supports a pricing plan of per group.",
+    # )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

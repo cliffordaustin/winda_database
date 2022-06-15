@@ -71,25 +71,25 @@ class TripView(APIView):
         stay_id = request.data.get("stay_id", None)
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
-        nights = request.data.get("nights", 3)
-        from_date = request.data.get("from_date", timezone.now())
-        activity_from_date = request.data.get("activity_from_date", timezone.now())
-        transport_from_date = request.data.get("transport_from_date", timezone.now())
+        from_date = request.data.get("from_date", None)
+        transport_number_of_days = request.data.get("transport_number_of_days", None)
+        activity_from_date = request.data.get("activity_from_date", None)
+        transport_from_date = request.data.get("transport_from_date", None)
         user_need_a_driver = request.data.get("user_need_a_driver", False)
-        number_of_people = request.data.get("number_of_people", 1)
-        number_of_days = request.data.get("number_of_days", None)
         starting_point = request.data.get("starting_point", None)
         destination = request.data.get("destination", None)
         distance = request.data.get("distance", None)
         stay_num_of_adults = request.data.get("stay_num_of_adults", 1)
-        stay_num_of_children = request.data.get("stay_num_of_children", 0)
+        stay_num_of_children = request.data.get("stay_num_of_children", None)
         stay_plan = request.data.get("stay_plan", "STANDARD")
         stay_non_resident = request.data.get("stay_non_resident", False)
         activity_non_resident = request.data.get("activity_non_resident", False)
         activity_pricing_type = request.data.get("activity_pricing_type", "PER PERSON")
-        activity_number_of_people = request.data.get("activity_number_of_people", 1)
-        activity_number_of_sessions = request.data.get("activity_number_of_sessions", 1)
-        activity_number_of_groups = request.data.get("activity_number_of_groups", 1)
+        activity_number_of_people = request.data.get("activity_number_of_people", None)
+        activity_number_of_sessions = request.data.get(
+            "activity_number_of_sessions", None
+        )
+        activity_number_of_groups = request.data.get("activity_number_of_groups", None)
 
         stay = None
         activity = None
@@ -109,13 +109,11 @@ class TripView(APIView):
             stay=stay,
             activity=activity,
             transport=transport,
-            nights=nights,
             from_date=from_date,
+            transport_number_of_days=transport_number_of_days,
             activity_from_date=activity_from_date,
             transport_from_date=transport_from_date,
-            number_of_people=number_of_people,
             user_need_a_driver=user_need_a_driver,
-            number_of_days=number_of_days,
             starting_point=starting_point,
             destination=destination,
             distance=distance,

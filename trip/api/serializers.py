@@ -49,15 +49,11 @@ class TripSerializer(serializers.ModelSerializer):
             "transport_from_date", instance.transport_from_date
         )
         instance.to_date = validated_data.get("to_date", instance.to_date)
-        instance.nights = validated_data.get("nights", instance.nights)
-        instance.number_of_people = validated_data.get(
-            "number_of_people", instance.number_of_people
-        )
         instance.user_need_a_driver = validated_data.get(
             "user_need_a_driver", instance.user_need_a_driver
         )
-        instance.number_of_days = validated_data.get(
-            "number_of_days", instance.number_of_days
+        instance.transport_number_of_days = validated_data.get(
+            "transport_number_of_days", instance.transport_number_of_days
         )
         instance.starting_point = validated_data.get(
             "starting_point", instance.starting_point

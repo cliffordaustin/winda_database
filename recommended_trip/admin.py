@@ -26,33 +26,15 @@ class SingleTripAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {"fields": ("user", "name", "description", "how_long_is_trip")},
+            {"fields": ("user", "name", "description")},
         ),
         (
             "Stay",
-            {
-                "fields": (
-                    "stay",
-                    "stay_plan",
-                    "stay_num_of_adults",
-                    "stay_num_of_children",
-                    "stay_non_resident",
-                    "nights",
-                )
-            },
+            {"fields": ("stay",)},
         ),
         (
             "Experience",
-            {
-                "fields": (
-                    "activity",
-                    "activity_pricing_type",
-                    "activity_number_of_people",
-                    "activity_number_of_sessions",
-                    "activity_number_of_groups",
-                    "activity_non_resident",
-                )
-            },
+            {"fields": ("activity",)},
         ),
         (
             "Transport",
@@ -60,7 +42,6 @@ class SingleTripAdmin(admin.ModelAdmin):
                 "fields": (
                     "transport",
                     "starting_point",
-                    "user_need_a_driver",
                 )
             },
         ),

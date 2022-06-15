@@ -20,24 +20,22 @@ class Trip(models.Model):
     transport = models.ForeignKey(
         Transportation, on_delete=models.SET_NULL, null=True, blank=True
     )
+    transport_number_of_days = models.IntegerField(blank=True, null=True)
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
 
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
     distance = models.FloatField(blank=True, null=True)
 
-    from_date = models.DateTimeField(default=timezone.now)
-    transport_from_date = models.DateTimeField(default=timezone.now)
+    from_date = models.DateTimeField(blank=True, null=True)
+    transport_from_date = models.DateTimeField(blank=True, null=True)
     stay_num_of_adults = models.IntegerField(default=1)
     stay_non_resident = models.BooleanField(default=False)
-    stay_num_of_children = models.IntegerField(default=0)
+    stay_num_of_children = models.IntegerField(blank=True, null=True)
     stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
-    activity_from_date = models.DateTimeField(default=timezone.now)
-    to_date = models.DateTimeField(default=next_time)
-    number_of_days = models.IntegerField(null=True, blank=True)
+    activity_from_date = models.DateTimeField(blank=True, null=True)
+    to_date = models.DateTimeField(blank=True, null=True)
     user_need_a_driver = models.BooleanField(default=False)
-    number_of_people = models.IntegerField(default=1)
-    nights = models.IntegerField(default=3)
     activity = models.ForeignKey(
         Activities, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -47,8 +45,8 @@ class Trip(models.Model):
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
     activity_number_of_people = models.IntegerField(default=1)
-    activity_number_of_sessions = models.IntegerField(default=1)
-    activity_number_of_groups = models.IntegerField(default=1)
+    activity_number_of_sessions = models.IntegerField(blank=True, null=True)
+    activity_number_of_groups = models.IntegerField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
