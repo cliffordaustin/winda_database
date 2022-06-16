@@ -142,6 +142,11 @@ class TripView(APIView):
 
             group_trip.save()
 
-        serializer = GroupTripSerializer(group_trip, many=True)
+        # all_trips = generics.get_object_or_404(GroupTrip, slug=group_trip.slug)
+        # serializer = GroupTripSerializer(all_trips, many=True)
+        # return Response(group_trip, status=status.HTTP_200_OK)
+
+        serializer_context = {"request": request}
+        serializer = self.serializer_class(group_trip, context=serializer_context)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
