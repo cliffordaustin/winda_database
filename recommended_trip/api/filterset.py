@@ -1,4 +1,5 @@
 from dataclasses import fields
+from random import choices
 from recommended_trip.models import *
 from django_filters import rest_framework as filters
 
@@ -23,6 +24,7 @@ class RecommendedTripFilter(filters.FilterSet):
     boat = filters.BooleanFilter(field_name="boat")
     creative_space = filters.BooleanFilter(field_name="creative_space")
     months = filters.NumberFilter(field_name="months")
+    price_budget = filters.ChoiceFilter(choices=PRICE_BUDGET, field_name="price_budget")
 
     class Meta:
         model = SingleTrip
@@ -46,4 +48,5 @@ class RecommendedTripFilter(filters.FilterSet):
             "boat",
             "creative_space",
             "months",
+            "price_budget",
         ]

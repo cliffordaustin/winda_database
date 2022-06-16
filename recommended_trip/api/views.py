@@ -5,6 +5,8 @@ from .serializers import *
 from recommended_trip.models import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from django.db.models import Q
+import re
 
 
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -32,4 +34,21 @@ class TripListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = SingleTrip.objects.all()
+
+        querystring = self.request.GET.get("location")
+        if querystring:
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= (
+                    Q(stay__location__icontains=word)
+                    | Q(stay__city__icontains=word)
+                    | Q(stay__country__icontains=word)
+                    | Q(activity__location__icontains=word)
+                    | Q(activity__location__icontains=word)
+                    | Q(activity__location__icontains=word)
+                )
+            queryset = SingleTrip.objects.filter(query).all()
+
         return queryset

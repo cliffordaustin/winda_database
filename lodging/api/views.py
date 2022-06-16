@@ -69,7 +69,11 @@ class StaysListView(generics.ListAPIView):
             query = Q()  # empty Q object
             for word in words:
                 # 'or' the queries together
-                query |= Q(location__icontains=word) | Q(city__icontains=word) | Q(country__icontains=word)
+                query |= (
+                    Q(location__icontains=word)
+                    | Q(city__icontains=word)
+                    | Q(country__icontains=word)
+                )
             queryset = Stays.objects.filter(query).all()
 
         return queryset

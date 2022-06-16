@@ -9,6 +9,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+PRICE_BUDGET = (("BUDGET", "BUDGET"), ("MID RANGE", "MID RANGE"), ("LUXURY", "LUXURY"))
+
+
 class SingleTrip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -47,6 +50,9 @@ class SingleTrip(models.Model):
         blank=True,
         null=True,
         help_text="suggested starting point of the trip",
+    )
+    price_budget = models.CharField(
+        max_length=100, choices=PRICE_BUDGET, default="MID RANGE"
     )
 
     # stay_num_of_adults = models.IntegerField(default=1)
