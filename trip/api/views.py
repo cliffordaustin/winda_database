@@ -142,7 +142,6 @@ class TripView(APIView):
 
             group_trip.save()
 
-        all_trips = GroupTrip.objects.filter(user=self.request.user)
-        serializer = GroupTripSerializer(all_trips, many=True)
+        serializer = GroupTripSerializer(group_trip, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
