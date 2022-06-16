@@ -46,8 +46,8 @@ class TripListView(generics.ListCreateAPIView):
                     | Q(stay__city__icontains=word)
                     | Q(stay__country__icontains=word)
                     | Q(activity__location__icontains=word)
-                    | Q(activity__location__icontains=word)
-                    | Q(activity__location__icontains=word)
+                    | Q(activity__city__icontains=word)
+                    | Q(activity__country__icontains=word)
                 )
             queryset = SingleTrip.objects.filter(query).all()
 
