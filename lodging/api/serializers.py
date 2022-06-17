@@ -125,88 +125,15 @@ class ReviewSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
-    stay_id = serializers.PrimaryKeyRelatedField(
-        queryset=Stays.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
-    activity = ActivitySerializer(read_only=True)
-    activity_id = serializers.PrimaryKeyRelatedField(
-        queryset=Activities.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
-    transport = TransportSerializer(read_only=True)
-    transport_id = serializers.PrimaryKeyRelatedField(
-        queryset=Transportation.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
     user_has_reviewed_stay = serializers.SerializerMethodField()
-    user_has_reviewed_activity = serializers.SerializerMethodField()
-    days = serializers.SerializerMethodField()
-    total_order_price_stay = serializers.SerializerMethodField()
-    total_order_price_activity = serializers.SerializerMethodField()
-
-    def create(self, validated_data):
-        stay = validated_data.pop("stay_id")
-        activity = validated_data.pop("activity_id")
-        transport = validated_data.pop("transport_id")
-        order = Order.objects.create(
-            stay=stay, activity=activity, transport=transport, **validated_data
-        )
-        return order
-
-    def update(self, instance, validated_data):
-        instance.transport = validated_data.get("transport_id", instance.transport)
-        instance.activity = validated_data.get("activity_id", instance.activity)
-        instance.stay = validated_data.get("stay_id", instance.stay)
-        instance.first_name = validated_data.get("first_name", instance.first_name)
-        instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.paid = validated_data.get("paid", instance.paid)
-        instance.from_date = validated_data.get("from_date", instance.from_date)
-        instance.to_date = validated_data.get("to_date", instance.to_date)
-        instance.starting_point = validated_data.get(
-            "starting_point", instance.starting_point
-        )
-        instance.transport_back = validated_data.get(
-            "transport_back", instance.transport_back
-        )
-
-        instance.save()
-        return instance
 
     class Meta:
         model = Order
         fields = "__all__"
 
-    def get_days(self, instance):
-        delta = instance.to_date - instance.from_date
-        return delta.days
-
-    def get_total_order_price_stay(self, instance):
-        return (
-            (self.get_days(instance) * instance.stay.price) if instance.stay else None
-        )
-
     def get_user_has_reviewed_stay(self, instance):
         request = self.context.get("request")
 
         order_review = Review.objects.filter(stay=instance.stay, user=request.user)
-
-        return order_review.exists()
-
-    def get_total_order_price_activity(self, instance):
-        return instance.activity.price if instance.activity else None
-
-    def get_user_has_reviewed_activity(self, instance):
-        request = self.context.get("request")
-
-        order_review = ActivityReview.objects.filter(
-            activity=instance.activity, user=request.user
-        )
 
         return order_review.exists()
