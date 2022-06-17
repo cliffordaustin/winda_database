@@ -234,10 +234,10 @@ class OrderCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # stay_slug = self.kwargs.get("stay_slug")
-        # stay = generics.get_object_or_404(Stays, slug=stay_slug)
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, stay=stay)
 
 
 class OrderListView(generics.ListAPIView):

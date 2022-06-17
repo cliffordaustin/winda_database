@@ -66,7 +66,7 @@ urlpatterns = [
     path("user-orders/paid/", OrderPaidListView.as_view(), name="orders-paid-list"),
     path("user-orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
     path(
-        "add-to-order/",
+        "stays/<stay_slug>/add-to-order/",
         OrderCreateView.as_view(),
         name="order-create",
     ),

@@ -11,8 +11,6 @@ from django.utils import timezone
 from lodging.models import PLAN_TYPE
 from activities.models import PRICING_TYPE
 
-next_time = timezone.now() + timezone.timedelta(days=3)
-
 
 class Trip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)

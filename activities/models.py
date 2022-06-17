@@ -15,8 +15,6 @@ PRICING_TYPE = (
     ("PER SESSION", "PER SESSION"),
 )
 
-next_time = timezone.now() + timezone.timedelta(days=3)
-
 
 class Activities(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -148,7 +146,6 @@ class Cart(models.Model):
         Activities, on_delete=models.CASCADE, related_name="activity_cart"
     )
     from_date = models.DateTimeField(default=timezone.now)
-    to_date = models.DateTimeField(default=next_time)
 
     non_resident = models.BooleanField(default=False)
     pricing_type = models.CharField(
@@ -171,7 +168,6 @@ class Order(models.Model):
         Activities, on_delete=models.CASCADE, related_name="activity_order"
     )
     from_date = models.DateTimeField(default=timezone.now)
-    to_date = models.DateTimeField(default=next_time)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)

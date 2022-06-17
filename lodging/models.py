@@ -44,9 +44,6 @@ PLAN_TYPE = (
 )
 
 
-next_time = timezone.now() + timezone.timedelta(days=3)
-
-
 class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
@@ -330,7 +327,7 @@ class Cart(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="cart")
     from_date = models.DateTimeField(default=timezone.now)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
-    to_date = models.DateTimeField(default=next_time)
+    to_date = models.DateTimeField(blank=True, null=True)
     non_resident = models.BooleanField(default=False)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
@@ -345,19 +342,10 @@ class Order(models.Model):
     stay = models.ForeignKey(
         Stays, on_delete=models.SET_NULL, blank=True, null=True, related_name="order"
     )
-    activity = models.ForeignKey(
-        Activities, on_delete=models.SET_NULL, blank=True, null=True
-    )
-    transport = models.ForeignKey(
-        Transportation,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="transport",
-    )
+
     from_date = models.DateTimeField(default=timezone.now)
     non_resident = models.BooleanField(default=False)
-    to_date = models.DateTimeField(default=next_time)
+    to_date = models.DateTimeField(blank=True, null=True)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
@@ -365,14 +353,6 @@ class Order(models.Model):
     last_name = models.CharField(max_length=120, blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
-    starting_point = models.CharField(max_length=250, blank=True, null=True)
-    transport_back = models.ForeignKey(
-        Transportation,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="transport_back",
-    )
 
     def __str__(self):
         return f"Order by {self.user}"
