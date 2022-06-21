@@ -23,7 +23,10 @@ class Trip(models.Model):
 
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
-    distance = models.FloatField(blank=True, null=True)
+    distance = models.FloatField(blank=True, null=True)  # remove
+
+    stay_is_not_available = models.BooleanField(default=False)
+    checked_for_availability = models.BooleanField(default=False)
 
     from_date = models.DateTimeField(blank=True, null=True)
     transport_from_date = models.DateTimeField(blank=True, null=True)

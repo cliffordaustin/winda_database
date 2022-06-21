@@ -82,6 +82,12 @@ class TripSerializer(serializers.ModelSerializer):
         instance.activity_number_of_groups = validated_data.get(
             "activity_number_of_groups", instance.activity_number_of_groups
         )
+        instance.stay_is_not_available = validated_data.get(
+            instance.stay_is_not_available, instance.stay_is_not_available
+        )
+        instance.checked_for_availability = validated_data.get(
+            "checked_for_availability", instance.checked_for_availability
+        )
         instance.stay_plan = validated_data.get("stay_plan", instance.stay_plan)
         instance.destination = validated_data.get("destination", instance.destination)
         instance.distance = validated_data.get("distance", instance.distance)

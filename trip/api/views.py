@@ -72,7 +72,7 @@ class TripView(APIView):
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
         from_date = request.data.get("from_date", None)
-        transport_number_of_days = request.data.get("transport_number_of_days", None)
+        transport_number_of_days = request.data.get("transport_number_of_days", 1)
         activity_from_date = request.data.get("activity_from_date", None)
         transport_from_date = request.data.get("transport_from_date", None)
         user_need_a_driver = request.data.get("user_need_a_driver", False)
@@ -90,6 +90,8 @@ class TripView(APIView):
             "activity_number_of_sessions", None
         )
         activity_number_of_groups = request.data.get("activity_number_of_groups", None)
+        checked_for_availability = request.data.get("checked_for_availability", False)
+        stay_is_not_available = request.data.get("stay_is_not_available", False)
 
         stay = None
         activity = None
@@ -126,6 +128,8 @@ class TripView(APIView):
             activity_number_of_people=activity_number_of_people,
             activity_number_of_sessions=activity_number_of_sessions,
             activity_number_of_groups=activity_number_of_groups,
+            checked_for_availability=checked_for_availability,
+            stay_is_not_available=stay_is_not_available,
         )
 
         if slug is not None:
