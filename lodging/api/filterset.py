@@ -33,6 +33,10 @@ class StayFilter(filters.FilterSet):
     max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
     min_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="gte")
     max_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="lte")
+    min_bathrooms = filters.NumberFilter(field_name="bathrooms", lookup_expr="gte")
+    max_bathrooms = filters.NumberFilter(field_name="bathrooms", lookup_expr="lte")
+    min_beds = filters.NumberFilter(field_name="beds", lookup_expr="gte")
+    max_beds = filters.NumberFilter(field_name="beds", lookup_expr="lte")
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
     theme = CharInFilter(label="Travel Theme", method=multiple_search)
     amenities = CharInFilter(field_name="ammenities", lookup_expr="overlap")
@@ -44,6 +48,10 @@ class StayFilter(filters.FilterSet):
             "max_price",
             "min_rooms",
             "max_rooms",
+            "min_bathrooms",
+            "max_bathrooms",
+            "min_beds",
+            "max_beds",
             "type_of_stay",
             "theme",
             "amenities",

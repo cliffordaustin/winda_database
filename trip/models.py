@@ -22,7 +22,7 @@ class Trip(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
 
     starting_point = models.CharField(max_length=250, blank=True, null=True)
-    destination = models.CharField(max_length=250, blank=True, null=True)
+    destination = models.CharField(max_length=250, blank=True, null=True)  # remove
     distance = models.FloatField(blank=True, null=True)  # remove
 
     stay_is_not_available = models.BooleanField(default=False)
@@ -65,7 +65,7 @@ class Trip(models.Model):
 
 
 class GroupTrip(models.Model):
-    starting_point = models.CharField(max_length=250, blank=True, null=True)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)  # remove
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
     )
