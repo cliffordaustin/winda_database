@@ -35,6 +35,8 @@ class StayFilter(filters.FilterSet):
     max_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="lte")
     min_bathrooms = filters.NumberFilter(field_name="bathrooms", lookup_expr="gte")
     max_bathrooms = filters.NumberFilter(field_name="bathrooms", lookup_expr="lte")
+    min_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="gte")
+    max_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="lte")
     min_beds = filters.NumberFilter(field_name="beds", lookup_expr="gte")
     max_beds = filters.NumberFilter(field_name="beds", lookup_expr="lte")
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")

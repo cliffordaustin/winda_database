@@ -17,19 +17,22 @@ class ActivitiesFilter(filters.FilterSet):
     type_of_activities = CharInFilter(
         field_name="type_of_activities", lookup_expr="overlap"
     )
-    gear_or_equipments = CharInFilter(
-        field_name="gear_or_equipments", lookup_expr="overlap"
-    )
 
     class Meta:
         model = Activities
-        fields = [
-            "min_price",
-            "max_price",
-            "min_capacity",
-            "max_capacity",
+        # fields = [
+        #     "min_price",
+        #     "max_price",
+        #     "min_capacity",
+        #     "max_capacity",
+        #     "type_of_activities",
+        #     "gear_or_equipments",
+        # ]
+
+        exclude = [
             "type_of_activities",
-            "gear_or_equipments",
+            "equipments_required_by_user_to_bring",
+            "equipments_provided",
         ]
 
 
