@@ -14,9 +14,9 @@ class CharInFilter(filters.BaseInFilter, filters.CharFilter):
 
 
 class TransportationFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr="gte")
-    max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
-    type_of_car = filters.ChoiceFilter(field_name="type_of_car", choices=TYPE_OF_CAR)
+    min_price = filters.NumberFilter(field_name="price_per_day", lookup_expr="gte")
+    max_price = filters.NumberFilter(field_name="price_per_day", lookup_expr="lte")
+    type_of_car = CharInFilter(field_name="type_of_car", lookup_expr="in")
     vehicle_make = filters.CharFilter(
         field_name="vehicle_make", lookup_expr="icontains"
     )
