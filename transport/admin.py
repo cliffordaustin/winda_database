@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Transportation, TransportationImage, Views, Cart, Order, Review
+from .models import (
+    Transportation,
+    TransportationImage,
+    Cart,
+    Order,
+    Review,
+    DriverOperatesWithin,
+)
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
@@ -8,8 +15,13 @@ class TransportationImageInline(admin.TabularInline):
     extra = 1
 
 
+class DriverOperatesWithinInline(admin.TabularInline):
+    model = DriverOperatesWithin
+    extra = 1
+
+
 class TransportationAdmin(admin.ModelAdmin):
-    inlines = (TransportationImageInline,)
+    inlines = (TransportationImageInline, DriverOperatesWithinInline)
     list_display = (
         "user",
         "type_of_car",

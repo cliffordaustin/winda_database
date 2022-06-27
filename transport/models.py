@@ -69,6 +69,17 @@ class Transportation(models.Model):
         return f"{self.user} - {self.type_of_car}"
 
 
+class DriverOperatesWithin(models.Model):
+    transportation = models.ForeignKey(
+        Transportation, on_delete=models.CASCADE, related_name="driver_operates_within"
+    )
+    city = models.CharField(max_length=350, blank=True, null=True)
+    country = models.CharField(max_length=350, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.transportation} - {self.city}"
+
+
 class TransportationImage(models.Model):
     transportation = models.ForeignKey(
         Transportation, on_delete=models.CASCADE, related_name="transportation_images"

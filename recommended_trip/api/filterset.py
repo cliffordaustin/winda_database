@@ -23,7 +23,7 @@ class RecommendedTripFilter(filters.FilterSet):
     treehouse = filters.BooleanFilter(field_name="treehouse")
     boat = filters.BooleanFilter(field_name="boat")
     creative_space = filters.BooleanFilter(field_name="creative_space")
-    months = filters.NumberFilter(field_name="months")
+    months = filters.NumberFilter(field_name="months__month")
     price_budget = filters.ChoiceFilter(choices=PRICE_BUDGET, field_name="price_budget")
 
     class Meta:
