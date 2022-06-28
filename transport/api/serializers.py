@@ -111,14 +111,10 @@ class OrderSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     transport = TransportSerializer(read_only=True)
     user_has_reviewed = serializers.SerializerMethodField()
-    total_order_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = "__all__"
-
-    def get_total_order_price(self, instance):
-        return (instance.distance / 10) * instance.transport.price
 
     def get_user_has_reviewed(self, instance):
         request = self.context.get("request")
