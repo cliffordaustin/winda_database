@@ -298,3 +298,23 @@ class SaveTransportDetailView(generics.RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return SaveTransportation.objects.filter(user=self.request.user)
+
+
+class SaveTransportsDeleteView(generics.DestroyAPIView):
+    serializer_class = SaveTransportSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "transport_id"
+
+    def get_queryset(self):
+        return SaveTransportation.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        transport_id = self.kwargs.get("transport_id")
+        transport = generics.get_object_or_404(Transportation, id=transport_id)
+
+        save_queryset = SaveTransportation.objects.filter(
+            user=self.request.user, transport=transport
+        )
+
+        if save_queryset.exists():
+            save_queryset.delete()

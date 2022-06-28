@@ -74,6 +74,11 @@ urlpatterns = [
         name="save-activity",
     ),
     path(
+        "activities/<activity_id>/delete/",
+        SaveActivityDeleteView.as_view(),
+        name="delete-activity",
+    ),
+    path(
         "user-saved-activities/",
         SaveActivityListView.as_view(),
         name="user-saved-activities",

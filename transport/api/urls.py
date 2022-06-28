@@ -63,6 +63,11 @@ urlpatterns = [
         name="save-transport",
     ),
     path(
+        "transport/<transport_id>/delete/",
+        SaveTransportsDeleteView.as_view(),
+        name="delete-transport",
+    ),
+    path(
         "user-saved-transports/",
         SaveTransportListView.as_view(),
         name="user-saved-transports",

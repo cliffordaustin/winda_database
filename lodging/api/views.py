@@ -290,3 +290,21 @@ class SaveStaysDetailView(generics.RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return SaveStays.objects.filter(user=self.request.user)
+
+
+class SaveStaysDeleteView(generics.DestroyAPIView):
+    serializer_class = SaveStaysSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "stay_id"
+
+    def get_queryset(self):
+        return SaveStays.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        stay_id = self.kwargs.get("stay_id")
+        stay = generics.get_object_or_404(Stays, id=stay_id)
+
+        save_queryset = SaveStays.objects.filter(user=self.request.user, stay=stay)
+
+        if save_queryset.exists():
+            save_queryset.delete()

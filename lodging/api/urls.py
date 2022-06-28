@@ -58,6 +58,11 @@ urlpatterns = [
         name="save-stay",
     ),
     path(
+        "stays/<stay_id>/delete/",
+        SaveStaysDeleteView.as_view(),
+        name="delete-stay",
+    ),
+    path(
         "user-saved-stays/",
         SaveStaysListView.as_view(),
         name="user-saved-stays",

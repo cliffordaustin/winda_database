@@ -1,4 +1,6 @@
 import re
+
+from requests import delete
 from activities.api.filterset import ActivitiesFilter
 from .filterset import ReviewFilter
 from lodging.api.pagination import Pagination
@@ -295,3 +297,23 @@ class SaveActivityDetailView(generics.RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return SaveActivities.objects.filter(user=self.request.user)
+
+
+class SaveActivityDeleteView(generics.DestroyAPIView):
+    serializer_class = SaveActivitySerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "activity_id"
+
+    def get_queryset(self):
+        return SaveActivities.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        activity_id = self.kwargs.get("activity_id")
+        activity = generics.get_object_or_404(Activities, id=activity_id)
+
+        save_queryset = SaveActivities.objects.filter(
+            user=self.request.user, activity=activity
+        )
+
+        if save_queryset.exists():
+            save_queryset.delete()
