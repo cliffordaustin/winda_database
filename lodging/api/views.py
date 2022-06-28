@@ -1,13 +1,7 @@
 import re
 from lodging.api.pagination import Pagination
-from .serializers import (
-    CartSerializer,
-    OrderSerializer,
-    StayViewsSerializer,
-    StaysSerializer,
-    StayImageSerializer,
-)
-from lodging.models import Cart, Order, Stays, StayImage, Views
+from .serializers import *
+from lodging.models import *
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -17,7 +11,6 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from .filterset import StayFilter, ReviewFilter
 from django.db.models import Q
 from lodging.models import Review
-from .serializers import ReviewSerializer
 from rest_framework.validators import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -262,3 +255,38 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class SaveStaysCreateView(generics.CreateAPIView):
+    serializer_class = SaveStaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveStays.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        save_queryset = SaveStays.objects.filter(user=self.request.user, stay=stay)
+
+        if save_queryset.exists():
+            raise ValidationError("User has already saved this listing")
+
+        serializer.save(stay=stay, user=self.request.user)
+
+
+class SaveStaysListView(generics.ListAPIView):
+    serializer_class = SaveStaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveStays.objects.filter(user=self.request.user)
+
+
+class SaveStaysDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = SaveStaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveStays.objects.filter(user=self.request.user)

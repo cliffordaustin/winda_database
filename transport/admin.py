@@ -1,12 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Transportation,
-    TransportationImage,
-    Cart,
-    Order,
-    Review,
-    DriverOperatesWithin,
-)
+from .models import *
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
@@ -129,3 +122,4 @@ admin.site.register(Transportation, TransportationAdmin)
 admin.site.register(Order)
 admin.site.register(Cart)
 admin.site.register(Review)
+admin.site.register(SaveTransportation)

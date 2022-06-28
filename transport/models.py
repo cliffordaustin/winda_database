@@ -179,3 +179,13 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.rate) + " - " + str(self.title)
+
+
+class SaveTransportation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    transport = models.ForeignKey(
+        Transportation, on_delete=models.CASCADE, related_name="saved_transport"
+    )
+
+    def __str__(self):
+        return str(self.transport)

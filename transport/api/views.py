@@ -260,3 +260,41 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class SaveTransportCreateView(generics.CreateAPIView):
+    serializer_class = SaveTransportSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = SaveTransportation.objects.filter(user=self.request.user)
+        return queryset
+
+    def perform_create(self, serializer):
+        transport_slug = self.kwargs.get("transport_slug")
+        transport = generics.get_object_or_404(Transportation, slug=transport_slug)
+
+        save_queryset = SaveTransportation.objects.filter(
+            user=self.request.user, transport=transport
+        )
+
+        if save_queryset.exists():
+            raise ValidationError("User has already saved this transport")
+
+        serializer.save(transport=transport, user=self.request.user)
+
+
+class SaveTransportListView(generics.ListAPIView):
+    serializer_class = SaveTransportSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveTransportation.objects.filter(user=self.request.user)
+
+
+class SaveTransportDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = SaveTransportSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveTransportation.objects.filter(user=self.request.user)

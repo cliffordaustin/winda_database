@@ -2,7 +2,7 @@ import string
 from rest_framework import serializers
 from activities.api.serializers import ActivitySerializer
 from activities.models import Activities
-from lodging.models import Cart, Order, Stays, StayImage, Views
+from lodging.models import Cart, Order, Stays, StayImage, Views, SaveStays
 from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
@@ -39,6 +39,9 @@ class StaysSerializer(serializers.ModelSerializer):
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
 
+    has_user_saved = serializers.SerializerMethodField()
+    saved_count = serializers.SerializerMethodField()
+
     def get_count_total_review_rates(self, instance):
         return instance.reviews.aggregate(Sum("rate"))["rate__sum"]
 
@@ -59,6 +62,19 @@ class StaysSerializer(serializers.ModelSerializer):
 
     def get_num_of_five_stars(self, instance):
         return instance.reviews.filter(rate=5).count()
+
+    def get_saved_count(self, instance):
+        return instance.saved_stays.count()
+
+    def get_has_user_saved(self, instance):
+        request = self.context.get("request")
+
+        try:
+            saved = SaveStays.objects.filter(stay=instance, user=request.user)
+            saved = saved.exists()
+        except:
+            saved = False
+        return saved
 
     class Meta:
         model = Stays
@@ -137,3 +153,12 @@ class OrderSerializer(serializers.ModelSerializer):
         order_review = Review.objects.filter(stay=instance.stay, user=request.user)
 
         return order_review.exists()
+
+
+class SaveStaysSerializer(serializers.ModelSerializer):
+    stay = StaysSerializer(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = SaveStays
+        fields = "__all__"

@@ -1,23 +1,5 @@
 from django.urls import path
-from .views import (
-    ActivityListView,
-    ActivityCreateView,
-    ActivityDetailView,
-    ActivityImageCreateView,
-    ActivityImageListView,
-    ActivityImageDetailView,
-    CartDetailView,
-    CartItemAPIView,
-    CartListView,
-    OrderCreateView,
-    OrderDetailView,
-    OrderListView,
-    OrderPaidListView,
-    ReviewCreateView,
-    ReviewDetailView,
-    ReviewListView,
-    CreateActivityViews,
-)
+from .views import *
 
 
 urlpatterns = [
@@ -85,5 +67,20 @@ urlpatterns = [
         "activities/<activity_slug>/add-to-order/",
         OrderCreateView.as_view(),
         name="order-create",
+    ),
+    path(
+        "activities/<activity_slug>/save/",
+        SaveActivityCreateView.as_view(),
+        name="save-activity",
+    ),
+    path(
+        "user-saved-activities/",
+        SaveActivityListView.as_view(),
+        name="user-saved-activities",
+    ),
+    path(
+        "user-saved-activities/<int:pk>/",
+        SaveActivityDetailView.as_view(),
+        name="user-saved-activities-detail",
     ),
 ]

@@ -1,23 +1,5 @@
 from django.urls import path
-from .views import (
-    OrderPaidListView,
-    StaysListView,
-    StaysCreateView,
-    StaysDetailView,
-    StayImageCreateView,
-    StayImageListView,
-    StayImageDetailView,
-    ReviewCreateView,
-    ReviewDetailView,
-    ReviewListView,
-    CreateStayViews,
-    CartListView,
-    CartDetailView,
-    CartItemAPIView,
-    OrderListView,
-    OrderDetailView,
-    OrderCreateView,
-)
+from .views import *
 
 
 urlpatterns = [
@@ -69,5 +51,20 @@ urlpatterns = [
         "stays/<stay_slug>/add-to-order/",
         OrderCreateView.as_view(),
         name="order-create",
+    ),
+    path(
+        "stays/<stay_slug>/save/",
+        SaveStaysCreateView.as_view(),
+        name="save-stay",
+    ),
+    path(
+        "user-saved-stays/",
+        SaveStaysListView.as_view(),
+        name="user-saved-stays",
+    ),
+    path(
+        "user-saved-stays/<int:pk>/",
+        SaveStaysDetailView.as_view(),
+        name="user-saved-stays-detail",
     ),
 ]

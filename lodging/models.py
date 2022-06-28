@@ -370,3 +370,13 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.rate) + " - " + str(self.title)
+
+
+class SaveStays(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="saved_stays"
+    )
+
+    def __str__(self):
+        return str(self.stay)

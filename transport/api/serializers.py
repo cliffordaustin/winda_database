@@ -23,6 +23,9 @@ class TransportSerializer(serializers.ModelSerializer):
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
 
+    has_user_saved = serializers.SerializerMethodField()
+    saved_count = serializers.SerializerMethodField()
+
     def get_count_total_review_rates(self, instance):
         return instance.transport_review.aggregate(Sum("rate"))["rate__sum"]
 
@@ -46,6 +49,21 @@ class TransportSerializer(serializers.ModelSerializer):
 
     def get_views(self, instance):
         return instance.transport_views.count()
+
+    def get_saved_count(self, instance):
+        return instance.saved_transport.count()
+
+    def get_has_user_saved(self, instance):
+        request = self.context.get("request")
+
+        try:
+            saved = SaveTransportation.objects.filter(
+                transport=instance, user=request.user
+            )
+            saved = saved.exists()
+        except:
+            saved = False
+        return saved
 
     def get_has_user_reviewed(self, instance):
         request = self.context.get("request")
@@ -124,3 +142,12 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
         return order_review.exists()
+
+
+class SaveTransportSerializer(serializers.ModelSerializer):
+    transport = TransportSerializer(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = SaveTransportation
+        fields = "__all__"

@@ -2,15 +2,8 @@ import re
 from activities.api.filterset import ActivitiesFilter
 from .filterset import ReviewFilter
 from lodging.api.pagination import Pagination
-from .serializers import (
-    ActivityImageSerializer,
-    ActivitySerializer,
-    ActivityViewsSerializer,
-    CartSerializer,
-    OrderSerializer,
-    ReviewSerializer,
-)
-from activities.models import Activities, ActivitiesImage, Cart, Order, Review, Views
+from .serializers import *
+from activities.models import *
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -264,3 +257,41 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class SaveActivityCreateView(generics.CreateAPIView):
+    serializer_class = SaveActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = SaveActivities.objects.filter(user=self.request.user)
+        return queryset
+
+    def perform_create(self, serializer):
+        activity_slug = self.kwargs.get("activity_slug")
+        activity = generics.get_object_or_404(Activities, slug=activity_slug)
+
+        save_queryset = SaveActivities.objects.filter(
+            user=self.request.user, activity=activity
+        )
+
+        if save_queryset.exists():
+            raise ValidationError("User has already saved this listing")
+
+        serializer.save(activity=activity, user=self.request.user)
+
+
+class SaveActivityListView(generics.ListAPIView):
+    serializer_class = SaveActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveActivities.objects.filter(user=self.request.user)
+
+
+class SaveActivityDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = SaveActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SaveActivities.objects.filter(user=self.request.user)

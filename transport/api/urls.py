@@ -57,4 +57,19 @@ urlpatterns = [
     path(
         "user-transport-orders/paid/", OrderPaidListView.as_view(), name="orders-paid"
     ),
+    path(
+        "transport/<transport_slug>/save/",
+        SaveTransportCreateView.as_view(),
+        name="save-transport",
+    ),
+    path(
+        "user-saved-transports/",
+        SaveTransportListView.as_view(),
+        name="user-saved-transports",
+    ),
+    path(
+        "user-saved-transports/<int:pk>/",
+        SaveTransportDetailView.as_view(),
+        name="user-saved-transports-detail",
+    ),
 ]

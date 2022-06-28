@@ -1,5 +1,13 @@
 from rest_framework import serializers
-from activities.models import Activities, ActivitiesImage, Cart, Order, Review, Views
+from activities.models import (
+    Activities,
+    ActivitiesImage,
+    Cart,
+    Order,
+    Review,
+    Views,
+    SaveActivities,
+)
 from django.db.models import Sum
 
 
@@ -22,6 +30,9 @@ class ActivitySerializer(serializers.ModelSerializer):
     num_of_one_stars = serializers.SerializerMethodField()
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
+
+    has_user_saved = serializers.SerializerMethodField()
+    saved_count = serializers.SerializerMethodField()
 
     def get_count_total_review_rates(self, instance):
         return instance.activity_reviews.aggregate(Sum("rate"))["rate__sum"]
@@ -66,6 +77,19 @@ class ActivitySerializer(serializers.ModelSerializer):
         except:
             has_user_reviewed = False
         return has_user_reviewed
+
+    def get_saved_count(self, instance):
+        return instance.saved_activities.count()
+
+    def get_has_user_saved(self, instance):
+        request = self.context.get("request")
+
+        try:
+            saved = SaveActivities.objects.filter(activity=instance, user=request.user)
+            saved = saved.exists()
+        except:
+            saved = False
+        return saved
 
     class Meta:
         model = Activities
@@ -125,3 +149,12 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
         return order_review.exists()
+
+
+class SaveActivitySerializer(serializers.ModelSerializer):
+    activity = ActivitySerializer(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = SaveActivities
+        fields = "__all__"
