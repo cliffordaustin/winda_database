@@ -17,9 +17,9 @@ from transport.models import Transportation
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 
 PRICING_TYPE = (
-    ("PER PERSON", "PER PERSON"),
-    ("PER ROOM", "PER ROOM"),
-    ("WHOLE PLACE", "WHOLE PLACE"),
+    ("REASONABLE", "REASONABLE"),
+    ("MID-RANGE", "MID-RANGE"),
+    ("HIGH-END", "HIGH-END"),
 )
 
 TYPE_OF_STAY = (
@@ -296,6 +296,10 @@ class Stays(models.Model):
     emperor_suite_room_children_price = models.FloatField(blank=True, null=True)
     emperor_suite_room_children_price_non_resident = models.FloatField(
         blank=True, null=True
+    )
+
+    pricing_type = models.CharField(
+        max_length=100, choices=PRICING_TYPE, default="REASONABLE"
     )
 
     is_active = models.BooleanField(default=True)

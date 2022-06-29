@@ -335,7 +335,12 @@ class StayAdmin(admin.ModelAdmin):
         ),
         (
             "Others",
-            {"fields": ("is_active",)},
+            {
+                "fields": (
+                    "pricing_type",
+                    "is_active",
+                )
+            },
         ),
     )
 
