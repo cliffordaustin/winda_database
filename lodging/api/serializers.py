@@ -2,7 +2,7 @@ import string
 from rest_framework import serializers
 from activities.api.serializers import ActivitySerializer
 from activities.models import Activities
-from lodging.models import Cart, Order, Stays, StayImage, Views, SaveStays
+from lodging.models import *
 from urllib.request import urlopen
 import json
 from geopy.distance import geodesic
@@ -25,6 +25,24 @@ class StayImageSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class ExperiencesIncludedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExperiencesIncluded
+        exclude = ["stay"]
+
+
+class FactsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Facts
+        exclude = ["stay"]
+
+
+class InclusionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inclusions
+        exclude = ["stay"]
+
+
 class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)
@@ -38,6 +56,9 @@ class StaysSerializer(serializers.ModelSerializer):
     num_of_one_stars = serializers.SerializerMethodField()
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
+    experiences_included = ExperiencesIncludedSerializer(many=True, read_only=True)
+    facts = FactsSerializer(many=True, read_only=True)
+    inclusions = InclusionsSerializer(many=True, read_only=True)
 
     has_user_saved = serializers.SerializerMethodField()
     saved_count = serializers.SerializerMethodField()

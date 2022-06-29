@@ -6,6 +6,7 @@ from django.db import models
 from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from phonenumber_field.modelfields import PhoneNumberField
 from activities.models import Activities
 from core.utils import lodge_image_thumbnail
 from django.utils import timezone
@@ -27,7 +28,30 @@ TYPE_OF_STAY = (
     ("HOUSE", "HOUSE"),
     ("UNIQUE SPACE", "UNIQUE SPACE"),
     ("CAMPSITE", "CAMPSITE"),
+    ("TENTED CAMP", "TENTED CAMP"),
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
+    ("WEEKEND GETAWAY", "WEEKEND GETAWAY"),
+    ("ROMANTIC GETAWAY", "ROMANTIC GETAWAY"),
+    ("GROUP GETAWAY", "GROUP GETAWAY"),
+    ("CONSERVANCY", "CONSERVANCY"),
+    ("NATIONAL PARK/GAME RESERVES", "NATIONAL PARK/GAME RESERVES"),
+    ("COZY PLACE", "COZY PLACE"),
+    ("LAKEFRONT", "LAKEFRONT"),
+    ("BEACHFRONT", "BEACHFRONT"),
+    ("LUXURIOUS", "LUXURIOUS"),
+    ("BEAUTIFUL VIEW", "BEAUTIFUL VIEW"),
+    ("OFF-GRID", "OFF-GRID"),
+    ("ECO-STAY", "ECO-STAY"),
+    ("QUIRKY", "QUIRKY"),
+    ("TRADITIONAL", "TRADITIONAL"),
+    ("MANSIONS", "MANSIONS"),
+    ("OVER-WATER", "OVER-WATER"),
+    ("UNIQUE EXPERIENCES", "UNIQUE EXPERIENCES"),
+    ("STUNNING ARCHITECTURE", "STUNNING ARCHITECTURE"),
+    ("HONEYMOON SPOT", "HONEYMOON SPOT"),
+    ("RIVERFRONT", "RIVERFRONT"),
+    ("PRIVATE HOUSE", "PRIVATE HOUSE"),
+    ("RESORT", "RESORT"),
 )
 
 PLAN_TYPE = (
@@ -47,6 +71,46 @@ PLAN_TYPE = (
 )
 
 
+class ExperiencesIncluded(models.Model):
+    stay = models.ForeignKey(
+        "Stays", on_delete=models.CASCADE, related_name="experiences_included"
+    )
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.stay.name)
+
+    class Meta:
+        verbose_name = "Experience Included"
+        verbose_name_plural = "Experiences Included"
+
+
+class Facts(models.Model):
+    stay = models.ForeignKey("Stays", on_delete=models.CASCADE, related_name="facts")
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.stay.name)
+
+    class Meta:
+        verbose_name = "Fact"
+        verbose_name_plural = "Facts"
+
+
+class Inclusions(models.Model):
+    stay = models.ForeignKey(
+        "Stays", on_delete=models.CASCADE, related_name="inclusions"
+    )
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.stay.name)
+
+    class Meta:
+        verbose_name = "Inclusion"
+        verbose_name_plural = "Inclusions"
+
+
 class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
@@ -58,29 +122,29 @@ class Stays(models.Model):
     )
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
 
-    experiences_included = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="Experiences included in this package ' , '. Eg Camping, Fishing, Hiking",
-    )
-    # work on this in the frontend
-    facts = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="Experiences included in this package ' , '",
-    )
-    # work on this in the frontend
-    included = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="included in this package ' , '. Eg Pool",
-    )
+    # experiences_included = ArrayField(
+    #     models.CharField(max_length=500, blank=True, null=True),
+    #     blank=True,
+    #     null=True,
+    #     default=list,
+    #     help_text="Separate all experiences included in this package by using ' , '. If the text includes a comma, then place it in a single quote Eg Camping, Fishing, Hiking",
+    # )
+    # # work on this in the frontend
+    # facts = ArrayField(
+    #     models.CharField(max_length=500, blank=True, null=True),
+    #     blank=True,
+    #     null=True,
+    #     default=list,
+    #     help_text="Separate all experiences included in this package by using ' , '. If the text includes a comma, then place it in a single quote",
+    # )
+    # # work on this in the frontend
+    # included = ArrayField(
+    #     models.CharField(max_length=500, blank=True, null=True),
+    #     blank=True,
+    #     null=True,
+    #     default=list,
+    #     help_text="Separate each by using ' , '. If the text includes a comma, then place it in a single quote. Eg Pool",
+    # )
 
     # Lodge
     tented_camp = models.BooleanField(default=False)
@@ -173,7 +237,7 @@ class Stays(models.Model):
         blank=True,
         null=True,
         default=list,
-        help_text="included in this package ' , '.",
+        help_text="Separate each amenities by using ' , '",
     )
 
     # Policies
@@ -207,6 +271,18 @@ class Stays(models.Model):
     super_deluxe_price_non_resident = models.FloatField(blank=True, null=True)
     super_deluxe_children_price = models.FloatField(blank=True, null=True)
     super_deluxe_children_price_non_resident = models.FloatField(blank=True, null=True)
+    super_deluxe_teen_price = models.FloatField(blank=True, null=True)
+    super_deluxe_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    super_deluxe_single_price = models.FloatField(blank=True, null=True)
+    super_deluxe_single_price_non_resident = models.FloatField(blank=True, null=True)
+    super_deluxe_single_child_price = models.FloatField(blank=True, null=True)
+    super_deluxe_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    super_deluxe_single_teen_price = models.FloatField(blank=True, null=True)
+    super_deluxe_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     deluxe = models.BooleanField(default=False)
     deluxe_capacity = models.IntegerField(blank=True, null=True)
@@ -214,6 +290,14 @@ class Stays(models.Model):
     deluxe_price_non_resident = models.FloatField(blank=True, null=True)
     deluxe_children_price = models.FloatField(blank=True, null=True)
     deluxe_children_price_non_resident = models.FloatField(blank=True, null=True)
+    deluxe_teen_price = models.FloatField(blank=True, null=True)
+    deluxe_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    deluxe_single_price = models.FloatField(blank=True, null=True)
+    deluxe_single_price_non_resident = models.FloatField(blank=True, null=True)
+    deluxe_single_child_price = models.FloatField(blank=True, null=True)
+    deluxe_single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    deluxe_single_teen_price = models.FloatField(blank=True, null=True)
+    deluxe_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     standard = models.BooleanField(default=True)
     standard_capacity = models.IntegerField(default=2)
@@ -221,6 +305,14 @@ class Stays(models.Model):
     price_non_resident = models.FloatField(blank=True, null=True)
     children_price = models.FloatField(blank=True, null=True)
     children_price_non_resident = models.FloatField(blank=True, null=True)
+    teen_price = models.FloatField(blank=True, null=True)
+    teen_price_non_resident = models.FloatField(blank=True, null=True)
+    single_price = models.FloatField(blank=True, null=True)
+    single_price_non_resident = models.FloatField(blank=True, null=True)
+    single_child_price = models.FloatField(blank=True, null=True)
+    single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    single_teen_price = models.FloatField(blank=True, null=True)
+    single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     studio = models.BooleanField(default=False)
     studio_capacity = models.IntegerField(blank=True, null=True)
@@ -228,6 +320,14 @@ class Stays(models.Model):
     studio_price_non_resident = models.FloatField(blank=True, null=True)
     studio_children_price = models.FloatField(blank=True, null=True)
     studio_children_price_non_resident = models.FloatField(blank=True, null=True)
+    studio_teen_price = models.FloatField(blank=True, null=True)
+    studio_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    studio_single_price = models.FloatField(blank=True, null=True)
+    studio_single_price_non_resident = models.FloatField(blank=True, null=True)
+    studio_single_child_price = models.FloatField(blank=True, null=True)
+    studio_single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    studio_single_teen_price = models.FloatField(blank=True, null=True)
+    studio_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     double_room = models.BooleanField(default=False)
     double_room_capacity = models.IntegerField(blank=True, null=True)
@@ -235,6 +335,18 @@ class Stays(models.Model):
     double_room_price_non_resident = models.FloatField(blank=True, null=True)
     double_room_children_price = models.FloatField(blank=True, null=True)
     double_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    double_room_teen_price = models.FloatField(blank=True, null=True)
+    double_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    double_room_single_price = models.FloatField(blank=True, null=True)
+    double_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    double_room_single_child_price = models.FloatField(blank=True, null=True)
+    double_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    double_room_single_teen_price = models.FloatField(blank=True, null=True)
+    double_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     tripple_room = models.BooleanField(default=False)
     tripple_room_capacity = models.IntegerField(blank=True, null=True)
@@ -242,6 +354,18 @@ class Stays(models.Model):
     tripple_room_price_non_resident = models.FloatField(blank=True, null=True)
     tripple_room_children_price = models.FloatField(blank=True, null=True)
     tripple_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    tripple_room_teen_price = models.FloatField(blank=True, null=True)
+    tripple_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    tripple_room_single_price = models.FloatField(blank=True, null=True)
+    tripple_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    tripple_room_single_child_price = models.FloatField(blank=True, null=True)
+    tripple_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    tripple_room_single_teen_price = models.FloatField(blank=True, null=True)
+    tripple_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     quad_room = models.BooleanField(default=False)
     quad_room_capacity = models.IntegerField(blank=True, null=True)
@@ -249,6 +373,14 @@ class Stays(models.Model):
     quad_room_price_non_resident = models.FloatField(blank=True, null=True)
     quad_room_children_price = models.FloatField(blank=True, null=True)
     quad_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    quad_room_teen_price = models.FloatField(blank=True, null=True)
+    quad_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    quad_room_single_price = models.FloatField(blank=True, null=True)
+    quad_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    quad_room_single_child_price = models.FloatField(blank=True, null=True)
+    quad_room_single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    quad_room_single_teen_price = models.FloatField(blank=True, null=True)
+    quad_room_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     queen_room = models.BooleanField(default=False)
     queen_room_capacity = models.IntegerField(blank=True, null=True)
@@ -256,6 +388,16 @@ class Stays(models.Model):
     queen_room_price_non_resident = models.FloatField(blank=True, null=True)
     queen_room_children_price = models.FloatField(blank=True, null=True)
     queen_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    queen_room_teen_price = models.FloatField(blank=True, null=True)
+    queen_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    queen_room_single_price = models.FloatField(blank=True, null=True)
+    queen_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    queen_room_single_child_price = models.FloatField(blank=True, null=True)
+    queen_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    queen_room_single_teen_price = models.FloatField(blank=True, null=True)
+    queen_room_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     king_room = models.BooleanField(default=False)
     king_room_capacity = models.IntegerField(blank=True, null=True)
@@ -263,6 +405,14 @@ class Stays(models.Model):
     king_room_price_non_resident = models.FloatField(blank=True, null=True)
     king_room_children_price = models.FloatField(blank=True, null=True)
     king_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    king_room_teen_price = models.FloatField(blank=True, null=True)
+    king_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    king_room_single_price = models.FloatField(blank=True, null=True)
+    king_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    king_room_single_child_price = models.FloatField(blank=True, null=True)
+    king_room_single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    king_room_single_teen_price = models.FloatField(blank=True, null=True)
+    king_room_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     twin_room = models.BooleanField(default=False)
     twin_room_capacity = models.IntegerField(blank=True, null=True)
@@ -270,6 +420,14 @@ class Stays(models.Model):
     twin_room_price_non_resident = models.FloatField(blank=True, null=True)
     twin_room_children_price = models.FloatField(blank=True, null=True)
     twin_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    twin_room_teen_price = models.FloatField(blank=True, null=True)
+    twin_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    twin_room_single_price = models.FloatField(blank=True, null=True)
+    twin_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    twin_room_single_child_price = models.FloatField(blank=True, null=True)
+    twin_room_single_child_price_non_resident = models.FloatField(blank=True, null=True)
+    twin_room_single_teen_price = models.FloatField(blank=True, null=True)
+    twin_room_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
     family_room = models.BooleanField(default=False)
     family_room_capacity = models.IntegerField(blank=True, null=True)
@@ -277,6 +435,18 @@ class Stays(models.Model):
     family_room_price_non_resident = models.FloatField(blank=True, null=True)
     family_room_children_price = models.FloatField(blank=True, null=True)
     family_room_children_price_non_resident = models.FloatField(blank=True, null=True)
+    family_room_teen_price = models.FloatField(blank=True, null=True)
+    family_room_teen_price_non_resident = models.FloatField(blank=True, null=True)
+    family_room_single_price = models.FloatField(blank=True, null=True)
+    family_room_single_price_non_resident = models.FloatField(blank=True, null=True)
+    family_room_single_child_price = models.FloatField(blank=True, null=True)
+    family_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    family_room_single_teen_price = models.FloatField(blank=True, null=True)
+    family_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     presidential_suite_room = models.BooleanField(default=False)
     presidential_suite_room_capacity = models.IntegerField(blank=True, null=True)
@@ -288,6 +458,24 @@ class Stays(models.Model):
     presidential_suite_room_children_price_non_resident = models.FloatField(
         blank=True, null=True
     )
+    presidential_suite_room_teen_price = models.FloatField(blank=True, null=True)
+    presidential_suite_room_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    presidential_suite_room_single_price = models.FloatField(blank=True, null=True)
+    presidential_suite_room_single_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    presidential_suite_room_single_child_price = models.FloatField(
+        blank=True, null=True
+    )
+    presidential_suite_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    presidential_suite_room_single_teen_price = models.FloatField(blank=True, null=True)
+    presidential_suite_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     emperor_suite_room = models.BooleanField(default=False)
     emperor_suite_room_capacity = models.IntegerField(blank=True, null=True)
@@ -297,10 +485,31 @@ class Stays(models.Model):
     emperor_suite_room_children_price_non_resident = models.FloatField(
         blank=True, null=True
     )
+    emperor_suite_room_teen_price = models.FloatField(blank=True, null=True)
+    emperor_suite_room_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    emperor_suite_room_single_price = models.FloatField(blank=True, null=True)
+    emperor_suite_room_single_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    emperor_suite_room_single_child_price = models.FloatField(blank=True, null=True)
+    emperor_suite_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    emperor_suite_room_single_teen_price = models.FloatField(blank=True, null=True)
+    emperor_suite_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
 
     pricing_type = models.CharField(
         max_length=100, choices=PRICING_TYPE, default="REASONABLE"
     )
+
+    contact_name = models.CharField(max_length=250, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = PhoneNumberField(blank=True)
+    company = models.CharField(max_length=250, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
 

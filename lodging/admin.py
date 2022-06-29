@@ -7,8 +7,28 @@ class StayImageInline(admin.TabularInline):
     extra = 1
 
 
+class ExperiencesIncludedInline(admin.TabularInline):
+    model = ExperiencesIncluded
+    extra = 1
+
+
+class FactsInline(admin.TabularInline):
+    model = Facts
+    extra = 1
+
+
+class InclusionsInline(admin.TabularInline):
+    model = Inclusions
+    extra = 1
+
+
 class StayAdmin(admin.ModelAdmin):
-    inlines = (StayImageInline,)
+    inlines = (
+        ExperiencesIncludedInline,
+        FactsInline,
+        InclusionsInline,
+        StayImageInline,
+    )
 
     list_display = (
         "user",
@@ -42,9 +62,6 @@ class StayAdmin(admin.ModelAdmin):
                     "capacity",
                     "description",
                     "unique_about_place",
-                    "experiences_included",
-                    "included",
-                    "facts",
                 )
             },
         ),
@@ -147,15 +164,27 @@ class StayAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Contact",
+            {"fields": ("contact_name", "contact_email", "contact_phone", "company")},
+        ),
+        (
             "Standard pricing",
             {
                 "fields": (
                     "standard",
                     "standard_capacity",
-                    "price",
                     "price_non_resident",
-                    "children_price",
+                    "single_price_non_resident",
+                    "price",
+                    "single_price",
                     "children_price_non_resident",
+                    "single_child_price_non_resident",
+                    "children_price",
+                    "single_child_price",
+                    "teen_price_non_resident",
+                    "single_teen_price_non_resident",
+                    "teen_price",
+                    "single_teen_price",
                 )
             },
         ),
@@ -165,10 +194,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "super_deluxe",
                     "super_deluxe_capacity",
-                    "super_deluxe_price",
                     "super_deluxe_price_non_resident",
-                    "super_deluxe_children_price",
+                    "super_deluxe_single_price_non_resident",
+                    "super_deluxe_price",
+                    "super_deluxe_single_price",
                     "super_deluxe_children_price_non_resident",
+                    "super_deluxe_single_child_price_non_resident",
+                    "super_deluxe_children_price",
+                    "super_deluxe_single_child_price",
+                    "super_deluxe_teen_price_non_resident",
+                    "super_deluxe_single_teen_price_non_resident",
+                    "super_deluxe_teen_price",
+                    "super_deluxe_single_teen_price",
                 )
             },
         ),
@@ -178,10 +215,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "deluxe",
                     "deluxe_capacity",
-                    "deluxe_price",
                     "deluxe_price_non_resident",
-                    "deluxe_children_price",
+                    "deluxe_single_price_non_resident",
+                    "deluxe_price",
+                    "deluxe_single_price",
                     "deluxe_children_price_non_resident",
+                    "deluxe_single_child_price_non_resident",
+                    "deluxe_children_price",
+                    "deluxe_single_child_price",
+                    "deluxe_teen_price_non_resident",
+                    "deluxe_single_teen_price_non_resident",
+                    "deluxe_teen_price",
+                    "deluxe_single_teen_price",
                 )
             },
         ),
@@ -191,10 +236,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "studio",
                     "studio_capacity",
-                    "studio_price",
                     "studio_price_non_resident",
-                    "studio_children_price",
+                    "studio_single_price_non_resident",
+                    "studio_price",
+                    "studio_single_price",
                     "studio_children_price_non_resident",
+                    "studio_single_child_price_non_resident",
+                    "studio_children_price",
+                    "studio_single_child_price",
+                    "studio_teen_price_non_resident",
+                    "studio_single_teen_price_non_resident",
+                    "studio_teen_price",
+                    "studio_single_teen_price",
                 )
             },
         ),
@@ -204,10 +257,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "double_room",
                     "double_room_capacity",
-                    "double_room_price",
                     "double_room_price_non_resident",
-                    "double_room_children_price",
+                    "double_room_single_price_non_resident",
+                    "double_room_price",
+                    "double_room_single_price",
                     "double_room_children_price_non_resident",
+                    "double_room_single_child_price_non_resident",
+                    "double_room_children_price",
+                    "double_room_single_child_price",
+                    "double_room_teen_price_non_resident",
+                    "double_room_single_teen_price_non_resident",
+                    "double_room_teen_price",
+                    "double_room_single_teen_price",
                 )
             },
         ),
@@ -217,10 +278,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "tripple_room",
                     "tripple_room_capacity",
-                    "tripple_room_price",
                     "tripple_room_price_non_resident",
-                    "tripple_room_children_price",
+                    "tripple_room_single_price_non_resident",
+                    "tripple_room_price",
+                    "tripple_room_single_price",
                     "tripple_room_children_price_non_resident",
+                    "tripple_room_single_child_price_non_resident",
+                    "tripple_room_children_price",
+                    "tripple_room_single_child_price",
+                    "tripple_room_teen_price_non_resident",
+                    "tripple_room_single_teen_price_non_resident",
+                    "tripple_room_teen_price",
+                    "tripple_room_single_teen_price",
                 )
             },
         ),
@@ -230,10 +299,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "quad_room",
                     "quad_room_capacity",
-                    "quad_room_price",
                     "quad_room_price_non_resident",
-                    "quad_room_children_price",
+                    "quad_room_single_price_non_resident",
+                    "quad_room_price",
+                    "quad_room_single_price",
                     "quad_room_children_price_non_resident",
+                    "quad_room_single_child_price_non_resident",
+                    "quad_room_children_price",
+                    "quad_room_single_child_price",
+                    "quad_room_teen_price_non_resident",
+                    "quad_room_single_teen_price_non_resident",
+                    "quad_room_teen_price",
+                    "quad_room_single_teen_price",
                 )
             },
         ),
@@ -243,10 +320,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "queen_room",
                     "queen_room_capacity",
-                    "queen_room_price",
                     "queen_room_price_non_resident",
-                    "queen_room_children_price",
+                    "queen_room_single_price_non_resident",
+                    "queen_room_price",
+                    "queen_room_single_price",
                     "queen_room_children_price_non_resident",
+                    "queen_room_single_child_price_non_resident",
+                    "queen_room_children_price",
+                    "queen_room_single_child_price",
+                    "queen_room_teen_price_non_resident",
+                    "queen_room_single_teen_price_non_resident",
+                    "queen_room_teen_price",
+                    "queen_room_single_teen_price",
                 )
             },
         ),
@@ -256,10 +341,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "king_room",
                     "king_room_capacity",
-                    "king_room_price",
                     "king_room_price_non_resident",
-                    "king_room_children_price",
+                    "king_room_single_price_non_resident",
+                    "king_room_price",
+                    "king_room_single_price",
                     "king_room_children_price_non_resident",
+                    "king_room_single_child_price_non_resident",
+                    "king_room_children_price",
+                    "king_room_single_child_price",
+                    "king_room_teen_price_non_resident",
+                    "king_room_single_teen_price_non_resident",
+                    "king_room_teen_price",
+                    "king_room_single_teen_price",
                 )
             },
         ),
@@ -269,10 +362,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "twin_room",
                     "twin_room_capacity",
-                    "twin_room_price",
                     "twin_room_price_non_resident",
-                    "twin_room_children_price",
+                    "twin_room_single_price_non_resident",
+                    "twin_room_price",
+                    "twin_room_single_price",
                     "twin_room_children_price_non_resident",
+                    "twin_room_single_child_price_non_resident",
+                    "twin_room_children_price",
+                    "twin_room_single_child_price",
+                    "twin_room_teen_price_non_resident",
+                    "twin_room_single_teen_price_non_resident",
+                    "twin_room_teen_price",
+                    "twin_room_single_teen_price",
                 )
             },
         ),
@@ -282,10 +383,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "presidential_suite_room",
                     "presidential_suite_room_capacity",
-                    "presidential_suite_room_price",
                     "presidential_suite_room_price_non_resident",
-                    "presidential_suite_room_children_price",
+                    "presidential_suite_room_single_price_non_resident",
+                    "presidential_suite_room_price",
+                    "presidential_suite_room_single_price",
                     "presidential_suite_room_children_price_non_resident",
+                    "presidential_suite_room_single_child_price_non_resident",
+                    "presidential_suite_room_children_price",
+                    "presidential_suite_room_single_child_price",
+                    "presidential_suite_room_teen_price_non_resident",
+                    "presidential_suite_room_single_teen_price_non_resident",
+                    "presidential_suite_room_teen_price",
+                    "presidential_suite_room_single_teen_price",
                 )
             },
         ),
@@ -295,10 +404,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "emperor_suite_room",
                     "emperor_suite_room_capacity",
-                    "emperor_suite_room_price",
                     "emperor_suite_room_price_non_resident",
-                    "emperor_suite_room_children_price",
+                    "emperor_suite_room_single_price_non_resident",
+                    "emperor_suite_room_price",
+                    "emperor_suite_room_single_price",
                     "emperor_suite_room_children_price_non_resident",
+                    "emperor_suite_room_single_child_price_non_resident",
+                    "emperor_suite_room_children_price",
+                    "emperor_suite_room_single_child_price",
+                    "emperor_suite_room_teen_price_non_resident",
+                    "emperor_suite_room_single_teen_price_non_resident",
+                    "emperor_suite_room_teen_price",
+                    "emperor_suite_room_single_teen_price",
                 )
             },
         ),
@@ -308,10 +425,18 @@ class StayAdmin(admin.ModelAdmin):
                 "fields": (
                     "family_room",
                     "family_room_capacity",
-                    "family_room_price",
                     "family_room_price_non_resident",
-                    "family_room_children_price",
+                    "family_room_single_price_non_resident",
+                    "family_room_price",
+                    "family_room_single_price",
                     "family_room_children_price_non_resident",
+                    "family_room_single_child_price_non_resident",
+                    "family_room_children_price",
+                    "family_room_single_child_price",
+                    "family_room_teen_price_non_resident",
+                    "family_room_single_teen_price_non_resident",
+                    "family_room_teen_price",
+                    "family_room_single_teen_price",
                 )
             },
         ),
