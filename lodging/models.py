@@ -483,6 +483,31 @@ class Stays(models.Model):
         blank=True, null=True
     )
 
+    executive_suite_room = models.BooleanField(default=False)
+    executive_suite_room_capacity = models.IntegerField(blank=True, null=True)
+    executive_suite_room_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_price_non_resident = models.FloatField(blank=True, null=True)
+    executive_suite_room_children_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_children_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    executive_suite_room_teen_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    executive_suite_room_single_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_single_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    executive_suite_room_single_child_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    executive_suite_room_single_teen_price = models.FloatField(blank=True, null=True)
+    executive_suite_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+
     emperor_suite_room = models.BooleanField(default=False)
     emperor_suite_room_capacity = models.IntegerField(blank=True, null=True)
     emperor_suite_room_price = models.FloatField(blank=True, null=True)

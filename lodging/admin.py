@@ -420,6 +420,27 @@ class StayAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Executive suite room pricing",
+            {
+                "fields": (
+                    "executive_suite_room",
+                    "executive_suite_room_capacity",
+                    "executive_suite_room_price_non_resident",
+                    "executive_suite_room_single_price_non_resident",
+                    "executive_suite_room_price",
+                    "executive_suite_room_single_price",
+                    "executive_suite_room_children_price_non_resident",
+                    "executive_suite_room_single_child_price_non_resident",
+                    "executive_suite_room_children_price",
+                    "executive_suite_room_single_child_price",
+                    "executive_suite_room_teen_price_non_resident",
+                    "executive_suite_room_single_teen_price_non_resident",
+                    "executive_suite_room_teen_price",
+                    "executive_suite_room_single_teen_price",
+                )
+            },
+        ),
+        (
             "Family room pricing",
             {
                 "fields": (
