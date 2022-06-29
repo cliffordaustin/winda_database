@@ -41,7 +41,6 @@ class StayFilter(filters.FilterSet):
     max_beds = filters.NumberFilter(field_name="beds", lookup_expr="lte")
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
     # theme = CharInFilter(label="Travel Theme", method=multiple_search)
-    # amenities = CharInFilter(field_name="ammenities", lookup_expr="overlap")
 
     class Meta:
         model = Stays
@@ -56,19 +55,9 @@ class StayFilter(filters.FilterSet):
         #     "max_beds",
         #     "type_of_stay",
         #     "theme",
-        #     "amenities",
         # ]
 
-        exclude = [
-            "experiences_included",
-            "best_describes_campsite",
-            "best_describes_boutique_hotel",
-            "best_describes_lodge",
-            "best_describes_house",
-            "best_describes_unique_space",
-            "essential_information",
-            "amenities",
-        ]
+        exclude = ["experiences_included", "included", "facts", "other_amenities"]
 
 
 class ReviewFilter(filters.FilterSet):
