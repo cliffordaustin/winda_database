@@ -455,6 +455,10 @@ class StayAdmin(admin.ModelAdmin):
                     "events_allowed",
                     "covid_19_compliance",
                     "covid_19_compliance_details",
+                    "cancellation_policy",
+                    "cancellation_policy_by_provider",
+                    "health_and_safety_policy",
+                    "damage_policy_by_provider",
                 )
             },
         ),

@@ -253,6 +253,11 @@ class Stays(models.Model):
     covid_19_compliance = models.BooleanField(default=False)
     covid_19_compliance_details = models.TextField(blank=True, null=True)
 
+    cancellation_policy = models.TextField(blank=True, null=True)
+    cancellation_policy_by_provider = models.TextField(blank=True, null=True)
+    health_and_safety_policy = models.TextField(blank=True, null=True)
+    damage_policy_by_provider = models.TextField(blank=True, null=True)
+
     location = models.CharField(
         max_length=350, blank=True, null=True, verbose_name="Address"
     )
