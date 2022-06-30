@@ -1,8 +1,119 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Activities)
-admin.site.register(ActivitiesImage)
+
+class EnquipmentProvidedInline(admin.TabularInline):
+    model = EnquipmentProvided
+    extra = 1
+
+
+class EnquipmentRequiredByUserInline(admin.TabularInline):
+    model = EnquipmentRequiredByUser
+    extra = 1
+
+
+class ActivitiesImageInline(admin.TabularInline):
+    model = ActivitiesImage
+    extra = 1
+
+
+class ActivitiesAdmin(admin.ModelAdmin):
+    inlines = (
+        EnquipmentProvidedInline,
+        EnquipmentRequiredByUserInline,
+        ActivitiesImageInline,
+    )
+
+    list_display = (
+        "user",
+        "name",
+        "city",
+        "location",
+    )
+
+    list_filter = ("date_posted",)
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "name",
+                )
+            },
+        ),
+        (
+            "About",
+            {
+                "fields": (
+                    "description",
+                    "min_capacity",
+                    "capacity",
+                )
+            },
+        ),
+        (
+            "Location",
+            {
+                "fields": (
+                    "country",
+                    "city",
+                    "location",
+                    "longitude",
+                    "latitude",
+                )
+            },
+        ),
+        (
+            "Contact",
+            {"fields": ("contact_name", "contact_email", "contact_phone", "company")},
+        ),
+        (
+            "Price per person",
+            {
+                "fields": (
+                    "price_per_person",
+                    "price",
+                    "price_non_resident",
+                )
+            },
+        ),
+        (
+            "Price per session",
+            {
+                "fields": (
+                    "price_per_session",
+                    "session_price",
+                    "session_price_non_resident",
+                )
+            },
+        ),
+        (
+            "Price per group",
+            {
+                "fields": (
+                    "price_per_group",
+                    "group_price",
+                    "group_price_non_resident",
+                    "max_number_of_people_in_a_group",
+                )
+            },
+        ),
+        (
+            "Others",
+            {
+                "fields": (
+                    "pricing_type",
+                    "is_active",
+                )
+            },
+        ),
+    )
+
+
+admin.site.register(Activities, ActivitiesAdmin)
+# admin.site.register(ActivitiesImage)
 admin.site.register(Cart)
 admin.site.register(Order)
 admin.site.register(Review)

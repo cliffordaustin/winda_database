@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from phonenumber_field.modelfields import PhoneNumberField
 from core.utils import activities_image_thumbnail
 from datetime import datetime, timedelta, date, tzinfo
 from django.utils import timezone
@@ -14,6 +15,35 @@ PRICING_TYPE = (
     ("PER GROUP", "PER GROUP"),
     ("PER SESSION", "PER SESSION"),
 )
+
+
+PRICING_STATUS = (
+    ("REASONABLE", "REASONABLE"),
+    ("MID-RANGE", "MID-RANGE"),
+    ("HIGH-END", "HIGH-END"),
+)
+
+
+class EnquipmentProvided(models.Model):
+    activity = models.ForeignKey(
+        "Activities", on_delete=models.CASCADE, related_name="enquipment_provided"
+    )
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.activity.name)
+
+
+class EnquipmentRequiredByUser(models.Model):
+    activity = models.ForeignKey(
+        "Activities",
+        on_delete=models.CASCADE,
+        related_name="enquipment_required_by_user",
+    )
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.activity.name)
 
 
 class Activities(models.Model):
@@ -38,21 +68,9 @@ class Activities(models.Model):
     country = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
+    min_capacity = models.IntegerField(blank=True, null=True)
     capacity = models.IntegerField(blank=True, null=True)
-    equipments_provided = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="What gear or equipment is needed? Separate each gear or equipments by using ' , '",
-    )
-    equipments_required_by_user_to_bring = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="What gear or equipment is needed and won't be provided by you? Separate each gear or equipments by using ' , '",
-    )
+
     duration_of_activity = models.DurationField(blank=True, null=True)
     description = models.TextField(
         blank=True,
@@ -61,15 +79,17 @@ class Activities(models.Model):
         + " it will take place",
     )
 
+    pricing_type = models.CharField(
+        max_length=100, choices=PRICING_STATUS, default="REASONABLE"
+    )
+
     price_per_person = models.BooleanField(default=True)
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
-    max_number_of_people = models.PositiveIntegerField(default=1)
 
     price_per_session = models.BooleanField(default=False)
     session_price = models.FloatField(blank=True, null=True)
     session_price_non_resident = models.FloatField(blank=True, null=True)
-    max_number_of_sessions = models.PositiveIntegerField(default=1)
 
     price_per_group = models.BooleanField(default=False)
     group_price = models.FloatField(blank=True, null=True)
@@ -78,6 +98,13 @@ class Activities(models.Model):
     max_number_of_groups = models.PositiveIntegerField(default=1)
 
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
+
+    contact_name = models.CharField(max_length=250, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = PhoneNumberField(blank=True)
+    company = models.CharField(max_length=250, blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
 
     check_in_time = models.TimeField(blank=True, null=True)
     check_out_time = models.TimeField(blank=True, null=True)

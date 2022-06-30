@@ -1,19 +1,23 @@
 from rest_framework import serializers
-from activities.models import (
-    Activities,
-    ActivitiesImage,
-    Cart,
-    Order,
-    Review,
-    Views,
-    SaveActivities,
-)
+from activities.models import *
 from django.db.models import Sum
 
 
 class ActivityImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivitiesImage
+        exclude = ["activity"]
+
+
+class EnquipmentProvidedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnquipmentProvided
+        exclude = ["activity"]
+
+
+class EnquipmentRequiredByUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnquipmentRequiredByUser
         exclude = ["activity"]
 
 
