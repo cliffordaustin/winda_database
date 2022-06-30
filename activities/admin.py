@@ -74,8 +74,8 @@ class ActivitiesAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "price_per_person",
-                    "price",
                     "price_non_resident",
+                    "price",
                 )
             },
         ),
@@ -84,8 +84,8 @@ class ActivitiesAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "price_per_session",
-                    "session_price",
                     "session_price_non_resident",
+                    "session_price",
                 )
             },
         ),
@@ -94,8 +94,8 @@ class ActivitiesAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "price_per_group",
-                    "group_price",
                     "group_price_non_resident",
+                    "group_price",
                     "max_number_of_people_in_a_group",
                 )
             },
