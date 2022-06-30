@@ -602,9 +602,11 @@ class Cart(models.Model):
     from_date = models.DateTimeField(default=timezone.now)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     to_date = models.DateTimeField(blank=True, null=True)
-    non_resident = models.BooleanField(default=False)
+    # non_resident = models.BooleanField(default=False)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
+    num_of_adults_non_resident = models.IntegerField(default=0)
+    num_of_children_non_resident = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.stay.name}"
@@ -618,10 +620,12 @@ class Order(models.Model):
     )
 
     from_date = models.DateTimeField(default=timezone.now)
-    non_resident = models.BooleanField(default=False)
+    # non_resident = models.BooleanField(default=False)
     to_date = models.DateTimeField(blank=True, null=True)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
+    num_of_adults_non_resident = models.IntegerField(default=0)
+    num_of_children_non_resident = models.IntegerField(default=0)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)

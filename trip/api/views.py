@@ -81,6 +81,12 @@ class TripView(APIView):
         distance = request.data.get("distance", None)
         stay_num_of_adults = request.data.get("stay_num_of_adults", 1)
         stay_num_of_children = request.data.get("stay_num_of_children", None)
+        stay_num_of_adults_non_resident = request.data.get(
+            "stay_num_of_adults_non_resident", None
+        )
+        stay_num_of_children_non_resident = request.data.get(
+            "stay_num_of_children_non_resident", None
+        )
         stay_plan = request.data.get("stay_plan", "STANDARD")
         stay_non_resident = request.data.get("stay_non_resident", False)
         activity_non_resident = request.data.get("activity_non_resident", False)
@@ -121,6 +127,8 @@ class TripView(APIView):
             distance=distance,
             stay_num_of_adults=stay_num_of_adults,
             stay_num_of_children=stay_num_of_children,
+            stay_num_of_adults_non_resident=stay_num_of_adults_non_resident,
+            stay_num_of_children_non_resident=stay_num_of_children_non_resident,
             stay_plan=stay_plan,
             stay_non_resident=stay_non_resident,
             activity_non_resident=activity_non_resident,

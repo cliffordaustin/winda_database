@@ -33,6 +33,8 @@ class Trip(models.Model):
     stay_num_of_adults = models.IntegerField(default=1)
     stay_non_resident = models.BooleanField(default=False)
     stay_num_of_children = models.IntegerField(blank=True, null=True)
+    stay_num_of_adults_non_resident = models.IntegerField(default=0)
+    stay_num_of_children_non_resident = models.IntegerField(default=0)
     stay_plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     activity_from_date = models.DateTimeField(blank=True, null=True)
     to_date = models.DateTimeField(blank=True, null=True)

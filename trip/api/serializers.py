@@ -64,6 +64,13 @@ class TripSerializer(serializers.ModelSerializer):
         instance.stay_num_of_children = validated_data.get(
             "stay_num_of_children", instance.stay_num_of_children
         )
+        instance.stay_num_of_adults_non_resident = validated_data.get(
+            "stay_num_of_adults_non_resident", instance.stay_num_of_adults_non_resident
+        )
+        instance.stay_num_of_children_non_resident = validated_data.get(
+            "stay_num_of_children_non_resident",
+            instance.stay_num_of_children_non_resident,
+        )
         instance.stay_non_resident = validated_data.get(
             "stay_non_resident", instance.stay_non_resident
         )
