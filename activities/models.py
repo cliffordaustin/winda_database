@@ -174,15 +174,14 @@ class Cart(models.Model):
     )
     from_date = models.DateTimeField(default=timezone.now)
 
-    non_resident = models.BooleanField(default=False)
     pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
-    number_of_people = models.IntegerField(default=1)
+    number_of_people = models.IntegerField(default=0)
     number_of_people_non_resident = models.IntegerField(default=0)
-    number_of_sessions = models.IntegerField(default=1)
+    number_of_sessions = models.IntegerField(default=0)
     number_of_sessions_non_resident = models.IntegerField(default=0)
-    number_of_groups = models.IntegerField(default=1)
+    number_of_groups = models.IntegerField(default=0)
     number_of_groups_non_resident = models.IntegerField(default=0)
 
     def __str__(self):
@@ -203,7 +202,6 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
 
-    non_resident = models.BooleanField(default=False)
     pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
