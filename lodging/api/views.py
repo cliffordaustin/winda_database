@@ -1,5 +1,5 @@
 import re
-from lodging.api.pagination import Pagination
+from lodging.api.pagination import Pagination, StayPagination
 from .serializers import *
 from lodging.models import *
 from rest_framework import generics
@@ -52,6 +52,7 @@ class StaysListView(generics.ListAPIView):
         "beds",
         "bathrooms",
     ]
+    pagination_class = StayPagination
 
     def get_queryset(self):
         queryset = Stays.objects.filter(is_active=True)

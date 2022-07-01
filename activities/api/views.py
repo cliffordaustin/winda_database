@@ -52,7 +52,7 @@ class ActivityListView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-        queryset = Activities.objects.all()
+        queryset = Activities.objects.filter(is_active=True)
 
         querystring = self.request.GET.get("search")
         if querystring:
