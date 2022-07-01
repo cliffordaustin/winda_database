@@ -54,7 +54,7 @@ class StaysListView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-        queryset = Stays.objects.all()
+        queryset = Stays.objects.filter(is_active=True)
 
         querystring = self.request.GET.get("search")
         if querystring:
