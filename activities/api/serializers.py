@@ -34,6 +34,10 @@ class ActivitySerializer(serializers.ModelSerializer):
     num_of_one_stars = serializers.SerializerMethodField()
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
+    enquipment_provided = EnquipmentProvidedSerializer(many=True, read_only=True)
+    enquipment_required_by_user = EnquipmentRequiredByUserSerializer(
+        many=True, read_only=True
+    )
 
     has_user_saved = serializers.SerializerMethodField()
     saved_count = serializers.SerializerMethodField()
