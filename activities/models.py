@@ -179,8 +179,11 @@ class Cart(models.Model):
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
     number_of_people = models.IntegerField(default=1)
+    number_of_people_non_resident = models.IntegerField(default=0)
     number_of_sessions = models.IntegerField(default=1)
+    number_of_sessions_non_resident = models.IntegerField(default=0)
     number_of_groups = models.IntegerField(default=1)
+    number_of_groups_non_resident = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.activity.name}"

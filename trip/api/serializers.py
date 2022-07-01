@@ -83,11 +83,23 @@ class TripSerializer(serializers.ModelSerializer):
         instance.activity_number_of_people = validated_data.get(
             "activity_number_of_people", instance.activity_number_of_people
         )
+        instance.activity_number_of_people_non_resident = validated_data.get(
+            "activity_number_of_people_non_resident",
+            instance.activity_number_of_people_non_resident,
+        )
         instance.activity_number_of_sessions = validated_data.get(
             "activity_number_of_sessions", instance.activity_number_of_sessions
         )
+        instance.activity_number_of_sessions_non_resident = validated_data.get(
+            "activity_number_of_sessions_non_resident",
+            instance.activity_number_of_sessions_non_resident,
+        )
         instance.activity_number_of_groups = validated_data.get(
             "activity_number_of_groups", instance.activity_number_of_groups
+        )
+        instance.activity_number_of_groups_non_resident = validated_data.get(
+            "activity_number_of_groups_non_resident",
+            instance.activity_number_of_groups_non_resident,
         )
         instance.stay_is_not_available = validated_data.get(
             instance.stay_is_not_available, instance.stay_is_not_available

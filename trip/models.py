@@ -48,8 +48,13 @@ class Trip(models.Model):
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
     activity_number_of_people = models.IntegerField(default=1)
+    activity_number_of_people_non_resident = models.IntegerField(blank=True, null=True)
     activity_number_of_sessions = models.IntegerField(blank=True, null=True)
+    activity_number_of_sessions_non_resident = models.IntegerField(
+        blank=True, null=True
+    )
     activity_number_of_groups = models.IntegerField(blank=True, null=True)
+    activity_number_of_groups_non_resident = models.IntegerField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
