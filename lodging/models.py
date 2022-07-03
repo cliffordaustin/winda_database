@@ -123,6 +123,12 @@ class Stays(models.Model):
         verbose_name="Name or description",
     )
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
+    tags = ArrayField(
+        models.CharField(max_length=100),
+        blank=True,
+        null=True,
+        help_text="Separate each tags by using ' , '",
+    )
 
     # experiences_included = ArrayField(
     #     models.CharField(max_length=500, blank=True, null=True),
