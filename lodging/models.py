@@ -126,9 +126,6 @@ class Stays(models.Model):
         max_length=250,
         blank=True,
         null=True,
-        help_text="If no name, enter a short description of the "
-        + "accommodation. Eg A lovely place located at the lake side",
-        verbose_name="Name or description",
     )
     room_type = models.CharField(max_length=100, blank=True)
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
