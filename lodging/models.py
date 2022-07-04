@@ -130,6 +130,7 @@ class Stays(models.Model):
         + "accommodation. Eg A lovely place located at the lake side",
         verbose_name="Name or description",
     )
+    room_type = models.CharField(max_length=100, blank=True)
     type_of_stay = models.CharField(max_length=100, choices=TYPE_OF_STAY, blank=True)
     tags = ArrayField(
         models.CharField(max_length=100),
