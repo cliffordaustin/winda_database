@@ -117,7 +117,15 @@ class Stays(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     name = models.CharField(
-        max_length=100,
+        max_length=500,
+        help_text="If no name, enter a short description of the "
+        + "accommodation. Eg A lovely place located at the lake side",
+        verbose_name="Name or description",
+    )
+    property_name = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
         help_text="If no name, enter a short description of the "
         + "accommodation. Eg A lovely place located at the lake side",
         verbose_name="Name or description",
@@ -127,32 +135,8 @@ class Stays(models.Model):
         models.CharField(max_length=100),
         blank=True,
         null=True,
-        help_text="Separate each tags by using ' , '",
+        help_text="Separate each tag by using ' , '",
     )
-
-    # experiences_included = ArrayField(
-    #     models.CharField(max_length=500, blank=True, null=True),
-    #     blank=True,
-    #     null=True,
-    #     default=list,
-    #     help_text="Separate all experiences included in this package by using ' , '. If the text includes a comma, then place it in a single quote Eg Camping, Fishing, Hiking",
-    # )
-    # # work on this in the frontend
-    # facts = ArrayField(
-    #     models.CharField(max_length=500, blank=True, null=True),
-    #     blank=True,
-    #     null=True,
-    #     default=list,
-    #     help_text="Separate all experiences included in this package by using ' , '. If the text includes a comma, then place it in a single quote",
-    # )
-    # # work on this in the frontend
-    # included = ArrayField(
-    #     models.CharField(max_length=500, blank=True, null=True),
-    #     blank=True,
-    #     null=True,
-    #     default=list,
-    #     help_text="Separate each by using ' , '. If the text includes a comma, then place it in a single quote. Eg Pool",
-    # )
 
     # Lodge
     tented_camp = models.BooleanField(default=False)

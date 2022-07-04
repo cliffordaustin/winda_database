@@ -55,6 +55,7 @@ class StayAdmin(admin.ModelAdmin):
             "About",
             {
                 "fields": (
+                    "property_name",
                     "name",
                     "tags",
                     "rooms",
