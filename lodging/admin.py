@@ -7,8 +7,8 @@ class StayImageInline(admin.TabularInline):
     extra = 1
 
 
-class ExperiencesIncludedInline(admin.TabularInline):
-    model = ExperiencesIncluded
+class ExtrasIncludedInline(admin.TabularInline):
+    model = ExtrasIncluded
     extra = 1
 
 
@@ -24,7 +24,7 @@ class InclusionsInline(admin.TabularInline):
 
 class StayAdmin(admin.ModelAdmin):
     inlines = (
-        ExperiencesIncludedInline,
+        ExtrasIncludedInline,
         FactsInline,
         InclusionsInline,
         StayImageInline,
@@ -190,27 +190,6 @@ class StayAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Super deluxe pricing",
-            {
-                "fields": (
-                    "super_deluxe",
-                    "super_deluxe_capacity",
-                    "super_deluxe_price_non_resident",
-                    "super_deluxe_single_price_non_resident",
-                    "super_deluxe_price",
-                    "super_deluxe_single_price",
-                    "super_deluxe_children_price_non_resident",
-                    "super_deluxe_single_child_price_non_resident",
-                    "super_deluxe_children_price",
-                    "super_deluxe_single_child_price",
-                    "super_deluxe_teen_price_non_resident",
-                    "super_deluxe_single_teen_price_non_resident",
-                    "super_deluxe_teen_price",
-                    "super_deluxe_single_teen_price",
-                )
-            },
-        ),
-        (
             "Deluxe pricing",
             {
                 "fields": (
@@ -228,6 +207,48 @@ class StayAdmin(admin.ModelAdmin):
                     "deluxe_single_teen_price_non_resident",
                     "deluxe_teen_price",
                     "deluxe_single_teen_price",
+                )
+            },
+        ),
+        (
+            "Park or conservation pricing",
+            {
+                "fields": (
+                    "conservation_or_park",
+                    "conservation_or_park_capacity",
+                    "conservation_or_park_price_non_resident",
+                    "conservation_or_park_single_price_non_resident",
+                    "conservation_or_park_price",
+                    "conservation_or_park_single_price",
+                    "conservation_or_park_children_price_non_resident",
+                    "conservation_or_park_single_child_price_non_resident",
+                    "conservation_or_park_children_price",
+                    "conservation_or_park_single_child_price",
+                    "conservation_or_park_teen_price_non_resident",
+                    "conservation_or_park_single_teen_price_non_resident",
+                    "conservation_or_park_teen_price",
+                    "conservation_or_park_single_teen_price",
+                )
+            },
+        ),
+        (
+            "Super deluxe pricing",
+            {
+                "fields": (
+                    "super_deluxe",
+                    "super_deluxe_capacity",
+                    "super_deluxe_price_non_resident",
+                    "super_deluxe_single_price_non_resident",
+                    "super_deluxe_price",
+                    "super_deluxe_single_price",
+                    "super_deluxe_children_price_non_resident",
+                    "super_deluxe_single_child_price_non_resident",
+                    "super_deluxe_children_price",
+                    "super_deluxe_single_child_price",
+                    "super_deluxe_teen_price_non_resident",
+                    "super_deluxe_single_teen_price_non_resident",
+                    "super_deluxe_teen_price",
+                    "super_deluxe_single_teen_price",
                 )
             },
         ),
@@ -466,17 +487,17 @@ class StayAdmin(admin.ModelAdmin):
             "Policies",
             {
                 "fields": (
-                    "check_in_time",
-                    "check_out_time",
-                    "refundable",
-                    "refund_policy",
-                    "damage_policy",
-                    "children_allowed",
-                    "pets_allowed",
-                    "smoking_allowed",
-                    "events_allowed",
-                    "covid_19_compliance",
-                    "covid_19_compliance_details",
+                    # "check_in_time",
+                    # "check_out_time",
+                    # "refundable",
+                    # "refund_policy",
+                    # "damage_policy",
+                    # "children_allowed",
+                    # "pets_allowed",
+                    # "smoking_allowed",
+                    # "events_allowed",
+                    # "covid_19_compliance",
+                    # "covid_19_compliance_details",
                     "cancellation_policy",
                     "cancellation_policy_by_provider",
                     "health_and_safety_policy",

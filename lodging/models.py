@@ -73,9 +73,9 @@ PLAN_TYPE = (
 )
 
 
-class ExperiencesIncluded(models.Model):
+class ExtrasIncluded(models.Model):
     stay = models.ForeignKey(
-        "Stays", on_delete=models.CASCADE, related_name="experiences_included"
+        "Stays", on_delete=models.CASCADE, related_name="extras_included"
     )
     name = models.CharField(max_length=500)
 
@@ -83,8 +83,8 @@ class ExperiencesIncluded(models.Model):
         return str(self.stay.name)
 
     class Meta:
-        verbose_name = "Experience Included"
-        verbose_name_plural = "Experiences Included"
+        verbose_name = "Extra Included"
+        verbose_name_plural = "Extras Included"
 
 
 class Facts(models.Model):
@@ -487,6 +487,31 @@ class Stays(models.Model):
     )
     presidential_suite_room_single_teen_price = models.FloatField(blank=True, null=True)
     presidential_suite_room_single_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+
+    conservation_or_park = models.BooleanField(default=False)
+    conservation_or_park_capacity = models.IntegerField(blank=True, null=True)
+    conservation_or_park_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_price_non_resident = models.FloatField(blank=True, null=True)
+    conservation_or_park_children_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_children_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    conservation_or_park_teen_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_teen_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    conservation_or_park_single_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_single_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    conservation_or_park_single_child_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_single_child_price_non_resident = models.FloatField(
+        blank=True, null=True
+    )
+    conservation_or_park_single_teen_price = models.FloatField(blank=True, null=True)
+    conservation_or_park_single_teen_price_non_resident = models.FloatField(
         blank=True, null=True
     )
 
