@@ -9,11 +9,26 @@ class TransportImagesSerializer(serializers.ModelSerializer):
         exclude = ["transportation"]
 
 
+class IncludedInPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IncludedInPrice
+        exclude = ["transportation"]
+
+
+class DriverOperatesWithinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverOperatesWithin
+        exclude = ["transportation"]
+
+
 class TransportSerializer(serializers.ModelSerializer):
     transportation_images = TransportImagesSerializer(many=True, read_only=True)
+    included_in_price = IncludedInPriceSerializer(many=True, read_only=True)
+    driver_operates_within = DriverOperatesWithinSerializer(many=True, read_only=True)
     user = serializers.StringRelatedField(read_only=True)
     is_user_transport = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
+
     views = serializers.SerializerMethodField()
     num_of_five_stars = serializers.SerializerMethodField()
     num_of_four_stars = serializers.SerializerMethodField()

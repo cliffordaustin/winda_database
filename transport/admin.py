@@ -13,18 +13,25 @@ class DriverOperatesWithinInline(admin.TabularInline):
     extra = 1
 
 
+class IncludedInPriceInline(admin.TabularInline):
+    model = IncludedInPrice
+    extra = 1
+
+
 class TransportationAdmin(admin.ModelAdmin):
-    inlines = (TransportationImageInline, DriverOperatesWithinInline)
+    inlines = (
+        TransportationImageInline,
+        DriverOperatesWithinInline,
+        IncludedInPriceInline,
+    )
     list_display = (
         "user",
         "type_of_car",
-        "price",
         "price_per_day",
         "additional_price_with_a_driver",
         "date_posted",
     )
     list_filter = (
-        "price",
         "price_per_day",
         "additional_price_with_a_driver",
         "date_posted",
@@ -38,12 +45,13 @@ class TransportationAdmin(admin.ModelAdmin):
                 "fields": (
                     "user",
                     "type_of_car",
-                    "vehicle_plate",
                     "vehicle_make",
-                    "vehicle_color",
-                    "price",
                     "price_per_day",
                     "additional_price_with_a_driver",
+                    "capacity",
+                    "bags",
+                    "transmission",
+                    "is_active",
                 )
             },
         ),
@@ -52,32 +60,8 @@ class TransportationAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "has_air_condition",
+                    "four_wheel_drive",
                     "open_roof",
-                ]
-            },
-        ),
-        (
-            "Entertainment",
-            {
-                "fields": [
-                    "fm_radio",
-                    "cd_player",
-                    "bluetooth",
-                    "audio_input",
-                    "cruise_control",
-                ]
-            },
-        ),
-        (
-            "Safety",
-            {
-                "fields": [
-                    "overhead_passenger_airbag",
-                    "side_airbag",
-                    "power_locks",
-                    "power_mirrors",
-                    "power_windows",
-                    "safety_tools",
                 ]
             },
         ),
@@ -85,33 +69,21 @@ class TransportationAdmin(admin.ModelAdmin):
             "Policies",
             {
                 "fields": [
-                    "refundable",
-                    "refund_policy",
-                    "damage_policy",
-                    "children_allowed",
-                    "pets_allowed",
-                    "covid_19_compliance",
-                    "covid_19_compliance_details",
+                    "policy",
                 ]
             },
-        ),
-        (
-            "Other",
-            {"fields": ["dropoff_city", "dropoff_country"]},
         ),
     )
 
     search_fields = (
         "user",
         "type_of_car",
-        "price",
         "price_per_day",
         "additional_price_with_a_driver",
         "date_posted",
     )
     ordering = (
         "date_posted",
-        "price",
         "price_per_day",
         "additional_price_with_a_driver",
     )

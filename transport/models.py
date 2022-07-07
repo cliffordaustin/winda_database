@@ -12,8 +12,15 @@ TYPE_OF_CAR = (
     ("LARGE 4x4", "LARGE 4x4"),
     ("SMALL 4x4", "SMALL 4x4"),
     ("VAN", "VAN"),
+    ("MEDIUM", "MEDIUM"),
+    ("MOTORBIKE", "MOTORBIKE"),
+    ("PICKUP TRUCK", "PICKUP TRUCK"),
     ("SEDAN", "SEDAN"),
-    ("SMALL CAR", "SMALL CAR"),
+)
+
+TYPE_OF_TRANSMISSION = (
+    ("AUTOMATIC", "AUTOMATIC"),
+    ("MANUAL", "MANUAL"),
 )
 
 
@@ -21,12 +28,9 @@ class Transportation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     type_of_car = models.CharField(max_length=100, choices=TYPE_OF_CAR, blank=True)
-    vehicle_plate = models.CharField(max_length=100, blank=True, null=True)
     vehicle_make = models.CharField(max_length=100, blank=True, null=True)
-    vehicle_color = models.CharField(
-        max_length=100, blank=True, null=True, help_text="eg. Red or #FF0000"
-    )
-    price = models.FloatField(blank=True, null=True, help_text="Price per 10km")
+    capacity = models.IntegerField(blank=True, null=True)
+    bags = models.IntegerField(blank=True, null=True)
     price_per_day = models.FloatField(
         blank=True, null=True, help_text="Price per day, if available"
     )
@@ -34,39 +38,28 @@ class Transportation(models.Model):
         blank=True, null=True, help_text="Price when a user needs a driver"
     )
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
-    has_air_condition = models.BooleanField(default=False)
-    fm_radio = models.BooleanField(default=False)
-    cd_player = models.BooleanField(default=False)
-    bluetooth = models.BooleanField(default=False)
-    audio_input = models.BooleanField(default=False)
-    cruise_control = models.BooleanField(default=False)
-    overhead_passenger_airbag = models.BooleanField(default=False)
-    side_airbag = models.BooleanField(default=False)
-    power_locks = models.BooleanField(default=False)
-    power_mirrors = models.BooleanField(default=False)
-    power_windows = models.BooleanField(default=False)
-    safety_tools = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="Separate each tools by using ' , '. Eg Spare wheel, Carjack",
+    transmission = models.CharField(
+        max_length=100, blank=True, null=True, choices=TYPE_OF_TRANSMISSION
     )
-    open_roof = models.BooleanField(default=False)
-    dropoff_city = models.CharField(max_length=350, blank=True, null=True)
-    dropoff_country = models.CharField(max_length=350, blank=True, null=True)
+    has_air_condition = models.BooleanField(default=False)
+    four_wheel_drive = models.BooleanField(default=False)
 
     # policies
-    refundable = models.BooleanField(default=False)
-    refund_policy = models.CharField(max_length=500, blank=True, null=True)
-    damage_policy = models.CharField(max_length=500, blank=True, null=True)
-    children_allowed = models.BooleanField(default=False)
-    pets_allowed = models.BooleanField(default=False)
-    covid_19_compliance = models.BooleanField(default=False)
-    covid_19_compliance_details = models.TextField(blank=True, null=True)
+    policy = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.user} - {self.type_of_car}"
+
+
+class IncludedInPrice(models.Model):
+    transportation = models.ForeignKey(
+        Transportation, on_delete=models.CASCADE, related_name="included_in_price"
+    )
+    included_in_price = models.CharField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.transportation} - {self.included_in_price}"
 
 
 class DriverOperatesWithin(models.Model):

@@ -29,7 +29,7 @@ class TransportCreateView(generics.CreateAPIView):
 class TransportListView(generics.ListAPIView):
     serializer_class = TransportSerializer
     filterset_class = TransportationFilter
-    queryset = Transportation.objects.all()
+    queryset = Transportation.objects.filter(is_active=True)
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
         "date_posted",
