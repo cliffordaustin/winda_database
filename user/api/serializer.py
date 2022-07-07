@@ -15,6 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "profile_pic",
+            "avatar_url",
             "instagram_username",
             "tiktok_username",
         ]
@@ -34,6 +35,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "instagram_username",
             "tiktok_username",
             "profile_pic",
+            "avatar_url",
             "password1",
             "password2",
         ]
@@ -66,6 +68,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "instagram_username": self.validated_data.get("instagram_username", ""),
             "tiktok_username": self.validated_data.get("tiktok_username", ""),
             "profile_pic": self.validated_data.get("profile_pic", ""),
+            "avatar_url": self.validated_data.get("avatar_url", ""),
             "password1": self.validated_data.get("password1", ""),
             "email": self.validated_data.get("email", ""),
         }
