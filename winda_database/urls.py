@@ -28,13 +28,13 @@ urlpatterns = [
     path("api/v1/", include("activities.api.urls")),
     path("api/v1/", include("transport.api.urls")),
     path("api/v1/", include("recommended_trip.api.urls")),
-    path("api/v1/rest-auth/", include("rest_auth.urls")),
-    path("api/v1/rest-auth/registration/", include("rest_auth.registration.urls")),
-    path("api/v1/rest-auth/password/change/", include("rest_auth.urls")),
-    path("api/v1/rest-auth/logout/", include("rest_auth.urls")),
+    path("api/v1/rest-auth/", include("dj_rest_auth.urls")),
+    path("api/v1/rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("api/v1/rest-auth/password/change/", include("dj_rest_auth.urls")),
+    path("api/v1/rest-auth/logout/", include("dj_rest_auth.urls")),
     path("accounts/", include("allauth.urls")),
-    path("auth/google/", GoogleLogin.as_view(), name="google-login"),
-    path("auth/facebook/", FacebookLogin.as_view(), name="facebook-login"),
+    path("api/v1/auth/google/", GoogleLogin.as_view(), name="google-login"),
+    path("api/v1/auth/facebook/", FacebookLogin.as_view(), name="facebook-login"),
 ]
 
 if settings.DEBUG:

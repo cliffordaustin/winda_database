@@ -49,6 +49,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    avatar_url = models.URLField(blank=True, null=True)
     profile_pic = ProcessedImageField(
         upload_to=profile_image_thumbnail,
         processors=[ResizeToFill(700, 450)],

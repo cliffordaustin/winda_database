@@ -41,11 +41,13 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "allauth",
     "allauth.account",
+    "dj_rest_auth.registration",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     "rest_framework",
     "rest_framework.authtoken",
+    "dj_rest_auth",
     "phonenumber_field",
     "django_filters",
     "corsheaders",
@@ -179,7 +181,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 
-SITE_ID = 1
+SITE_ID = 2
+
+# SOCAILACCOUNT_PROVIDERS = {
+#     "google": {
+#         "APP": {
+#             "client_id": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"),
+#             "secret": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"),
+#         }
+#     }
+# }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ACCOUNT_EMAIL_VERIFICATION = "optional"
