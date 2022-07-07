@@ -29,6 +29,7 @@ class TransportationFilter(filters.FilterSet):
     )
     has_air_condition = filters.BooleanFilter(field_name="has_air_condition")
     four_wheel_drive = filters.BooleanFilter(field_name="four_wheel_drive")
+    open_roof = filters.BooleanFilter(field_name="open_roof")
 
     class Meta:
         model = Transportation
@@ -43,6 +44,7 @@ class TransportationFilter(filters.FilterSet):
             "vehicle_make",
             "has_air_condition",
             "four_wheel_drive",
+            "open_roof",
         ]
 
 

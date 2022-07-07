@@ -43,6 +43,7 @@ class Transportation(models.Model):
     )
     has_air_condition = models.BooleanField(default=False)
     four_wheel_drive = models.BooleanField(default=False)
+    open_roof = models.BooleanField(default=False)
 
     # policies
     policy = models.TextField(blank=True, null=True)
