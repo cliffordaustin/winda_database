@@ -37,7 +37,7 @@ class TransportListView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-        queryset = Transportation.objects.all()
+        queryset = Transportation.objects.filter(is_active=True)
 
         querystring = self.request.GET.get("search")
         if querystring:
@@ -48,7 +48,7 @@ class TransportListView(generics.ListAPIView):
                 query |= Q(dropoff_city__icontains=word) | Q(
                     dropoff_country__icontains=word
                 )
-            queryset = Transportation.objects.filter(query).all()
+            queryset = Transportation.objects.filter(query, is_active=True).all()
 
         return queryset
 
