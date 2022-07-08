@@ -65,7 +65,7 @@ class ActivityListView(generics.ListAPIView):
                     | Q(city__icontains=word)
                     | Q(country__icontains=word)
                 )
-            queryset = Activities.objects.filter(query).all()
+            queryset = Activities.objects.filter(query, is_active=True).all()
 
         return queryset
 

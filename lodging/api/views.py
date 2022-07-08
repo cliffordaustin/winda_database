@@ -68,7 +68,7 @@ class StaysListView(generics.ListAPIView):
                     | Q(city__icontains=word)
                     | Q(country__icontains=word)
                 )
-            queryset = Stays.objects.filter(query).all()
+            queryset = Stays.objects.filter(query, is_active=True).all()
 
         return queryset
 
