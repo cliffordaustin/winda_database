@@ -25,13 +25,14 @@ class TransportationAdmin(admin.ModelAdmin):
         IncludedInPriceInline,
     )
     list_display = (
-        "user",
+        "vehicle_make",
         "type_of_car",
         "price_per_day",
         "additional_price_with_a_driver",
         "date_posted",
     )
     list_filter = (
+        "vehicle_make",
         "price_per_day",
         "additional_price_with_a_driver",
         "date_posted",
