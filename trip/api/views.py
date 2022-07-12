@@ -88,7 +88,6 @@ class TripView(APIView):
             "stay_num_of_children_non_resident", None
         )
         stay_plan = request.data.get("stay_plan", "STANDARD")
-        stay_non_resident = request.data.get("stay_non_resident", False)
         activity_non_resident = request.data.get("activity_non_resident", False)
         activity_pricing_type = request.data.get("activity_pricing_type", "PER PERSON")
         activity_number_of_people = request.data.get("activity_number_of_people", 1)
@@ -139,7 +138,6 @@ class TripView(APIView):
             stay_num_of_adults_non_resident=stay_num_of_adults_non_resident,
             stay_num_of_children_non_resident=stay_num_of_children_non_resident,
             stay_plan=stay_plan,
-            stay_non_resident=stay_non_resident,
             activity_non_resident=activity_non_resident,
             activity_pricing_type=activity_pricing_type,
             activity_number_of_people=activity_number_of_people,

@@ -71,9 +71,7 @@ class TripSerializer(serializers.ModelSerializer):
             "stay_num_of_children_non_resident",
             instance.stay_num_of_children_non_resident,
         )
-        instance.stay_non_resident = validated_data.get(
-            "stay_non_resident", instance.stay_non_resident
-        )
+
         instance.activity_non_resident = validated_data.get(
             "activity_non_resident", instance.activity_non_resident
         )
