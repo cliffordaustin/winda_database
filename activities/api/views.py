@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django.db.models import F, Value, CharField, Q
+from .pagination import ActivityPagination
 
 
 class ActivityCreateView(generics.CreateAPIView):
@@ -50,6 +51,7 @@ class ActivityListView(generics.ListAPIView):
         "price",
         "capacity",
     ]
+    pagination_class = ActivityPagination
 
     def get_queryset(self):
         queryset = Activities.objects.filter(is_active=True)
