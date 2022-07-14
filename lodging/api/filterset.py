@@ -29,8 +29,8 @@ class NumberInFilter(filters.BaseInFilter, filters.CharFilter):
 
 
 class StayFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr="gte")
-    max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
+    min_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="gte")
+    max_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="lte")
     min_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="gte")
     max_rooms = filters.NumberFilter(field_name="rooms", lookup_expr="lte")
     min_bathrooms = filters.NumberFilter(field_name="bathrooms", lookup_expr="gte")

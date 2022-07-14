@@ -10,8 +10,8 @@ class CharInFilter(filters.BaseInFilter, filters.CharFilter):
 
 
 class ActivitiesFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr="gte")
-    max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
+    min_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="gte")
+    max_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="lte")
     min_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="gte")
     max_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="lte")
     type_of_activities = CharInFilter(
