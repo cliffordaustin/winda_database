@@ -1,7 +1,7 @@
 import re
 
 from transport.api.filterset import ReviewFilter, TransportationFilter
-from transport.api.pagination import Pagination
+from transport.api.pagination import Pagination, TransportPagination
 from .serializers import *
 from transport.models import *
 from rest_framework import generics, status
@@ -33,8 +33,9 @@ class TransportListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
         "date_posted",
-        "price",
+        "price_per_day",
     ]
+    pagination_class = TransportPagination
 
     def get_queryset(self):
         queryset = Transportation.objects.filter(is_active=True)
