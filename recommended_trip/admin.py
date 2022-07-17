@@ -77,6 +77,7 @@ class SingleTripAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        ("Others", {"fields": ("is_active",)}),
     )
 
     search_fields = (
