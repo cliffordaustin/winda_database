@@ -3,6 +3,7 @@ from rest_framework import generics
 from recommended_trip.api.filterset import RecommendedTripFilter
 from .serializers import *
 from recommended_trip.models import *
+from .pagination import TripPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django.db.models import Q
@@ -26,6 +27,7 @@ class TripListView(generics.ListCreateAPIView):
     serializer_class = TripSerializer
     filterset_class = RecommendedTripFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = TripPagination
 
     ordering_fields = [
         "name",
@@ -33,7 +35,7 @@ class TripListView(generics.ListCreateAPIView):
     ]
 
     def get_queryset(self):
-        queryset = SingleTrip.objects.all()
+        queryset = SingleTrip.objects.filter(is_active=True)
 
         querystring = self.request.GET.get("location")
         if querystring:
@@ -49,6 +51,6 @@ class TripListView(generics.ListCreateAPIView):
                     | Q(activity__city__icontains=word)
                     | Q(activity__country__icontains=word)
                 )
-            queryset = SingleTrip.objects.filter(query).all()
+            queryset = SingleTrip.objects.filter(query).filter(is_active=True)
 
         return queryset

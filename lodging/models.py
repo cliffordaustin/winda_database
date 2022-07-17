@@ -563,7 +563,7 @@ class Stays(models.Model):
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
-        return f"{self.user} - {self.name}"
+        return f"{self.user} - {self.property_name} - {self.name}"
 
     class Meta:
         verbose_name = "Stay"

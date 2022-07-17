@@ -12,8 +12,13 @@ class RecommendedMonthsInline(admin.TabularInline):
     extra = 1
 
 
+class TripHighlightInline(admin.TabularInline):
+    model = TripHighlight
+    extra = 1
+
+
 class SingleTripAdmin(admin.ModelAdmin):
-    inlines = (SingleTripImageInline, RecommendedMonthsInline)
+    inlines = (SingleTripImageInline, TripHighlightInline, RecommendedMonthsInline)
 
     list_display = (
         "user",
@@ -26,7 +31,7 @@ class SingleTripAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {"fields": ("user", "name", "description", "price_budget")},
+            {"fields": ("user", "name", "area_covered", "description", "pricing_type")},
         ),
         (
             "Stay",
@@ -38,31 +43,33 @@ class SingleTripAdmin(admin.ModelAdmin):
         ),
         (
             "Transport",
-            {
-                "fields": (
-                    "transport",
-                    "starting_point",
-                )
-            },
+            {"fields": ("transport",)},
         ),
         (
             "Tags",
             {
                 "fields": (
                     "honeymoon",
+                    "cultural",
+                    "weekend_getaway",
+                    "road_trip",
+                    "hiking",
+                    "beach",
+                    "game",
+                    "romantic_getaway",
+                    "active",
+                    "cycling",
+                    "lake",
+                    "walking",
                     "family",
                     "couples",
                     "friends",
-                    "beach",
-                    "game",
                     "caves",
                     "surfing",
                     "tropical",
                     "camping",
-                    "hiking",
                     "mountain",
                     "cabin",
-                    "lake",
                     "desert",
                     "treehouse",
                     "boat",

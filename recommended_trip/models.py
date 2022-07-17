@@ -9,7 +9,11 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-PRICE_BUDGET = (("BUDGET", "BUDGET"), ("MID RANGE", "MID RANGE"), ("LUXURY", "LUXURY"))
+PRICING_TYPE = (
+    ("REASONABLE", "REASONABLE"),
+    ("MID-RANGE", "MID-RANGE"),
+    ("HIGH-END", "HIGH-END"),
+)
 
 
 class SingleTrip(models.Model):
@@ -24,36 +28,40 @@ class SingleTrip(models.Model):
     )
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
+    area_covered = models.CharField(max_length=350, blank=True, null=True)
     # how_long_is_trip = models.IntegerField(default=3)
 
     honeymoon = models.BooleanField(default=False)
+    cultural = models.BooleanField(default=False)
+    weekend_getaway = models.BooleanField(default=False)
+    road_trip = models.BooleanField(default=False)
+    hiking = models.BooleanField(default=False)
+    beach = models.BooleanField(default=False)
+    game = models.BooleanField(default=False)
+    romantic_getaway = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    cycling = models.BooleanField(default=False)
+    lake = models.BooleanField(default=False)
+    walking = models.BooleanField(default=False)
+
     family = models.BooleanField(default=False)
     couples = models.BooleanField(default=False)
     friends = models.BooleanField(default=False)
-    beach = models.BooleanField(default=False)
-    game = models.BooleanField(default=False)
     caves = models.BooleanField(default=False)
     surfing = models.BooleanField(default=False)
     tropical = models.BooleanField(default=False)
     camping = models.BooleanField(default=False)
-    hiking = models.BooleanField(default=False)
     mountain = models.BooleanField(default=False)
     cabin = models.BooleanField(default=False)
-    lake = models.BooleanField(default=False)
     desert = models.BooleanField(default=False)
     treehouse = models.BooleanField(default=False)
     boat = models.BooleanField(default=False)
     creative_space = models.BooleanField(default=False)
 
-    starting_point = models.CharField(
-        max_length=250,
-        blank=True,
-        null=True,
-        help_text="suggested starting point of the trip",
+    pricing_type = models.CharField(
+        max_length=100, choices=PRICING_TYPE, default="REASONABLE"
     )
-    price_budget = models.CharField(
-        max_length=100, choices=PRICE_BUDGET, default="MID RANGE"
-    )
+    is_active = models.BooleanField(default=True)
 
     # stay_num_of_adults = models.IntegerField(default=1)
     # stay_non_resident = models.BooleanField(default=False)
@@ -88,6 +96,14 @@ class SingleTrip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class TripHighlight(models.Model):
+    trip = models.ForeignKey(SingleTrip, on_delete=models.CASCADE)
+    highlight = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.highlight
 
 
 class RecommendedMonths(models.Model):

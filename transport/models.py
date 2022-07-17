@@ -50,7 +50,7 @@ class Transportation(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user} - {self.type_of_car}"
+        return f"{self.user} - { self.vehicle_make } - {self.type_of_car}"
 
 
 class IncludedInPrice(models.Model):

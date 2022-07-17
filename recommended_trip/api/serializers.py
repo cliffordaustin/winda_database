@@ -17,12 +17,19 @@ class RecommendedMonthsSerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
+class TripHighlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripHighlight
+        exclude = ["trip"]
+
+
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
     activity = ActivitySerializer(read_only=True)
     transport = TransportSerializer(read_only=True)
     single_trip_images = SingleTripImageSerializer(many=True, read_only=True)
+    trip_highlights = TripHighlightSerializer(many=True, read_only=True)
     months = RecommendedMonthsSerializer(many=True, read_only=True)
 
     stay_id = serializers.PrimaryKeyRelatedField(
