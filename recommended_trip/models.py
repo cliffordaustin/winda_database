@@ -92,7 +92,7 @@ class SingleTrip(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Created by {self.user}"
+        return f"Created { self.name } by {self.user}"
 
     class Meta:
         ordering = ["-created_at"]
