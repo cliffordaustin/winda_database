@@ -3,10 +3,11 @@ from django.dispatch import receiver
 
 
 @receiver(user_signed_up)
-def populate_profile(sociallogin, user, **kwargs):
-    if sociallogin.account.provider == "google":
-        user_data = user.socialaccount_set.filter(provider="google")[0].extra_data
-        avatar_url = user_data["picture"]
+def populate_profile(user, sociallogin=None, **kwargs):
+    if sociallogin:
+        if sociallogin.account.provider == "google":
+            user_data = user.socialaccount_set.filter(provider="google")[0].extra_data
+            avatar_url = user_data["picture"]
 
-    user.avatar_url = avatar_url
-    user.save()
+            user.avatar_url = avatar_url
+            user.save()
