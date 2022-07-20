@@ -21,6 +21,12 @@ class EnquipmentRequiredByUserSerializer(serializers.ModelSerializer):
         exclude = ["activity"]
 
 
+class FactsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Facts
+        exclude = ["activity"]
+
+
 class ActivitySerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     activity_images = ActivityImageSerializer(many=True, read_only=True)
@@ -38,6 +44,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     enquipment_required_by_user = EnquipmentRequiredByUserSerializer(
         many=True, read_only=True
     )
+    facts = FactsSerializer(many=True, read_only=True)
 
     has_user_saved = serializers.SerializerMethodField()
     saved_count = serializers.SerializerMethodField()

@@ -46,6 +46,22 @@ class EnquipmentRequiredByUser(models.Model):
         return str(self.activity.name)
 
 
+class Facts(models.Model):
+    activity = models.ForeignKey(
+        "Activities",
+        on_delete=models.CASCADE,
+        related_name="facts",
+    )
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.activity.name)
+
+    class Meta:
+        verbose_name = "Fact"
+        verbose_name_plural = "Facts"
+
+
 class Activities(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)

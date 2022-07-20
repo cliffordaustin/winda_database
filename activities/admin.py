@@ -17,10 +17,16 @@ class ActivitiesImageInline(admin.TabularInline):
     extra = 1
 
 
+class FactsInline(admin.TabularInline):
+    model = Facts
+    extra = 1
+
+
 class ActivitiesAdmin(admin.ModelAdmin):
     inlines = (
         EnquipmentProvidedInline,
         EnquipmentRequiredByUserInline,
+        FactsInline,
         ActivitiesImageInline,
     )
 
