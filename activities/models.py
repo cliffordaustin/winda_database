@@ -137,8 +137,8 @@ class Activities(models.Model):
         return f"{self.user} - {self.name}"
 
     class Meta:
-        verbose_name = "Activity"
-        verbose_name_plural = "Activities"
+        verbose_name = "Experience"
+        verbose_name_plural = "Experiences"
 
 
 class ActivitiesImage(models.Model):
