@@ -52,6 +52,10 @@ class Transportation(models.Model):
     def __str__(self):
         return f"{self.user} - { self.vehicle_make } - {self.type_of_car}"
 
+    class Meta:
+        verbose_name = "Transportation"
+        verbose_name_plural = "Transportations"
+
 
 class IncludedInPrice(models.Model):
     transportation = models.ForeignKey(

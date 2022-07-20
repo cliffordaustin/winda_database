@@ -567,6 +567,7 @@ class Stays(models.Model):
 
     class Meta:
         verbose_name = "Stay"
+        verbose_name_plural = "Stays"
 
 
 class StayImage(models.Model):

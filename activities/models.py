@@ -137,7 +137,8 @@ class Activities(models.Model):
         return f"{self.user} - {self.name}"
 
     class Meta:
-        verbose_name = "Activitie"  # this is the name of the model in the admin panel('s' is added automatically by django)
+        verbose_name = "Activity"
+        verbose_name_plural = "Activities"
 
 
 class ActivitiesImage(models.Model):
