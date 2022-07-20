@@ -99,7 +99,9 @@ class SingleTrip(models.Model):
 
 
 class TripHighlight(models.Model):
-    trip = models.ForeignKey(SingleTrip, on_delete=models.CASCADE)
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.CASCADE, related_name="trip_highlights"
+    )
     highlight = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
