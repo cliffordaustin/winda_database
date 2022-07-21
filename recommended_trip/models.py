@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from unicodedata import name
 from django.db import models
 from django.conf import settings
@@ -96,6 +97,8 @@ class SingleTrip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "Curated trip"
+        verbose_name_plural = "Curated trips"
 
 
 class TripHighlight(models.Model):

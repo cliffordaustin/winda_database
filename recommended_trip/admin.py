@@ -23,9 +23,22 @@ class SingleTripAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "name",
+        "stay_name",
+        "experience_name",
+        "transport_name",
         "created_at",
         "updated_at",
     )
+
+    def stay_name(self, obj):
+        return obj.stay.name
+
+    def experience_name(self, obj):
+        return obj.activity.name
+
+    def transport_name(self, obj):
+        return obj.transport.vehicle_make + " " + obj.transport.type_of_car
+
     list_filter = ("created_at", "updated_at")
 
     fieldsets = (
