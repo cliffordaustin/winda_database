@@ -31,13 +31,17 @@ class SingleTripAdmin(admin.ModelAdmin):
     )
 
     def stay_name(self, obj):
-        return obj.stay.name
+        return obj.stay.name if obj.stay else None
 
     def experience_name(self, obj):
-        return obj.activity.name
+        return obj.activity.name if obj.activity else None
 
     def transport_name(self, obj):
-        return obj.transport.vehicle_make + " " + obj.transport.type_of_car
+        return (
+            obj.transport.vehicle_make + " " + obj.transport.type_of_car
+            if obj.transport
+            else None
+        )
 
     list_filter = ("created_at", "updated_at")
 
