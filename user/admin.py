@@ -65,7 +65,10 @@ class UserAdmin(BaseUserAdmin):
             "Personal info",
             {"fields": ["profile_pic", "instagram_username", "tiktok_username"]},
         ),
-        ("Permissions", {"fields": ("is_admin", "is_staff", "is_superuser")}),
+        (
+            "Permissions",
+            {"fields": ("email_verified", "is_admin", "is_staff", "is_superuser")},
+        ),
     )
 
     add_fieldsets = (
@@ -82,6 +85,7 @@ class UserAdmin(BaseUserAdmin):
                     "profile_pic",
                     "password1",
                     "password2",
+                    "email_verified",
                     "is_admin",
                     "is_staff",
                     "is_superuser",
@@ -90,7 +94,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ("email", "first_name", "last_name")
-    ordering = ("email", "first_name", "last_name")
+    ordering = ("email", "first_name", "last_name", "email_verified")
     filter_horizontal = ()
 
 

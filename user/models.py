@@ -43,6 +43,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=120, blank=True, null=True)
     instagram_username = models.CharField(max_length=120, blank=True, null=True)
     tiktok_username = models.CharField(max_length=120, blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

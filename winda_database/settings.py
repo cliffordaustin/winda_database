@@ -141,7 +141,7 @@ if DEBUG:
         "HOST": os.environ.get("WINDA_DATABASE_HOST"),
     }
 else:
-    db_from_env = dj_database_url.config(default=os.environ.get("WINDA_DATABASE_URL"))
+    db_from_env = dj_database_url.config(default=os.environ.get("DATABASE_URL"))
     DATABASES["default"].update(db_from_env)
 
 
@@ -178,6 +178,14 @@ USE_L10N = True
 USE_TZ = True
 
 
+FRONTEND_URL = ""
+
+if DEBUG:
+    FRONTEND_URL = "http://localhost:3000"
+else:
+    FRONTEND_URL = "https://winda-sandy.vercel.app"
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -190,8 +198,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 
-SITE_ID = 2
-
 # SOCAILACCOUNT_PROVIDERS = {
 #     "google": {
 #         "APP": {
@@ -201,14 +207,28 @@ SITE_ID = 2
 #     }
 # }
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+EMAIL_BACKEND = "django_ses.SESBackend"
+EMAIL_HOST = os.environ.get("WINDA_SMTP_HOST")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("WINDA_SMTP_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("WINDA_SMTP_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
+AWS_SES_REGION_NAME = "eu-west-2"
+AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
+
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_ADAPTER = "winda_database.adapter.DefaultAccountAdapterCustom"
+
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# LOGIN_ON_EMAIL_CONFIRMATION = False
 
 
 AWS_ACCESS_KEY_ID = os.environ.get("WINDA_AWS_ACCESS_KEY_ID")
@@ -221,6 +241,9 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 AWS_S3_REGION_NAME = "eu-west-2"
 AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+
+SITE_ID = 2
 
 
 # Default primary key field type
