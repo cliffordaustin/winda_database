@@ -218,7 +218,7 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 AWS_SES_REGION_NAME = "eu-west-2"
 AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = None
 # ACCOUNT_ADAPTER = "winda_database.adapter.DefaultAccountAdapterCustom"
 
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
