@@ -512,8 +512,11 @@ class StayAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "user",
+        "user__email",
+        "user__first_name",
+        "user__last_name",
         "name",
+        "property_name",
     )
 
     ordering = ("date_posted",)
