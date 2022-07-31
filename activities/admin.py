@@ -53,6 +53,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
             "About",
             {
                 "fields": (
+                    "tags",
                     "description",
                     "min_capacity",
                     "capacity",

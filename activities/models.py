@@ -77,6 +77,12 @@ class Activities(models.Model):
         default=list,
         help_text="Separate each activities by using ' , '. Eg Active Adventures, Wellness experiences",
     )
+    tags = ArrayField(
+        models.CharField(max_length=100),
+        blank=True,
+        null=True,
+        help_text="Separate each tag by using ' , '",
+    )
     location = models.CharField(
         max_length=350, blank=True, null=True, verbose_name="Address"
     )
