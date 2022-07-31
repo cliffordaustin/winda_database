@@ -33,6 +33,7 @@ class ActivitiesFilter(filters.FilterSet):
             "type_of_activities",
             "equipments_required_by_user_to_bring",
             "equipments_provided",
+            "tags",
         ]
 
 
