@@ -251,7 +251,7 @@ class Review(models.Model):
     date_posted = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return str(self.rate) + " - " + str(self.title)
+        return "Rated as " + str(self.rate) + " star - " + str(self.title)
 
 
 class SaveActivities(models.Model):

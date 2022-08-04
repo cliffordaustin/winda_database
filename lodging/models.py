@@ -659,10 +659,10 @@ class Review(models.Model):
     )
     title = models.CharField(max_length=120, blank=True, null=True)
     message = models.TextField(blank=True, null=True)
-    date_posted = models.DateField(default=timezone.now)
+    date_posted = models.DateField(default=timezone.now, editable=False)
 
     def __str__(self):
-        return str(self.rate) + " - " + str(self.title)
+        return "Rated as " + str(self.rate) + " star - " + str(self.title)
 
 
 class SaveStays(models.Model):

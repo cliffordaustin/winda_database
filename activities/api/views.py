@@ -3,7 +3,7 @@ import re
 from requests import delete
 from activities.api.filterset import ActivitiesFilter
 from .filterset import ReviewFilter
-from lodging.api.pagination import Pagination
+from activities.api.pagination import Pagination
 from .serializers import *
 from activities.models import *
 from rest_framework import generics, status
@@ -130,6 +130,8 @@ class ActivityImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ReviewListView(generics.ListAPIView):
     serializer_class = ReviewSerializer
     filterset_class = ReviewFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = ["date_posted", "rate"]
     pagination_class = Pagination
 
     def get_queryset(self):

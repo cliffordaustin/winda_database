@@ -129,6 +129,8 @@ class StayImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ReviewListView(generics.ListAPIView):
     serializer_class = ReviewSerializer
     filterset_class = ReviewFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = ["date_posted", "rate"]
     pagination_class = Pagination
 
     def get_queryset(self):
