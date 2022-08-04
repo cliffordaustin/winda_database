@@ -98,8 +98,9 @@ class SingleTripAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "user",
         "name",
+        "stay__name",
+        "activity__name",
     )
 
     ordering = (
