@@ -24,6 +24,7 @@ class TransportationAdmin(admin.ModelAdmin):
         DriverOperatesWithinInline,
         IncludedInPriceInline,
     )
+    raw_id_fields = ("user",)
     list_display = (
         "vehicle_make",
         "type_of_car",

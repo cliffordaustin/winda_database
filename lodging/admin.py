@@ -29,6 +29,7 @@ class StayAdmin(admin.ModelAdmin):
         InclusionsInline,
         StayImageInline,
     )
+    raw_id_fields = ("user",)
 
     list_display = (
         "property_name",

@@ -29,6 +29,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
         FactsInline,
         ActivitiesImageInline,
     )
+    raw_id_fields = ("user",)
 
     list_display = (
         "user",
