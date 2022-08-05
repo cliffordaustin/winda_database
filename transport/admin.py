@@ -78,11 +78,11 @@ class TransportationAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "user",
+        "user__email",
+        "user__first_name",
+        "user__last_name",
         "type_of_car",
-        "price_per_day",
-        "additional_price_with_a_driver",
-        "date_posted",
+        "vehicle_make",
     )
     ordering = (
         "date_posted",

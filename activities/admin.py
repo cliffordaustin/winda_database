@@ -119,6 +119,15 @@ class ActivitiesAdmin(admin.ModelAdmin):
         ),
     )
 
+    search_fields = (
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "name",
+    )
+
+    ordering = ("date_posted",)
+
 
 admin.site.register(Activities, ActivitiesAdmin)
 # admin.site.register(ActivitiesImage)
