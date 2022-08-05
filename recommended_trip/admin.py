@@ -18,7 +18,7 @@ class TripHighlightInline(admin.TabularInline):
 
 
 class SingleTripAdmin(admin.ModelAdmin):
-    inlines = (SingleTripImageInline, TripHighlightInline, RecommendedMonthsInline)
+    inlines = (SingleTripImageInline, TripHighlightInline)
     raw_id_fields = ("user", "stay", "activity", "transport")
 
     list_display = (
