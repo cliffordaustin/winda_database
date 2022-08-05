@@ -29,6 +29,7 @@ class SingleTripAdmin(admin.ModelAdmin):
         "transport_name",
         "created_at",
         "updated_at",
+        "is_active",
     )
 
     def stay_name(self, obj):
