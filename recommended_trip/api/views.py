@@ -44,7 +44,8 @@ class TripListView(generics.ListCreateAPIView):
             for word in words:
                 # 'or' the queries together
                 query |= (
-                    Q(stay__location__icontains=word)
+                    Q(area_covered__icontains=word)
+                    | Q(stay__location__icontains=word)
                     | Q(stay__city__icontains=word)
                     | Q(activity__location__icontains=word)
                     | Q(activity__city__icontains=word)
