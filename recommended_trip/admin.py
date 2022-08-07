@@ -102,6 +102,7 @@ class SingleTripAdmin(admin.ModelAdmin):
     search_fields = (
         "name",
         "stay__name",
+        "stay__property_name",
         "activity__name",
     )
 
