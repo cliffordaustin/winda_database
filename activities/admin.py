@@ -36,6 +36,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
         "name",
         "city",
         "location",
+        "is_active",
     )
 
     list_filter = ("date_posted",)

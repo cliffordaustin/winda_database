@@ -37,6 +37,7 @@ class StayAdmin(admin.ModelAdmin):
         "rooms",
         "bathrooms",
         "capacity",
+        "is_active",
     )
 
     list_filter = ("date_posted", "bathrooms", "rooms", "capacity")
