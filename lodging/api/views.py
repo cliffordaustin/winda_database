@@ -47,11 +47,12 @@ class StaysListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
         "date_posted",
-        "price",
+        ("price", "price_non_resident"),
         "rooms",
         "beds",
         "bathrooms",
     ]
+    ordering = ["price_non_resident"]
     pagination_class = StayPagination
 
     def get_queryset(self):
