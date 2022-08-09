@@ -88,27 +88,27 @@ class ActivitiesAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        (
-            "Price per session",
-            {
-                "fields": (
-                    "price_per_session",
-                    "session_price_non_resident",
-                    "session_price",
-                )
-            },
-        ),
-        (
-            "Price per group",
-            {
-                "fields": (
-                    "price_per_group",
-                    "group_price_non_resident",
-                    "group_price",
-                    "max_number_of_people_in_a_group",
-                )
-            },
-        ),
+        # (
+        #     "Price per session",
+        #     {
+        #         "fields": (
+        #             "price_per_session",
+        #             "session_price_non_resident",
+        #             "session_price",
+        #         )
+        #     },
+        # ),
+        # (
+        #     "Price per group",
+        #     {
+        #         "fields": (
+        #             "price_per_group",
+        #             "group_price_non_resident",
+        #             "group_price",
+        #             "max_number_of_people_in_a_group",
+        #         )
+        #     },
+        # ),
         (
             "Others",
             {

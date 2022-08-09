@@ -58,7 +58,7 @@ class StayFilter(filters.FilterSet):
         #     "theme",
         # ]
 
-        exclude = ["other_amenities", "tags"]
+        exclude = ["tags"]
 
 
 class ReviewFilter(filters.FilterSet):

@@ -83,8 +83,8 @@ class ExtrasIncluded(models.Model):
         return str(self.stay.name)
 
     class Meta:
-        verbose_name = "Extra Included"
-        verbose_name_plural = "Extras Included"
+        verbose_name = "Extra"
+        verbose_name_plural = "Extras"
 
 
 class Facts(models.Model):
@@ -95,8 +95,8 @@ class Facts(models.Model):
         return str(self.stay.name)
 
     class Meta:
-        verbose_name = "Fact"
-        verbose_name_plural = "Facts"
+        verbose_name = "Amenties(Quick Fact)"
+        verbose_name_plural = "Amenties(Quick Facts)"
 
 
 class Inclusions(models.Model):
@@ -109,8 +109,8 @@ class Inclusions(models.Model):
         return str(self.stay.name)
 
     class Meta:
-        verbose_name = "Inclusion"
-        verbose_name_plural = "Inclusions"
+        verbose_name = "Included Activity"
+        verbose_name_plural = "Included Activities"
 
 
 class Stays(models.Model):
@@ -222,13 +222,13 @@ class Stays(models.Model):
     library = models.BooleanField(default=False)
 
     # work on this in the frontend
-    other_amenities = ArrayField(
-        models.CharField(max_length=500, blank=True, null=True),
-        blank=True,
-        null=True,
-        default=list,
-        help_text="Separate each amenities by using ' , '",
-    )
+    # other_amenities = ArrayField(
+    #     models.CharField(max_length=500, blank=True, null=True),
+    #     blank=True,
+    #     null=True,
+    #     default=list,
+    #     help_text="Separate each amenities by using ' , '",
+    # )
 
     # Policies
     check_in_time = models.TimeField(blank=True, null=True)
@@ -251,7 +251,9 @@ class Stays(models.Model):
     location = models.CharField(
         max_length=350, blank=True, null=True, verbose_name="Address"
     )
-    city = models.CharField(max_length=350, blank=True, null=True)
+    city = models.CharField(
+        max_length=350, blank=True, null=True, verbose_name="county"
+    )
     country = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)

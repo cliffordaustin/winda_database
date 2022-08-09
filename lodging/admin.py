@@ -55,7 +55,7 @@ class StayAdmin(admin.ModelAdmin):
                     "name",
                     "tags",
                     "rooms",
-                    "beds",
+                    # "beds",
                     "bathrooms",
                     "capacity",
                     "description",
@@ -119,7 +119,6 @@ class StayAdmin(admin.ModelAdmin):
                     "conference_center",
                     "ensuite_room",
                     "library",
-                    "other_amenities",
                 )
             },
         ),
@@ -170,7 +169,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "standard",
-                    "standard_capacity",
+                    # "standard_capacity",
                     "price_non_resident",
                     "single_price_non_resident",
                     "teen_price_non_resident",
@@ -191,7 +190,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "deluxe",
-                    "deluxe_capacity",
+                    # "deluxe_capacity",
                     "deluxe_price_non_resident",
                     "deluxe_single_price_non_resident",
                     "deluxe_teen_price_non_resident",
@@ -212,7 +211,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "family_room",
-                    "family_room_capacity",
+                    # "family_room_capacity",
                     "family_room_price_non_resident",
                     "family_room_single_price_non_resident",
                     "family_room_teen_price_non_resident",
@@ -233,7 +232,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "conservation_or_park",
-                    "conservation_or_park_capacity",
+                    # "conservation_or_park_capacity",
                     "conservation_or_park_price_non_resident",
                     "conservation_or_park_single_price_non_resident",
                     "conservation_or_park_teen_price_non_resident",
@@ -422,7 +421,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "presidential_suite_room",
-                    "presidential_suite_room_capacity",
+                    # "presidential_suite_room_capacity",
                     "presidential_suite_room_price_non_resident",
                     "presidential_suite_room_single_price_non_resident",
                     "presidential_suite_room_teen_price_non_resident",
@@ -443,7 +442,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "emperor_suite_room",
-                    "emperor_suite_room_capacity",
+                    # "emperor_suite_room_capacity",
                     "emperor_suite_room_price_non_resident",
                     "emperor_suite_room_single_price_non_resident",
                     "emperor_suite_room_teen_price_non_resident",
@@ -464,7 +463,7 @@ class StayAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "executive_suite_room",
-                    "executive_suite_room_capacity",
+                    # "executive_suite_room_capacity",
                     "executive_suite_room_price_non_resident",
                     "executive_suite_room_single_price_non_resident",
                     "executive_suite_room_teen_price_non_resident",

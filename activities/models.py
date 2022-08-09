@@ -33,6 +33,10 @@ class EnquipmentProvided(models.Model):
     def __str__(self):
         return str(self.activity.name)
 
+    class Meta:
+        verbose_name = "Inclusions"
+        verbose_name_plural = "Inclusions"
+
 
 class EnquipmentRequiredByUser(models.Model):
     activity = models.ForeignKey(
@@ -44,6 +48,10 @@ class EnquipmentRequiredByUser(models.Model):
 
     def __str__(self):
         return str(self.activity.name)
+
+    class Meta:
+        verbose_name = "What to bring"
+        verbose_name_plural = "What to bring"
 
 
 class Facts(models.Model):
@@ -58,8 +66,8 @@ class Facts(models.Model):
         return str(self.activity.name)
 
     class Meta:
-        verbose_name = "Fact"
-        verbose_name_plural = "Facts"
+        verbose_name = "Quick Fact"
+        verbose_name_plural = "Quick Facts"
 
 
 class Activities(models.Model):
@@ -86,7 +94,9 @@ class Activities(models.Model):
     location = models.CharField(
         max_length=350, blank=True, null=True, verbose_name="Address"
     )
-    city = models.CharField(max_length=350, blank=True, null=True)
+    city = models.CharField(
+        max_length=350, blank=True, null=True, verbose_name="county"
+    )
     country = models.CharField(max_length=350, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
@@ -173,6 +183,10 @@ class ActivitiesImage(models.Model):
 
     def __str__(self):
         return f"{self.activity.user} - {self.activity.name}"
+
+    class Meta:
+        verbose_name = "Experience Image"
+        verbose_name_plural = "Experience Images"
 
 
 class Views(models.Model):
