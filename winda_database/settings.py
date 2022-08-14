@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "activities",
     "transport",
     "recommended_trip",
+    "curated_trip",
     "trip",
     "django_cleanup.apps.CleanupConfig",
 ]

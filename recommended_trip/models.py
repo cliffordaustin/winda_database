@@ -1,5 +1,3 @@
-from tabnanny import verbose
-from unicodedata import name
 from django.db import models
 from django.conf import settings
 from activities.models import *
@@ -30,6 +28,10 @@ class SingleTrip(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     area_covered = models.CharField(max_length=350, blank=True, null=True)
+    total_number_of_days = models.IntegerField(blank=True, null=True)
+    starting_location = models.CharField(max_length=255, blank=True, null=True)
+    ending_location = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
     # how_long_is_trip = models.IntegerField(default=3)
 
     honeymoon = models.BooleanField(default=False)
@@ -123,6 +125,36 @@ class RecommendedMonths(models.Model):
 
     def __str__(self):
         return f"{self.trip} - {self.month}"
+
+
+class Itinerary(models.Model):
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.CASCADE, related_name="itineraries"
+    )
+    day = models.CharField(
+        max_length=255, blank=True, null=True, help_text="Day of the trip. eg 'Day 1'."
+    )
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.trip} - {self.day}"
+
+    class Meta:
+        verbose_name = "Itinerary"
+        verbose_name_plural = "Itineraries"
+
+
+class FrequentlyAskedQuestion(models.Model):
+    trip = models.ForeignKey(SingleTrip, on_delete=models.CASCADE, related_name="faqs")
+    question = models.CharField(max_length=255, blank=True, null=True)
+    answer = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.trip} - {self.question}"
+
+    class Meta:
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"
 
 
 class SingleTripImage(models.Model):

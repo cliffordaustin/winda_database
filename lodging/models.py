@@ -379,6 +379,9 @@ class Stays(models.Model):
     quad_room_single_teen_price = models.FloatField(blank=True, null=True)
     quad_room_single_teen_price_non_resident = models.FloatField(blank=True, null=True)
 
+    per_house = models.BooleanField(default=False)
+    per_house_price = models.FloatField(blank=True, null=True)
+
     queen_room = models.BooleanField(default=False)
     queen_room_capacity = models.IntegerField(blank=True, null=True)
     queen_room_price = models.FloatField(blank=True, null=True)

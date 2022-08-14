@@ -1,6 +1,6 @@
 from dataclasses import fields
 from random import choices
-from recommended_trip.models import *
+from curated_trip.models import *
 from django_filters import rest_framework as filters
 
 
@@ -15,5 +15,5 @@ class RecommendedTripFilter(filters.FilterSet):
     )
 
     class Meta:
-        model = SingleTrip
+        model = CuratedTrip
         fields = "__all__"

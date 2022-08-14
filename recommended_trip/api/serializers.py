@@ -23,6 +23,18 @@ class TripHighlightSerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
+class ItinerarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Itinerary
+        exclude = ["trip"]
+
+
+class FrequentlyAskedQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FrequentlyAskedQuestion
+        exclude = ["trip"]
+
+
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
@@ -30,6 +42,8 @@ class TripSerializer(serializers.ModelSerializer):
     transport = TransportSerializer(read_only=True)
     single_trip_images = SingleTripImageSerializer(many=True, read_only=True)
     trip_highlights = TripHighlightSerializer(many=True, read_only=True)
+    itineraries = ItinerarySerializer(many=True, read_only=True)
+    faqs = FrequentlyAskedQuestionSerializer(many=True, read_only=True)
     months = RecommendedMonthsSerializer(many=True, read_only=True)
 
     stay_id = serializers.PrimaryKeyRelatedField(

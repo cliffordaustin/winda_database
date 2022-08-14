@@ -17,14 +17,30 @@ class TripHighlightInline(admin.TabularInline):
     extra = 1
 
 
+class ItineraryInline(admin.TabularInline):
+    model = Itinerary
+    extra = 1
+
+
+class FrequentlyAskedQuestionInline(admin.TabularInline):
+    model = FrequentlyAskedQuestion
+    extra = 1
+
+
 class SingleTripAdmin(admin.ModelAdmin):
-    inlines = (SingleTripImageInline, TripHighlightInline)
+    inlines = (
+        SingleTripImageInline,
+        TripHighlightInline,
+        ItineraryInline,
+        FrequentlyAskedQuestionInline,
+    )
     raw_id_fields = ("user", "stay", "activity", "transport")
 
     list_display = (
         "user",
         "name",
         "stay_name",
+        "total_number_of_days",
         "experience_name",
         "transport_name",
         "created_at",
@@ -50,7 +66,16 @@ class SingleTripAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {"fields": ("user", "name", "area_covered", "description", "pricing_type")},
+            {
+                "fields": (
+                    "user",
+                    "name",
+                    "area_covered",
+                    "total_number_of_days",
+                    "description",
+                    "pricing_type",
+                )
+            },
         ),
         (
             "Stay",
@@ -96,7 +121,17 @@ class SingleTripAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Others", {"fields": ("is_active",)}),
+        (
+            "Others",
+            {
+                "fields": (
+                    "is_active",
+                    "starting_location",
+                    "ending_location",
+                    "country",
+                )
+            },
+        ),
     )
 
     search_fields = (

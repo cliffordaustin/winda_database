@@ -44,7 +44,9 @@ class GroupTripPaidView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return GroupTrip.objects.filter(user=self.request.user, paid=False)
+        return GroupTrip.objects.filter(
+            user=self.request.user, paid=False
+        )  # set paid to true
 
 
 class TripView(APIView):

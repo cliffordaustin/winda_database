@@ -29,6 +29,7 @@ urlpatterns = [
     path("api/v1/", include("activities.api.urls")),
     path("api/v1/", include("transport.api.urls")),
     path("api/v1/", include("recommended_trip.api.urls")),
+    path("api/v1/", include("curated_trip.api.urls")),
     re_path(
         r"^account-confirm-email/(?P<key>[-:\w]+)/$",
         VerifyEmailView.as_view(),
