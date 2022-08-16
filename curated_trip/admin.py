@@ -181,16 +181,9 @@ class UserTripAdmin(admin.ModelAdmin):
         UserActivityTripInline,
         UserTransportTripInline,
     )
-    raw_id_fields = ("user",)
+    raw_id_fields = ("user", "trips")
 
-    list_display = (
-        "user",
-        "name",
-        "total_number_of_days",
-        "created_at",
-        "updated_at",
-        "is_active",
-    )
+    list_display = ("user", "name", "created_at", "updated_at")
 
     list_filter = ("created_at", "updated_at")
 
@@ -200,8 +193,8 @@ class UserTripAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "user",
+                    "trips",
                     "name",
-                    "paid",
                 )
             },
         ),
@@ -223,3 +216,45 @@ class UserTripAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
+
+
+class UserTripsAdmin(admin.ModelAdmin):
+    raw_id_fields = ("user",)
+
+    list_display = ("user", "name", "created_at", "updated_at", "paid")
+
+    list_filter = ("created_at", "updated_at")
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "name",
+                    "paid",
+                )
+            },
+        ),
+    )
+
+    search_fields = (
+        "name",
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "trip__user_stay_trip__stay__name",
+        "trip__user_stay_trip__stay__property_name",
+        "trip__user_activity_trip__activity__name",
+        "trip__user_transport_trip__transport__vehicle_make",
+        "trip__user_transport_trip__transport__type_of_car",
+    )
+
+    ordering = (
+        "created_at",
+        "updated_at",
+    )
+
+
+admin.site.register(UserTrips, UserTripsAdmin)
+admin.site.register(UserTrip, UserTripAdmin)

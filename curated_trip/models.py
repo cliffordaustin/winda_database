@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from lodging.models import Stays
 from transport.models import Transportation
@@ -218,7 +219,7 @@ class UserStayTrip(models.Model):
     num_of_children_non_resident = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.stay.property_name}"
+        return f"{self.stay}"
 
 
 class UserActivityTrip(models.Model):
@@ -242,7 +243,7 @@ class UserActivityTrip(models.Model):
     number_of_groups_non_resident = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.activity.name}"
+        return f"{self.activity}"
 
 
 class UserTransportTrip(models.Model):
@@ -259,18 +260,22 @@ class UserTransportTrip(models.Model):
     user_need_a_driver = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.transport.user} - {self.transport.type_of_car}"
+        return f"{self.transport}"
 
 
 class UserTrip(models.Model):
-    starting_point = models.CharField(max_length=250, blank=True, null=True)  # remove
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_trips"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_trip"
     )
     name = models.CharField(max_length=250, default="Untitled Trip")
-    paid = models.BooleanField(default=False)
-
+    trips = models.ForeignKey(
+        "UserTrips",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="trip",
+        verbose_name="Group Trip",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -279,3 +284,23 @@ class UserTrip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class UserTrips(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_trips"
+    )
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)  # remove
+    name = models.CharField(max_length=250, default="Untitled Trip")
+    paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user}"
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Group User Trip"
+        verbose_name_plural = "Group User Trips"
