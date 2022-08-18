@@ -113,6 +113,7 @@ class TripView(APIView):
         stay = None
         activity = None
         transport = None
+        flight = None
 
         if stay_id:
             stay = generics.get_object_or_404(Stays, pk=stay_id)
