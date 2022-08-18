@@ -113,7 +113,6 @@ class FlightAdmin(admin.ModelAdmin):
                     "starting_point",
                     "destination",
                     "number_of_people",
-                    "date_posted",
                     "paid",
                 )
             },
