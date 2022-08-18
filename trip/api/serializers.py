@@ -5,7 +5,7 @@ from activities.models import *
 from transport.models import *
 from lodging.api.serializers import StaysSerializer
 from activities.api.serializers import ActivitySerializer
-from transport.api.serializers import TransportSerializer
+from transport.api.serializers import TransportSerializer, FlightSerializer
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class TripSerializer(serializers.ModelSerializer):
     stay = StaysSerializer(read_only=True)
     activity = ActivitySerializer(read_only=True)
     transport = TransportSerializer(read_only=True)
-
+    flight = FlightSerializer(read_only=True)
     stay_id = serializers.PrimaryKeyRelatedField(
         queryset=Stays.objects.all(),
         write_only=True,
@@ -32,6 +32,12 @@ class TripSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
+    flight_id = serializers.PrimaryKeyRelatedField(
+        queryset=Flight.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = Trip
@@ -39,6 +45,7 @@ class TripSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.transport = validated_data.get("transport_id", instance.transport)
+        instance.flight = validated_data.get("flight_id", instance.flight)
         instance.activity = validated_data.get("activity_id", instance.activity)
         instance.stay = validated_data.get("stay_id", instance.stay)
         instance.from_date = validated_data.get("from_date", instance.from_date)

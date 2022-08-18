@@ -81,6 +81,7 @@ class CuratedTrip(models.Model):
     description = models.TextField(blank=True, null=True)
     area_covered = models.CharField(max_length=350, blank=True, null=True)
     total_number_of_days = models.IntegerField(blank=True, null=True)
+    essential_information = models.TextField(blank=True, null=True)
     starting_location = models.CharField(max_length=255, blank=True, null=True)
     ending_location = models.CharField(max_length=255, blank=True, null=True)
 

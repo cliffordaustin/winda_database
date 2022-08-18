@@ -4,7 +4,7 @@ from activities.models import Activities
 from core.utils import group_trip_image_thumbnail, trip_image_thumbnail
 
 from lodging.models import Stays
-from transport.models import Transportation
+from transport.models import Transportation, Flight
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.utils import timezone
@@ -18,6 +18,7 @@ class Trip(models.Model):
     transport = models.ForeignKey(
         Transportation, on_delete=models.SET_NULL, null=True, blank=True
     )
+    flight = models.ForeignKey(Flight, on_delete=models.SET_NULL, null=True, blank=True)
     transport_number_of_days = models.IntegerField(blank=True, null=True)
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
 

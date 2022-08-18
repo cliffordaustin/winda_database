@@ -57,6 +57,23 @@ class Transportation(models.Model):
         verbose_name_plural = "Transportations"
 
 
+class Flight(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
+    destination = models.CharField(max_length=250, blank=True, null=True)
+    number_of_people = models.IntegerField(default=1)
+    date_posted = models.DateTimeField(default=timezone.now, editable=False)
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user}"
+
+    class Meta:
+        verbose_name = "Flight"
+        verbose_name_plural = "Flights"
+
+
 class IncludedInPrice(models.Model):
     transportation = models.ForeignKey(
         Transportation, on_delete=models.CASCADE, related_name="included_in_price"

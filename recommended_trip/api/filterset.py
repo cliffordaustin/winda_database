@@ -16,4 +16,4 @@ class RecommendedTripFilter(filters.FilterSet):
 
     class Meta:
         model = SingleTrip
-        fields = "__all__"
+        exclude = ["stop_at", "countries_covered"]

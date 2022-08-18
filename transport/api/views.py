@@ -17,6 +17,31 @@ from rest_framework.response import Response
 from .permissions import IsUserTransportInstance, ObjectPermission
 
 
+class FlightListCreateView(generics.ListCreateAPIView):
+    serializer_class = FlightSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Flight.objects.filter(paid=False)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class FlightDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = FlightSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = Flight.objects.all()
+        slug = self.kwargs.get("slug")
+
+        if slug is not None:
+            queryset = Flight.objects.filter(slug=slug)
+        return queryset
+
+
 class TransportCreateView(generics.CreateAPIView):
     serializer_class = TransportSerializer
     queryset = Transportation.objects.all()

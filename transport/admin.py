@@ -91,8 +91,50 @@ class TransportationAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Transportation, TransportationAdmin)
+class FlightAdmin(admin.ModelAdmin):
+    list_display = (
+        "starting_point",
+        "destination",
+        "date_posted",
+        "paid",
+    )
+    list_filter = (
+        "starting_point",
+        "destination",
+        "date_posted",
+        "paid",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "starting_point",
+                    "destination",
+                    "number_of_people",
+                    "date_posted",
+                    "paid",
+                )
+            },
+        ),
+    )
 
+    search_fields = (
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "starting_point",
+        "destination",
+    )
+    ordering = (
+        "date_posted",
+        "paid",
+    )
+
+
+admin.site.register(Flight, FlightAdmin)
+admin.site.register(Transportation, TransportationAdmin)
 admin.site.register(Order)
 admin.site.register(Cart)
 admin.site.register(Review)

@@ -34,7 +34,7 @@ class SingleTripAdmin(admin.ModelAdmin):
         ItineraryInline,
         FrequentlyAskedQuestionInline,
     )
-    raw_id_fields = ("user", "stay", "activity", "transport")
+    raw_id_fields = ("user", "stay", "activity", "transport", "flight")
 
     list_display = (
         "user",
@@ -71,7 +71,9 @@ class SingleTripAdmin(admin.ModelAdmin):
                     "user",
                     "name",
                     "area_covered",
+                    "countries_covered",
                     "total_number_of_days",
+                    "essential_information",
                     "description",
                     "pricing_type",
                 )
@@ -88,6 +90,10 @@ class SingleTripAdmin(admin.ModelAdmin):
         (
             "Transport",
             {"fields": ("transport",)},
+        ),
+        (
+            "Flight",
+            {"fields": ("flight",)},
         ),
         (
             "Tags",
@@ -128,7 +134,7 @@ class SingleTripAdmin(admin.ModelAdmin):
                     "is_active",
                     "starting_location",
                     "ending_location",
-                    "country",
+                    "stop_at",
                 )
             },
         ),

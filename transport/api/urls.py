@@ -12,6 +12,16 @@ urlpatterns = [
         name="transport-image-create",
     ),
     path(
+        "flights/",
+        FlightListCreateView.as_view(),
+        name="flight-list-create",
+    ),
+    path(
+        "flights/<slug>/",
+        FlightDetailView.as_view(),
+        name="flight-detail",
+    ),
+    path(
         "transport/<transport_slug>/images/",
         TransportImageListView.as_view(),
         name="transport-image-list",

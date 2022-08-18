@@ -73,6 +73,7 @@ class TripView(APIView):
         stay_id = request.data.get("stay_id", None)
         activity_id = request.data.get("activity_id", None)
         transport_id = request.data.get("transport_id", None)
+        flight_id = request.data.get("flight_id", None)
         from_date = request.data.get("from_date", None)
         transport_number_of_days = request.data.get("transport_number_of_days", 1)
         activity_from_date = request.data.get("activity_from_date", None)
@@ -122,11 +123,15 @@ class TripView(APIView):
         if transport_id:
             transport = generics.get_object_or_404(Transportation, pk=transport_id)
 
+        if flight_id:
+            flight = generics.get_object_or_404(Flight, pk=flight_id)
+
         trip = Trip.objects.create(
             user=self.request.user,
             stay=stay,
             activity=activity,
             transport=transport,
+            flight=flight,
             from_date=from_date,
             transport_number_of_days=transport_number_of_days,
             activity_from_date=activity_from_date,

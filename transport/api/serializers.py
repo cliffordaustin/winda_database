@@ -3,6 +3,14 @@ from transport.models import *
 from django.db.models import Sum
 
 
+class FlightSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Flight
+        fields = "__all__"
+
+
 class TransportImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransportationImage

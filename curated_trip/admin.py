@@ -69,6 +69,7 @@ class CuratedTripAdmin(admin.ModelAdmin):
                     "name",
                     "area_covered",
                     "total_number_of_days",
+                    "essential_information",
                     "description",
                     "pricing_type",
                 )
