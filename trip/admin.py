@@ -25,6 +25,15 @@ class GroupTripAdmin(admin.ModelAdmin):
     ordering = ("updated_at",)
 
 
+class BookedTripAdmin(admin.ModelAdmin):
+    raw_id_fields = ("user", "trip")
+    search_fields = ("user__email",)
+    ordering = ("updated_at",)
+    list_display = ("user", "trip", "starting_date", "guests", "created_at")
+
+
+admin.site.register(BookedTrip, BookedTripAdmin)
+
 admin.site.register(Trip, TripAdmin)
 
 admin.site.register(GroupTrip, GroupTripAdmin)

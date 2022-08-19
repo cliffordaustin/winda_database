@@ -3,10 +3,44 @@ from .serializers import *
 from trip.models import *
 from lodging.models import *
 from activities.models import *
+from recommended_trip.models import SingleTrip
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+
+
+class BookedTripListAPIView(generics.ListAPIView):
+    queryset = BookedTrip.objects.all()
+    serializer_class = BookedTripSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class BookedTripCreateAPIView(generics.CreateAPIView):
+    queryset = BookedTrip.objects.all()
+    serializer_class = BookedTripSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        trip_slug = self.kwargs.get("trip_slug")
+        trip = generics.get_object_or_404(SingleTrip, slug=trip_slug)
+        print(trip)
+        serializer.save(user=self.request.user, trip=trip)
+
+
+class BookedTripDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = BookedTripSerializer
+    permission_classes = (IsAuthenticated,)
+
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = BookedTrip.objects.all()
+        slug = self.kwargs.get("slug")
+
+        if slug is not None:
+            queryset = BookedTrip.objects.filter(slug=slug)
+        return queryset
 
 
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):

@@ -1,3 +1,4 @@
+from email import message
 from django.db import models
 from django.conf import settings
 from activities.models import Activities
@@ -7,9 +8,32 @@ from lodging.models import Stays
 from transport.models import Transportation, Flight
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from recommended_trip.models import SingleTrip
 from django.utils import timezone
 from lodging.models import PLAN_TYPE
 from activities.models import PRICING_TYPE
+
+
+class BookedTrip(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    starting_date = models.DateField(default=timezone.now)
+    guests = models.IntegerField(default=1)
+    message = models.TextField(blank=True, null=True)
+    paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Booked Trip"
+        verbose_name_plural = "Booked Trips"
+
+    def __str__(self):
+        return "{} - {}".format(self.user, self.trip)
 
 
 class Trip(models.Model):
