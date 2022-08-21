@@ -83,6 +83,47 @@ class StaysListView(generics.ListAPIView):
         return queryset
 
 
+class AllStaysListView(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    filterset_class = StayFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = [
+        "date_posted",
+        ("price", "price_non_resident"),
+        "rooms",
+        "beds",
+        "bathrooms",
+    ]
+    ordering = ["price_non_resident"]
+
+    def get_queryset(self):
+        queryset = Stays.objects.all()
+
+        querystring = self.request.GET.get("search")
+        querystring_detail_search = self.request.GET.get("d_search")
+        if querystring:
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= Q(location__icontains=word) | Q(city__icontains=word)
+            queryset = Stays.objects.filter(query).all()
+
+        if querystring_detail_search:
+            words = re.split(r"[^A-Za-z']+", querystring_detail_search)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= (
+                    Q(location__icontains=word)
+                    | Q(city__icontains=word)
+                    | Q(country__icontains=word)
+                )
+            queryset = Stays.objects.filter(query).all()
+
+        return queryset
+
+
 class StayImageListView(generics.ListAPIView):
     serializer_class = StayImageSerializer
     pagination_class = None

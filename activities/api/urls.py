@@ -4,6 +4,9 @@ from .views import *
 
 urlpatterns = [
     path("activities/", ActivityListView.as_view(), name="activities-list"),
+    path(
+        "all-activities/", AllActivitiesListView.as_view(), name="all-activities-list"
+    ),
     path("create-activity/", ActivityCreateView.as_view(), name="activities-create"),
     path("activities/<slug>/", ActivityDetailView.as_view(), name="activities-detail"),
     path(
