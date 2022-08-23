@@ -16,4 +16,4 @@ class RecommendedTripFilter(filters.FilterSet):
 
     class Meta:
         model = CuratedTrip
-        fields = "__all__"
+        exclude = ["stop_at"]

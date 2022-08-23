@@ -21,9 +21,13 @@ class BookedTrip(models.Model):
         SingleTrip, on_delete=models.SET_NULL, null=True, blank=True
     )
     starting_date = models.DateField(default=timezone.now)
-    guests = models.IntegerField(default=1)
+    guests = models.IntegerField(blank=True, null=True, verbose_name="residents")
+    non_residents = models.IntegerField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
+    reviewing = models.BooleanField(default=True)
+    email_sent = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

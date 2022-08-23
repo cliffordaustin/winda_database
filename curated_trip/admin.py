@@ -130,6 +130,7 @@ class CuratedTripAdmin(admin.ModelAdmin):
                 "fields": (
                     "is_active",
                     "starting_location",
+                    "stop_at",
                     "ending_location",
                 )
             },

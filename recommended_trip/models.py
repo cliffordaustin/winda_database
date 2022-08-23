@@ -38,6 +38,9 @@ class SingleTrip(models.Model):
     countries_covered = ArrayField(
         models.CharField(max_length=255), blank=True, null=True
     )
+    nights = models.IntegerField(default=3, verbose_name="Number of nights for stay")
+    price = models.FloatField(blank=True, null=True)
+    price_non_resident = models.FloatField(blank=True, null=True)
     # how_long_is_trip = models.IntegerField(default=3)
 
     honeymoon = models.BooleanField(default=False)

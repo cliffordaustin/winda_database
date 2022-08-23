@@ -11,9 +11,13 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class BookedTripListAPIView(generics.ListAPIView):
-    queryset = BookedTrip.objects.all()
     serializer_class = BookedTripSerializer
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
+
+    def get_queryset(self):
+        booked_trips = BookedTrip.objects.filter(user=self.request.user)
+        return booked_trips
 
 
 class BookedTripCreateAPIView(generics.CreateAPIView):
@@ -24,7 +28,6 @@ class BookedTripCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         trip_slug = self.kwargs.get("trip_slug")
         trip = generics.get_object_or_404(SingleTrip, slug=trip_slug)
-        print(trip)
         serializer.save(user=self.request.user, trip=trip)
 
 

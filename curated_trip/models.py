@@ -6,6 +6,7 @@ from activities.models import Activities
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from django.contrib.postgres.fields import ArrayField
 
 from django.conf import settings
 from django.utils import timezone
@@ -83,6 +84,7 @@ class CuratedTrip(models.Model):
     total_number_of_days = models.IntegerField(blank=True, null=True)
     essential_information = models.TextField(blank=True, null=True)
     starting_location = models.CharField(max_length=255, blank=True, null=True)
+    stop_at = ArrayField(models.CharField(max_length=255), blank=True, null=True)
     ending_location = models.CharField(max_length=255, blank=True, null=True)
 
     honeymoon = models.BooleanField(default=False)

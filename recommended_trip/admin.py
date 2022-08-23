@@ -72,6 +72,7 @@ class SingleTripAdmin(admin.ModelAdmin):
                     "name",
                     "area_covered",
                     "countries_covered",
+                    "nights",
                     "total_number_of_days",
                     "essential_information",
                     "description",
@@ -94,6 +95,10 @@ class SingleTripAdmin(admin.ModelAdmin):
         (
             "Flight",
             {"fields": ("flight",)},
+        ),
+        (
+            "Prices",
+            {"fields": ("price", "price_non_resident")},
         ),
         (
             "Tags",
