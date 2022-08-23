@@ -640,7 +640,6 @@ class Order(models.Model):
     )
 
     from_date = models.DateTimeField(default=timezone.now)
-    # non_resident = models.BooleanField(default=False)
     to_date = models.DateTimeField(blank=True, null=True)
     num_of_adults = models.IntegerField(default=1)
     num_of_children = models.IntegerField(default=0)
