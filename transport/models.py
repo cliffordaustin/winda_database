@@ -64,7 +64,11 @@ class Flight(models.Model):
     destination = models.CharField(max_length=250, blank=True, null=True)
     number_of_people = models.IntegerField(default=1)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
+    user_has_ordered = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
+    reviewing = models.BooleanField(default=True)
+    email_sent = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user}"
