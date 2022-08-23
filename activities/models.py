@@ -245,6 +245,8 @@ class Order(models.Model):
     number_of_people = models.IntegerField(default=1)
     number_of_sessions = models.IntegerField(default=1)
     number_of_groups = models.IntegerField(default=1)
+    reviewing = models.BooleanField(default=True)
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order for { self.activity.name } by {self.user}"
