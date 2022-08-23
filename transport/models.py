@@ -175,6 +175,7 @@ class Order(models.Model):
     distance = models.FloatField(blank=True, null=True)
     reviewing = models.BooleanField(default=True)
     email_sent = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order for a { self.transport.type_of_car } by {self.user}"

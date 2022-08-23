@@ -647,6 +647,7 @@ class Order(models.Model):
     num_of_children_non_resident = models.IntegerField(default=0)
     reviewing = models.BooleanField(default=True)
     email_sent = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
