@@ -55,6 +55,11 @@ urlpatterns = [
     path("user-transport-cart/", CartListView.as_view(), name="cart-list"),
     path("user-transport-orders/", OrderListView.as_view(), name="orders-list"),
     path(
+        "user-flight-orders/",
+        FlightHasBeenOrderedView.as_view(),
+        name="flight-orders-list",
+    ),
+    path(
         "user-transport-orders/<int:pk>/",
         OrderDetailView.as_view(),
         name="orders-detail",

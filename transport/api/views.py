@@ -22,10 +22,18 @@ class FlightListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Flight.objects.filter(paid=False)
+        return Flight.objects.filter(paid=False, user_has_ordered=False)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class FlightHasBeenOrderedView(generics.ListAPIView):
+    serializer_class = FlightSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Flight.objects.filter(user_has_ordered=True)
 
 
 class FlightDetailView(generics.RetrieveUpdateDestroyAPIView):
