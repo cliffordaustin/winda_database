@@ -242,9 +242,12 @@ class Order(models.Model):
     pricing_type = models.CharField(
         max_length=50, choices=PRICING_TYPE, default="PER PERSON"
     )
-    number_of_people = models.IntegerField(default=1)
-    number_of_sessions = models.IntegerField(default=1)
-    number_of_groups = models.IntegerField(default=1)
+    number_of_people = models.IntegerField(default=0)
+    number_of_people_non_resident = models.IntegerField(default=0)
+    number_of_sessions = models.IntegerField(default=0)
+    number_of_sessions_non_resident = models.IntegerField(default=0)
+    number_of_groups = models.IntegerField(default=0)
+    number_of_groups_non_resident = models.IntegerField(default=0)
     reviewing = models.BooleanField(default=True)
     email_sent = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)

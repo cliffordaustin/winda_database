@@ -113,7 +113,11 @@ class FlightAdmin(admin.ModelAdmin):
                     "starting_point",
                     "destination",
                     "number_of_people",
+                    "user_has_ordered",
                     "paid",
+                    "reviewing",
+                    "email_sent",
+                    "cancelled",
                 )
             },
         ),

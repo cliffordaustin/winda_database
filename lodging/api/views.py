@@ -292,7 +292,7 @@ class OrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user, paid=False)
+        return Order.objects.filter(user=self.request.user)
 
 
 class OrderPaidListView(generics.ListAPIView):
