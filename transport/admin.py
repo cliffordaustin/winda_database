@@ -96,6 +96,7 @@ class FlightAdmin(admin.ModelAdmin):
         "starting_point",
         "destination",
         "date_posted",
+        "is_admin_entry",
         "paid",
     )
     list_filter = (
@@ -113,6 +114,8 @@ class FlightAdmin(admin.ModelAdmin):
                     "starting_point",
                     "destination",
                     "number_of_people",
+                    "flight_types",
+                    "is_admin_entry",
                     "user_has_ordered",
                     "paid",
                     "reviewing",
@@ -132,6 +135,7 @@ class FlightAdmin(admin.ModelAdmin):
     )
     ordering = (
         "date_posted",
+        "is_admin_entry",
         "paid",
     )
 

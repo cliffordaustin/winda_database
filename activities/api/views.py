@@ -51,6 +51,7 @@ class ActivityListView(generics.ListAPIView):
         "price",
         "capacity",
     ]
+    ordering = ["price_non_resident"]
     pagination_class = ActivityPagination
 
     def get_queryset(self):

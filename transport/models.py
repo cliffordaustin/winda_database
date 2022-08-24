@@ -23,6 +23,11 @@ TYPE_OF_TRANSMISSION = (
     ("MANUAL", "MANUAL"),
 )
 
+TYPE_OF_FLIGHTS = (
+    ("ONE WAY", "ONE WAY"),
+    ("RETURN", "RETURN"),
+)
+
 
 class Transportation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -63,6 +68,10 @@ class Flight(models.Model):
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
     number_of_people = models.IntegerField(default=1)
+    flight_types = models.CharField(
+        max_length=100, blank=True, null=True, choices=TYPE_OF_FLIGHTS
+    )
+    is_admin_entry = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     user_has_ordered = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
