@@ -116,8 +116,8 @@ class Activities(models.Model):
     )
 
     price_per_person = models.BooleanField(default=True)
-    price = models.FloatField(blank=True, null=True)
-    price_non_resident = models.FloatField(blank=True, null=True)
+    price = models.FloatField(default=0)
+    price_non_resident = models.FloatField(default=0)
 
     price_per_session = models.BooleanField(default=False)
     session_price = models.FloatField(blank=True, null=True)
