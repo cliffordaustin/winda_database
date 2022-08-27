@@ -41,22 +41,13 @@ class SingleTrip(models.Model):
     nights = models.IntegerField(default=3, verbose_name="Number of nights for stay")
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
-    # how_long_is_trip = models.IntegerField(default=3)
-
     honeymoon = models.BooleanField(default=False)
-    cultural = models.BooleanField(default=False)
-    weekend_getaway = models.BooleanField(default=False)
-    road_trip = models.BooleanField(default=False)
     hiking = models.BooleanField(default=False)
-    beach = models.BooleanField(default=False)
     game = models.BooleanField(default=False)
     romantic_getaway = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     cycling = models.BooleanField(default=False)
-    lake = models.BooleanField(default=False)
     walking = models.BooleanField(default=False)
-
-    family = models.BooleanField(default=False)
     couples = models.BooleanField(default=False)
     friends = models.BooleanField(default=False)
     caves = models.BooleanField(default=False)
@@ -70,7 +61,15 @@ class SingleTrip(models.Model):
     boat = models.BooleanField(default=False)
     creative_space = models.BooleanField(default=False)
 
+    # tags
+    weekend_getaway = models.BooleanField(default=False)
+    road_trip = models.BooleanField(default=False)
+    cultural = models.BooleanField(default=False)
+    lake = models.BooleanField(default=False)
     day_game_drives = models.BooleanField(default=False)
+    walking_hiking = models.BooleanField(default=False, verbose_name="Walking/hinking")
+    beach = models.BooleanField(default=False)
+    family = models.BooleanField(default=False, verbose_name="Families")
     romantic = models.BooleanField(default=False)
     culinary = models.BooleanField(default=False)
     day_trips = models.BooleanField(default=False)
@@ -85,16 +84,16 @@ class SingleTrip(models.Model):
     sailing = models.BooleanField(default=False)
     night_game_drives = models.BooleanField(default=False)
     sustainable = models.BooleanField(default=False)
-    all_female = models.BooleanField(default=False)
-    families = models.BooleanField(default=False)
+    all_female = models.BooleanField(default=False, verbose_name="All-female")
     groups = models.BooleanField(default=False)
     luxury = models.BooleanField(default=False)
     budget = models.BooleanField(default=False)
     mid_range = models.BooleanField(default=False)
-    beach = models.BooleanField(default=False)
     short_getaways = models.BooleanField(default=False)
-    cross_country = models.BooleanField(default=False)
-    park_conservancies = models.BooleanField(default=False)
+    cross_country = models.BooleanField(default=False, verbose_name="Cross-country")
+    park_conservancies = models.BooleanField(
+        default=False, verbose_name="Park & Conservancies"
+    )
 
     pricing_type = models.CharField(
         max_length=100, choices=PRICING_TYPE, default="REASONABLE"
