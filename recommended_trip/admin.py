@@ -163,4 +163,42 @@ class SingleTripAdmin(admin.ModelAdmin):
     )
 
 
+class RequestCustomTripAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "created_at",
+    )
+
+    list_filter = ("created_at", "updated_at")
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "message",
+                )
+            },
+        ),
+    )
+
+    search_fields = (
+        "first_name",
+        "last_name",
+        "email",
+    )
+
+    ordering = (
+        "created_at",
+        "updated_at",
+    )
+
+
 admin.site.register(SingleTrip, SingleTripAdmin)
+
+admin.site.register(RequestCustomTrip, RequestCustomTripAdmin)

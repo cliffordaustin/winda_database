@@ -53,3 +53,8 @@ class TripListView(generics.ListCreateAPIView):
             queryset = SingleTrip.objects.filter(query).filter(is_active=True)
 
         return queryset
+
+
+class RequestCustomTripListCreatView(generics.ListCreateAPIView):
+    serializer_class = RequestCustomTripSerializer
+    queryset = RequestCustomTrip.objects.all()

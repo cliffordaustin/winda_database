@@ -10,3 +10,10 @@ def create_trip_slug(sender, instance, *args, **kwargs):
     if instance and not instance.slug:
         random_string = generate_random_string(length=24)
         instance.slug = random_string
+
+
+@receiver(pre_save, sender=RequestCustomTrip)
+def create_request_custom_trip_slug(sender, instance, *args, **kwargs):
+    if instance and not instance.slug:
+        random_string = generate_random_string(length=24)
+        instance.slug = random_string

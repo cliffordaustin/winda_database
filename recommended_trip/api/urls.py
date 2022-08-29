@@ -1,3 +1,4 @@
+from unicodedata import name
 from .views import *
 from django.urls import path
 
@@ -8,5 +9,10 @@ urlpatterns = [
         "recommended-trips/<slug:slug>/",
         TripDetailView.as_view(),
         name="recommended-trips-detail",
+    ),
+    path(
+        "request-custom-trip/",
+        RequestCustomTripListCreatView.as_view(),
+        name="request-custom-trip",
     ),
 ]

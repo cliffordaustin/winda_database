@@ -35,6 +35,12 @@ class FrequentlyAskedQuestionSerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
+class RequestCustomTripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequestCustomTrip
+        fields = "__all__"
+
+
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)

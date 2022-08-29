@@ -112,6 +112,19 @@ class SingleTrip(models.Model):
         verbose_name_plural = "Curated trips"
 
 
+class RequestCustomTrip(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Created { self.first_name } {self.last_name}"
+
+
 class TripHighlight(models.Model):
     trip = models.ForeignKey(
         SingleTrip, on_delete=models.CASCADE, related_name="trip_highlights"
