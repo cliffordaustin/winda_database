@@ -57,6 +57,45 @@ class FlightDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
+class GeneralTransfersListCreateView(generics.ListCreateAPIView):
+    serializer_class = GeneralTransferSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return GeneralTransfers.objects.filter(
+            paid=False,
+            user_has_ordered=False,
+            user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class GeneralTransfersHasBeenOrderedView(generics.ListAPIView):
+    serializer_class = GeneralTransferSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return GeneralTransfers.objects.filter(
+            user_has_ordered=True, user=self.request.user
+        )
+
+
+class GeneralTransfersDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GeneralTransferSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = GeneralTransfers.objects.all()
+        slug = self.kwargs.get("slug")
+
+        if slug is not None:
+            queryset = GeneralTransfers.objects.filter(slug=slug)
+        return queryset
+
+
 class TransportCreateView(generics.CreateAPIView):
     serializer_class = TransportSerializer
     queryset = Transportation.objects.all()

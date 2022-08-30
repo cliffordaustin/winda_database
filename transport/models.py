@@ -87,6 +87,30 @@ class Flight(models.Model):
         verbose_name_plural = "Flights"
 
 
+class GeneralTransfers(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    starting_point = models.CharField(max_length=250, blank=True, null=True)
+    destination = models.CharField(max_length=250, blank=True, null=True)
+    number_of_people = models.IntegerField(default=1)
+    transfer_types = models.CharField(
+        max_length=100, blank=True, null=True, choices=TYPE_OF_FLIGHTS
+    )
+    date_posted = models.DateTimeField(default=timezone.now, editable=False)
+    user_has_ordered = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
+    reviewing = models.BooleanField(default=True)
+    email_sent = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user}"
+
+    class Meta:
+        verbose_name = "General Transfer"
+        verbose_name_plural = "General Transfers"
+
+
 class IncludedInPrice(models.Model):
     transportation = models.ForeignKey(
         Transportation, on_delete=models.CASCADE, related_name="included_in_price"

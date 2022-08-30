@@ -135,7 +135,58 @@ class FlightAdmin(admin.ModelAdmin):
     )
     ordering = (
         "date_posted",
-        "is_admin_entry",
+        "reviewing",
+        "cancelled",
+        "email_sent",
+        "paid",
+    )
+
+
+class GeneralTransferAdmin(admin.ModelAdmin):
+    list_display = (
+        "starting_point",
+        "destination",
+        "date_posted",
+        "paid",
+    )
+    list_filter = (
+        "starting_point",
+        "destination",
+        "date_posted",
+        "paid",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "starting_point",
+                    "destination",
+                    "number_of_people",
+                    "flight_types",
+                    "user_has_ordered",
+                    "paid",
+                    "reviewing",
+                    "email_sent",
+                    "cancelled",
+                )
+            },
+        ),
+    )
+
+    search_fields = (
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "starting_point",
+        "destination",
+    )
+    ordering = (
+        "date_posted",
+        "reviewing",
+        "cancelled",
+        "email_sent",
         "paid",
     )
 

@@ -11,6 +11,14 @@ class FlightSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class GeneralTransferSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = GeneralTransfers
+        fields = "__all__"
+
+
 class TransportImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransportationImage

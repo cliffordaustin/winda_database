@@ -22,6 +22,21 @@ urlpatterns = [
         name="flight-detail",
     ),
     path(
+        "general-transfers/",
+        GeneralTransfersListCreateView.as_view(),
+        name="general-transfer-list-create",
+    ),
+    path(
+        "general-transfers/<slug>/",
+        GeneralTransfersDetailView.as_view(),
+        name="general-transfer-detail",
+    ),
+    path(
+        "user-general-transfers-orders/",
+        GeneralTransfersHasBeenOrderedView.as_view(),
+        name="general-transfer-orders-list",
+    ),
+    path(
         "transport/<transport_slug>/images/",
         TransportImageListView.as_view(),
         name="transport-image-list",
