@@ -159,6 +159,7 @@ class Stays(models.Model):
     farmstay = models.BooleanField(default=False)
     national_park_game_reserves = models.BooleanField(default=False)
     lakefront = models.BooleanField(default=False)
+    beachfront = models.BooleanField(default=False)
     luxurious = models.BooleanField(default=False)
     beautiful_view = models.BooleanField(default=False)
     off_grid = models.BooleanField(default=False)

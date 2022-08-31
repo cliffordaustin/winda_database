@@ -5,6 +5,12 @@ from allauth.account.utils import setup_user_email
 from rest_framework import serializers
 from user.models import CustomUser
 
+# from mixpanel import Mixpanel
+
+# import os
+
+# mp = Mixpanel(os.environ.get("WINDA_MIXPANEL_TOKEN"))
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
