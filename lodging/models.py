@@ -26,7 +26,7 @@ PRICING_TYPE = (
 TYPE_OF_STAY = (
     ("TENTED CAMP", "TENTED CAMP"),
     ("LODGE", "LODGE"),
-    ("HOUSE", "HOUSE"), #
+    ("HOUSE", "HOUSE"),  #
     ("CAMPSITE", "CAMPSITE"),
     ("WEEKEND GETAWAY", "WEEKEND GETAWAY"),
     ("ROMANTIC GETAWAY", "ROMANTIC GETAWAY"),
@@ -51,20 +51,17 @@ TYPE_OF_STAY = (
     ("PRIVATE HOUSE", "PRIVATE HOUSE"),
     ("RESORT", "RESORT"),
     ("BOUTIQUE HOTEL", "BOUTIQUE HOTEL"),
-    ("UNIQUE SPACE", "UNIQUE SPACE"), #
+    ("UNIQUE SPACE", "UNIQUE SPACE"),  #
     ("UNIQUE LOCATION", "UNIQUE LOCATION"),
     ("HOTEL", "HOTEL"),
     ("COTTAGE", "COTTAGE"),
     ("COWORKING SPOT", "COWORKING SPOT"),
     ("SWIMMING POOL", "SWIMMING POOL"),
-    ("FAST WIFI", "FAST WIFI"),
-    ("WIFI", "WIFI"),
     ("LOCALLY OWNED", "LOCALLY OWNED"),
     ("COMMUNITY OWNED", "COMMUNITY OWNED"),
     ("CARBON NEUTRAL", "CARBON NEUTRAL"),
     ("OWNER OPERATED", "OWNER OPERATED"),
     ("POPULAR", "POPULAR"),
-    ("SWIMING POOL", "SWIMING POOL"),
     ("WELLNESS RETREAT", "WELLNESS RETREAT"),
 )
 
@@ -150,46 +147,45 @@ class Stays(models.Model):
         help_text="Separate each tag by using ' , '",
     )
 
-    # Lodge
+    # Best describe the stay
     tented_camp = models.BooleanField(default=False)
-    permanent_structures = models.BooleanField(default=False)
-    part_permanent_structures = models.BooleanField(default=False)
-    mobile_camp = models.BooleanField(default=False)
-
-    # House
-    residential_home = models.BooleanField(default=False)
-    villa = models.BooleanField(default=False)
-    boathouse = models.BooleanField(default=False)
-    historical_building = models.BooleanField(default=False)
-    on_private_property = models.BooleanField(default=False)
-    cabin = models.BooleanField(default=False)
-    cottage = models.BooleanField(default=False)
-    chalets = models.BooleanField(default=False)
-    bungalow = models.BooleanField(default=False)
-    tiny_house = models.BooleanField(default=False)
-    duplex = models.BooleanField(default=False)
-    earth_house = models.BooleanField(default=False)
-    container_house = models.BooleanField(default=False)
-    terrace_house = models.BooleanField(default=False)
-
-    # Unique Space
-    bus = models.BooleanField(default=False)
-    lighthouse = models.BooleanField(default=False)
-    glasshouse = models.BooleanField(default=False)
-    treehouse = models.BooleanField(default=False)
-    barn = models.BooleanField(default=False)
-    grasshouse = models.BooleanField(default=False)
-
-    # Campsite
-    in_conservancy = models.BooleanField(default=False)
-    in_national_park = models.BooleanField(default=False)
-    in_nature_reserve = models.BooleanField(default=False)
-    in_public_area = models.BooleanField(default=False)
-
-    # Boutique Hotel
-    a_hotel_out_in_nature = models.BooleanField(default=False)
+    lodge = models.BooleanField(default=False)
+    house = models.BooleanField(default=False)
+    campsite = models.BooleanField(default=False)
+    weekend_getaway = models.BooleanField(default=False)
+    romantic_getaway = models.BooleanField(default=False)
+    group_getaway = models.BooleanField(default=False)
+    conservancy = models.BooleanField(default=False)
+    farmstay = models.BooleanField(default=False)
+    national_park_game_reserves = models.BooleanField(default=False)
+    lakefront = models.BooleanField(default=False)
+    luxurious = models.BooleanField(default=False)
+    beautiful_view = models.BooleanField(default=False)
+    off_grid = models.BooleanField(default=False)
+    eco_stay = models.BooleanField(default=False)
+    quirky = models.BooleanField(default=False)
+    honeymoon_spot = models.BooleanField(default=False)
+    unique_experiences = models.BooleanField(default=False)
+    traditional = models.BooleanField(default=False)
+    mansion = models.BooleanField(default=False)
+    over_water = models.BooleanField(default=False)
+    stunning_architecture = models.BooleanField(default=False)
+    riverfront = models.BooleanField(default=False)
+    private_house = models.BooleanField(default=False)
     resort = models.BooleanField(default=False)
-    unique_achitectural_design = models.BooleanField(default=False)
+    boutique_hotel = models.BooleanField(default=False)
+    unique_space = models.BooleanField(default=False)
+    unique_location = models.BooleanField(default=False)
+    hotel = models.BooleanField(default=False)
+    cottage = models.BooleanField(default=False)
+    coworking_spot = models.BooleanField(default=False)
+    fast_wifi = models.BooleanField(default=False)
+    locally_owned = models.BooleanField(default=False)
+    community_owned = models.BooleanField(default=False)
+    carbon_neutral = models.BooleanField(default=False)
+    owner_operated = models.BooleanField(default=False)
+    popular = models.BooleanField(default=False)
+    wellness_retreat = models.BooleanField(default=False)
 
     # Amenities
     swimming_pool = models.BooleanField(default=False)
@@ -197,7 +193,6 @@ class Stays(models.Model):
     sauna = models.BooleanField(default=False)
     gym = models.BooleanField(default=False)
     patio = models.BooleanField(default=False)
-    beachfront = models.BooleanField(default=False)
     terrace = models.BooleanField(default=False)
     balcony = models.BooleanField(default=False)
     firepit = models.BooleanField(default=False)
@@ -234,15 +229,6 @@ class Stays(models.Model):
     firewood = models.BooleanField(default=False)
     conference_center = models.BooleanField(default=False)
     library = models.BooleanField(default=False)
-
-    # work on this in the frontend
-    # other_amenities = ArrayField(
-    #     models.CharField(max_length=500, blank=True, null=True),
-    #     blank=True,
-    #     null=True,
-    #     default=list,
-    #     help_text="Separate each amenities by using ' , '",
-    # )
 
     # Policies
     check_in_time = models.TimeField(blank=True, null=True)
