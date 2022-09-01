@@ -5,10 +5,20 @@ from allauth.account.utils import setup_user_email
 from rest_framework import serializers
 from user.models import CustomUser
 from mixpanel import Mixpanel
+from django.conf import settings
 
 import os
 
 mp = Mixpanel(os.environ.get("WINDA_MIXPANEL_TOKEN"))
+
+
+def get_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -88,14 +98,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         setup_user_email(request, user, [])
         user.save()
 
-        mp.alias(user.email, user.email)
+        if settings.DEBUG is not True:
+            mp.alias(user.email, user.email)
 
-        mp.people_set(
-            user.email,
-            {
-                "$email": user.email,
-                "$first_name": user.first_name,
-                "$last_name": user.last_name,
-            },
-        )
+            mp.people_set(
+                user.email,
+                {
+                    "$email": user.email,
+                    "$first_name": user.first_name,
+                    "$last_name": user.last_name,
+                },
+                meta={
+                    "$ip": get_ip(request),
+                },
+            )
+
         return user

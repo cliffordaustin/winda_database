@@ -86,7 +86,11 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = ["https://winda-sandy.vercel.app", "http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = [
+    "https://winda-sandy.vercel.app",
+    "https://winda.guide",
+    "http://localhost:3000",
+]
 
 
 ROOT_URLCONF = "winda_database.urls"
@@ -184,7 +188,7 @@ FRONTEND_URL = ""
 if DEBUG:
     FRONTEND_URL = "http://localhost:3000"
 else:
-    FRONTEND_URL = "https://winda-sandy.vercel.app"
+    FRONTEND_URL = "https://winda.guide"
 
 
 # Static files (CSS, JavaScript, Images)
