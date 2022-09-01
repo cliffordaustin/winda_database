@@ -4,12 +4,11 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from rest_framework import serializers
 from user.models import CustomUser
+from mixpanel import Mixpanel
 
-# from mixpanel import Mixpanel
+import os
 
-# import os
-
-# mp = Mixpanel(os.environ.get("WINDA_MIXPANEL_TOKEN"))
+mp = Mixpanel(os.environ.get("WINDA_MIXPANEL_TOKEN"))
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -88,4 +87,15 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.profile_pic = self.cleaned_data.get("profile_pic")
         setup_user_email(request, user, [])
         user.save()
+
+        mp.alias(user.email, user.email)
+
+        mp.people_set(
+            user.email,
+            {
+                "$email": user.email,
+                "$first_name": user.first_name,
+                "$last_name": user.last_name,
+            },
+        )
         return user
