@@ -88,6 +88,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://winda-sandy.vercel.app",
+    "https://www.winda.guide",
     "https://winda.guide",
     "http://localhost:3000",
 ]
