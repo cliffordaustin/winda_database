@@ -189,7 +189,7 @@ FRONTEND_URL = ""
 if DEBUG:
     FRONTEND_URL = "http://localhost:3000"
 else:
-    FRONTEND_URL = "https://winda.guide"
+    FRONTEND_URL = "https://www.winda.guide"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -225,6 +225,7 @@ AWS_SES_REGION_NAME = "eu-west-2"
 AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
 ACCOUNT_EMAIL_VERIFICATION = None
+OLD_PASSWORD_FIELD_ENABLED = True
 # ACCOUNT_ADAPTER = "winda_database.adapter.DefaultAccountAdapterCustom"
 
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
