@@ -42,14 +42,7 @@ class TripListView(generics.ListCreateAPIView):
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
-                # 'or' the queries together
-                query |= (
-                    Q(area_covered__icontains=word)
-                    | Q(stay__location__icontains=word)
-                    | Q(stay__city__icontains=word)
-                    | Q(activity__location__icontains=word)
-                    | Q(activity__city__icontains=word)
-                )
+                query |= Q(area_covered__icontains=word)
             queryset = SingleTrip.objects.filter(query).filter(is_active=True)
 
         return queryset
