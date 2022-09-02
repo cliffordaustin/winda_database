@@ -64,7 +64,7 @@ class ActivityListView(generics.ListAPIView):
             query = Q()  # empty Q object
             for word in words:
                 # 'or' the queries together
-                query |= Q(location__icontains=word) | Q(city__icontains=word)
+                query |= Q(location__contains=word) | Q(city__contains=word)
             queryset = Activities.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
@@ -73,9 +73,9 @@ class ActivityListView(generics.ListAPIView):
             for word in words:
                 # 'or' the queries together
                 query |= (
-                    Q(location__icontains=word)
-                    | Q(city__icontains=word)
-                    | Q(country__icontains=word)
+                    Q(location__contains=word)
+                    | Q(city__contains=word)
+                    | Q(country__contains=word)
                 )
             queryset = Activities.objects.filter(query, is_active=True).all()
 
