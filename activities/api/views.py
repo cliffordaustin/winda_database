@@ -17,6 +17,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django.db.models import F, Value, CharField, Q
 from .pagination import ActivityPagination
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 
 class ActivityCreateView(generics.CreateAPIView):
@@ -57,14 +58,14 @@ class ActivityListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Activities.objects.filter(is_active=True)
 
-        querystring = self.request.GET.get("search")
-        querystring_detail_search = self.request.GET.get("d_search")
+        querystring = self.request.GET.get("search").split(",")[0]
+        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
         if querystring:
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
                 # 'or' the queries together
-                query |= Q(location__contains=word) | Q(city__contains=word)
+                query |= Q(location__icontains=word) | Q(city__icontains=word)
             queryset = Activities.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
@@ -73,9 +74,9 @@ class ActivityListView(generics.ListAPIView):
             for word in words:
                 # 'or' the queries together
                 query |= (
-                    Q(location__contains=word)
-                    | Q(city__contains=word)
-                    | Q(country__contains=word)
+                    Q(location__icontains=word)
+                    | Q(city__icontains=word)
+                    | Q(country__icontains=word)
                 )
             queryset = Activities.objects.filter(query, is_active=True).all()
 

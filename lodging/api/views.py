@@ -58,8 +58,8 @@ class StaysListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Stays.objects.filter(is_active=True)
 
-        querystring = self.request.GET.get("search")
-        querystring_detail_search = self.request.GET.get("d_search")
+        querystring = self.request.GET.get("search").split(",")[0]
+        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
         if querystring:
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
@@ -99,8 +99,8 @@ class AllStaysListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Stays.objects.all()
 
-        querystring = self.request.GET.get("search")
-        querystring_detail_search = self.request.GET.get("d_search")
+        querystring = self.request.GET.get("search").split(",")[0]
+        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
         if querystring:
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
