@@ -13,6 +13,12 @@ class RecommendedTripFilter(filters.FilterSet):
     area_covered = filters.CharFilter(
         field_name="area_covered", lookup_expr="icontains"
     )
+    old_price = filters.NumberFilter(method="deals")
+
+    def deals(self, queryset, name, value):
+        if value:
+            return queryset.filter(old_price__gt=0)
+        return queryset
 
     class Meta:
         model = SingleTrip

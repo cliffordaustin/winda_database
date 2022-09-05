@@ -39,6 +39,9 @@ class SingleTrip(models.Model):
         models.CharField(max_length=255), blank=True, null=True
     )
     nights = models.IntegerField(default=3, verbose_name="Number of nights for stay")
+    old_price = models.FloatField(
+        blank=True, null=True, help_text="add the previous price(old price)"
+    )
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
     honeymoon = models.BooleanField(default=False)

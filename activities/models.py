@@ -118,6 +118,10 @@ class Activities(models.Model):
     price_per_person = models.BooleanField(default=True)
     price = models.FloatField(default=0)
     price_non_resident = models.FloatField(default=0)
+    price_is_flexible = models.BooleanField(
+        default=False,
+        help_text="This means they will be a 'from' price next to the price in the frontend. Eg from $100 per person",
+    )
 
     price_per_session = models.BooleanField(default=False)
     session_price = models.FloatField(blank=True, null=True)

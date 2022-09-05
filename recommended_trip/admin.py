@@ -98,7 +98,7 @@ class SingleTripAdmin(admin.ModelAdmin):
         ),
         (
             "Prices",
-            {"fields": ("price", "price_non_resident")},
+            {"fields": ("old_price", "price", "price_non_resident")},
         ),
         (
             "Tags",

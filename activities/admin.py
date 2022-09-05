@@ -85,6 +85,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
                     "price_per_person",
                     "price_non_resident",
                     "price",
+                    "price_is_flexible",
                 )
             },
         ),
