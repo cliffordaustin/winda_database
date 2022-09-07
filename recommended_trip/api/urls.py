@@ -15,4 +15,9 @@ urlpatterns = [
         RequestCustomTripListCreatView.as_view(),
         name="request-custom-trip",
     ),
+    path(
+        "recommended-trips/<slug:slug>/request-info/",
+        RequestInfoListCreatView.as_view(),
+        name="request-info",
+    ),
 ]

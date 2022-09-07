@@ -2,7 +2,11 @@ from rest_framework import serializers
 from recommended_trip.models import *
 from lodging.api.serializers import StaysSerializer
 from activities.api.serializers import ActivitySerializer
-from transport.api.serializers import TransportSerializer, FlightSerializer
+from transport.api.serializers import (
+    GeneralTransferSerializer,
+    TransportSerializer,
+    FlightSerializer,
+)
 
 
 class SingleTripImageSerializer(serializers.ModelSerializer):
@@ -41,12 +45,19 @@ class RequestCustomTripSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class RequestInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequestInfo
+        fields = "__all__"
+
+
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
     activity = ActivitySerializer(read_only=True)
     transport = TransportSerializer(read_only=True)
     flight = FlightSerializer(read_only=True)
+    general_transfer = GeneralTransferSerializer(read_only=True)
     single_trip_images = SingleTripImageSerializer(many=True, read_only=True)
     trip_highlights = TripHighlightSerializer(many=True, read_only=True)
     itineraries = ItinerarySerializer(many=True, read_only=True)
@@ -77,6 +88,12 @@ class TripSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
+    general_transfer_id = serializers.PrimaryKeyRelatedField(
+        queryset=GeneralTransfers.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = SingleTrip
@@ -85,6 +102,9 @@ class TripSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.transport = validated_data.get("transport_id", instance.transport)
         instance.flight = validated_data.get("flight_id", instance.flight)
+        instance.general_transfer = validated_data.get(
+            "general_transfer_id", instance.general_transfer
+        )
         instance.activity = validated_data.get("activity_id", instance.activity)
         instance.stay = validated_data.get("stay_id", instance.stay)
 

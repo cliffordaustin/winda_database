@@ -3,7 +3,8 @@ from django.conf import settings
 from activities.models import *
 from core.utils import trip_image_thumbnail
 from lodging.models import *
-from transport.models import Flight, Transportation
+from transport.admin import GeneralTransferAdmin
+from transport.models import Flight, GeneralTransfers, Transportation
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -27,6 +28,9 @@ class SingleTrip(models.Model):
     )
     stay = models.ForeignKey(Stays, on_delete=models.SET_NULL, null=True, blank=True)
     flight = models.ForeignKey(Flight, on_delete=models.SET_NULL, null=True, blank=True)
+    general_transfer = models.ForeignKey(
+        GeneralTransfers, on_delete=models.SET_NULL, null=True, blank=True
+    )
     description = models.TextField(blank=True, null=True)
     area_covered = models.CharField(max_length=350, blank=True, null=True)
     total_number_of_days = models.IntegerField(blank=True, null=True)
@@ -117,6 +121,22 @@ class SingleTrip(models.Model):
 
 class RequestCustomTrip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Created { self.first_name } {self.last_name}"
+
+
+class RequestInfo(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.CASCADE, null=True, blank=True
+    )
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)

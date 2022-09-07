@@ -51,3 +51,14 @@ class TripListView(generics.ListCreateAPIView):
 class RequestCustomTripListCreatView(generics.ListCreateAPIView):
     serializer_class = RequestCustomTripSerializer
     queryset = RequestCustomTrip.objects.all()
+
+
+class RequestInfoListCreatView(generics.ListCreateAPIView):
+    serializer_class = RequestInfoSerializer
+    queryset = RequestInfo.objects.all()
+
+    def perform_create(self, serializer):
+        trip_slug = self.kwargs.get("slug")
+        trip = SingleTrip.objects.get(slug=trip_slug)
+
+        serializer.save(trip=trip)

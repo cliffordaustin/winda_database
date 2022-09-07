@@ -1,3 +1,4 @@
+from tokenize import Single
 from django.contrib import admin
 from .models import *
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -143,17 +144,12 @@ class FlightAdmin(admin.ModelAdmin):
 
 
 class GeneralTransferAdmin(admin.ModelAdmin):
-    list_display = (
-        "starting_point",
-        "destination",
-        "date_posted",
-        "paid",
-    )
+    list_display = ("starting_point", "destination", "date_posted", "is_train")
     list_filter = (
         "starting_point",
         "destination",
         "date_posted",
-        "paid",
+        "is_train",
     )
     fieldsets = (
         (
@@ -163,13 +159,7 @@ class GeneralTransferAdmin(admin.ModelAdmin):
                     "user",
                     "starting_point",
                     "destination",
-                    "number_of_people",
-                    "flight_types",
-                    "user_has_ordered",
-                    "paid",
-                    "reviewing",
-                    "email_sent",
-                    "cancelled",
+                    "is_train",
                 )
             },
         ),
@@ -182,16 +172,11 @@ class GeneralTransferAdmin(admin.ModelAdmin):
         "starting_point",
         "destination",
     )
-    ordering = (
-        "date_posted",
-        "reviewing",
-        "cancelled",
-        "email_sent",
-        "paid",
-    )
+    ordering = ("date_posted", "is_train")
 
 
 admin.site.register(Flight, FlightAdmin)
+admin.site.register(GeneralTransfers, GeneralTransferAdmin)
 admin.site.register(Transportation, TransportationAdmin)
 admin.site.register(Order)
 admin.site.register(Cart)

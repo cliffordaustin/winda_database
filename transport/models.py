@@ -92,16 +92,10 @@ class GeneralTransfers(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     starting_point = models.CharField(max_length=250, blank=True, null=True)
     destination = models.CharField(max_length=250, blank=True, null=True)
-    number_of_people = models.IntegerField(default=1)
-    transfer_types = models.CharField(
-        max_length=100, blank=True, null=True, choices=TYPE_OF_FLIGHTS
-    )
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
-    user_has_ordered = models.BooleanField(default=False)
-    paid = models.BooleanField(default=False)
-    reviewing = models.BooleanField(default=True)
-    email_sent = models.BooleanField(default=False)
-    cancelled = models.BooleanField(default=False)
+    is_train = models.BooleanField(
+        default=False, verbose_name="Check the box if it is a train transfer"
+    )
 
     def __str__(self):
         return f"{self.user}"

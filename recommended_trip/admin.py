@@ -34,7 +34,14 @@ class SingleTripAdmin(admin.ModelAdmin):
         ItineraryInline,
         FrequentlyAskedQuestionInline,
     )
-    raw_id_fields = ("user", "stay", "activity", "transport", "flight")
+    raw_id_fields = (
+        "user",
+        "stay",
+        "activity",
+        "transport",
+        "flight",
+        "general_transfer",
+    )
 
     list_display = (
         "user",
@@ -95,6 +102,10 @@ class SingleTripAdmin(admin.ModelAdmin):
         (
             "Flight",
             {"fields": ("flight",)},
+        ),
+        (
+            "General Transfer",
+            {"fields": ("general_transfer",)},
         ),
         (
             "Prices",
@@ -199,6 +210,37 @@ class RequestCustomTripAdmin(admin.ModelAdmin):
     )
 
 
+class RequestInfoTripAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "created_at",
+    )
+
+    list_filter = ("created_at", "updated_at")
+
+    fieldsets = (
+        (
+            None,
+            {"fields": ("first_name", "last_name", "email", "message", "trip")},
+        ),
+    )
+
+    search_fields = (
+        "first_name",
+        "last_name",
+        "email",
+    )
+
+    ordering = (
+        "created_at",
+        "updated_at",
+    )
+
+
 admin.site.register(SingleTrip, SingleTripAdmin)
 
 admin.site.register(RequestCustomTrip, RequestCustomTripAdmin)
+
+admin.site.register(RequestInfo, RequestInfoTripAdmin)
