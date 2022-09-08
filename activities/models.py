@@ -134,6 +134,7 @@ class Activities(models.Model):
     max_number_of_groups = models.PositiveIntegerField(default=1)
 
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
+    date_updated = models.DateTimeField(auto_now=True)
 
     contact_name = models.CharField(max_length=250, blank=True, null=True)
     contact_email = models.EmailField(blank=True, null=True)

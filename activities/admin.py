@@ -39,7 +39,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    list_filter = ("date_posted",)
+    list_filter = ("date_posted", "date_updated")
 
     fieldsets = (
         (
@@ -128,7 +128,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
         "name",
     )
 
-    ordering = ("date_posted",)
+    ordering = ("date_posted", "date_updated")
 
 
 admin.site.register(Activities, ActivitiesAdmin)

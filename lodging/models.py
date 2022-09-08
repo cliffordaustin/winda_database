@@ -567,6 +567,7 @@ class Stays(models.Model):
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
+    date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user} - {self.property_name} - {self.name}"

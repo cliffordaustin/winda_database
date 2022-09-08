@@ -40,7 +40,7 @@ class StayAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    list_filter = ("date_posted", "bathrooms", "rooms", "capacity")
+    list_filter = ("date_posted", "date_updated", "bathrooms", "rooms", "capacity")
 
     fieldsets = (
         (
@@ -536,7 +536,7 @@ class StayAdmin(admin.ModelAdmin):
         "property_name",
     )
 
-    ordering = ("date_posted",)
+    ordering = ("date_posted", "date_updated")
 
 
 admin.site.register(Stays, StayAdmin)
