@@ -58,9 +58,10 @@ class StaysListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Stays.objects.filter(is_active=True)
 
-        querystring = self.request.GET.get("search").split(",")[0]
-        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
+        querystring = self.request.GET.get("search")
+        querystring_detail_search = self.request.GET.get("d_search")
         if querystring:
+            querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
@@ -69,6 +70,7 @@ class StaysListView(generics.ListAPIView):
             queryset = Stays.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
+            querystring_detail_search = querystring_detail_search.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring_detail_search)
             query = Q()  # empty Q object
             for word in words:
@@ -99,17 +101,19 @@ class AllStaysListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Stays.objects.all()
 
-        querystring = self.request.GET.get("search").split(",")[0]
-        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
+        querystring = self.request.GET.get("search")
+        querystring_detail_search = self.request.GET.get("d_search")
         if querystring:
+            querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
-            queryset = Stays.objects.filter(query).all()
+            queryset = Stays.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
+            querystring_detail_search = querystring_detail_search.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring_detail_search)
             query = Q()  # empty Q object
             for word in words:
@@ -119,7 +123,7 @@ class AllStaysListView(generics.ListAPIView):
                     | Q(city__icontains=word)
                     | Q(country__icontains=word)
                 )
-            queryset = Stays.objects.filter(query).all()
+            queryset = Stays.objects.filter(query, is_active=True).all()
 
         return queryset
 

@@ -58,9 +58,10 @@ class ActivityListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Activities.objects.filter(is_active=True)
 
-        querystring = self.request.GET.get("search").split(",")[0]
-        querystring_detail_search = self.request.GET.get("d_search").split(",")[0]
+        querystring = self.request.GET.get("search")
+        querystring_detail_search = self.request.GET.get("d_search")
         if querystring:
+            querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
@@ -69,6 +70,7 @@ class ActivityListView(generics.ListAPIView):
             queryset = Activities.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
+            querystring_detail_search = querystring_detail_search.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring_detail_search)
             query = Q()  # empty Q object
             for word in words:
@@ -99,6 +101,7 @@ class AllActivitiesListView(generics.ListAPIView):
         querystring = self.request.GET.get("search")
         querystring_detail_search = self.request.GET.get("d_search")
         if querystring:
+            querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
@@ -107,6 +110,7 @@ class AllActivitiesListView(generics.ListAPIView):
             queryset = Activities.objects.filter(query, is_active=True).all()
 
         if querystring_detail_search:
+            querystring_detail_search = querystring_detail_search.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring_detail_search)
             query = Q()  # empty Q object
             for word in words:

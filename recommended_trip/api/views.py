@@ -39,6 +39,31 @@ class TripListView(generics.ListCreateAPIView):
 
         querystring = self.request.GET.get("location")
         if querystring:
+            querystring = querystring.split(",")[0]
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                query |= Q(area_covered__icontains=word)
+            queryset = SingleTrip.objects.filter(query).filter(is_active=True)
+
+        return queryset
+
+
+class AllTripsListView(generics.ListAPIView):
+    serializer_class = TripSerializer
+    filterset_class = RecommendedTripFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = [
+        "name",
+        "created_at",
+    ]
+
+    def get_queryset(self):
+        queryset = SingleTrip.objects.filter(is_active=True)
+
+        querystring = self.request.GET.get("location")
+        if querystring:
+            querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:

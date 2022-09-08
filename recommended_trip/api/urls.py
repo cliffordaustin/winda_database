@@ -5,6 +5,7 @@ from django.urls import path
 
 urlpatterns = [
     path("recommended-trips/", TripListView.as_view(), name="recommended-trips"),
+    path("all-trips/", AllTripsListView.as_view(), name="all-trips"),
     path(
         "recommended-trips/<slug:slug>/",
         TripDetailView.as_view(),
