@@ -171,6 +171,7 @@ class StayAdmin(admin.ModelAdmin):
             "Contact",
             {"fields": ("contact_name", "contact_email", "contact_phone", "company")},
         ),
+        ("Event", {"fields": ("is_an_event", "event_price")}),
         (
             "Standard pricing",
             {

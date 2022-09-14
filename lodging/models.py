@@ -564,6 +564,10 @@ class Stays(models.Model):
 
     is_active = models.BooleanField(default=True)
 
+    is_an_event = models.BooleanField(default=False)
+
+    event_price = models.FloatField(blank=True, null=True)
+
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)

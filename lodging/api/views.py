@@ -33,7 +33,7 @@ class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        queryset = Stays.objects.all()
+        queryset = Stays.objects.filter(is_active=True)
         slug = self.kwargs.get("slug")
 
         if slug is not None:
@@ -56,7 +56,7 @@ class StaysListView(generics.ListAPIView):
     pagination_class = StayPagination
 
     def get_queryset(self):
-        queryset = Stays.objects.filter(is_active=True)
+        queryset = Stays.objects.filter(is_active=True, is_an_event=False)
 
         querystring = self.request.GET.get("search")
         querystring_detail_search = self.request.GET.get("d_search")
@@ -82,6 +82,25 @@ class StaysListView(generics.ListAPIView):
                 )
             queryset = Stays.objects.filter(query, is_active=True).all()
 
+        return queryset
+
+
+class EventListView(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    filterset_class = StayFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = [
+        "date_posted",
+        ("event_price"),
+        "rooms",
+        "beds",
+        "bathrooms",
+    ]
+    ordering = ["event_price"]
+    pagination_class = StayPagination
+
+    def get_queryset(self):
+        queryset = Stays.objects.filter(is_active=True, is_an_event=True)
         return queryset
 
 
