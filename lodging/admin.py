@@ -108,7 +108,14 @@ class StayAdmin(NestedModelAdmin):
         "is_active",
     )
 
-    list_filter = ("date_posted", "date_updated", "bathrooms", "rooms", "capacity")
+    list_filter = (
+        "date_posted",
+        "date_updated",
+        "is_an_event",
+        "bathrooms",
+        "rooms",
+        "capacity",
+    )
 
     fieldsets = (
         (
