@@ -5,6 +5,7 @@ from lodging.models import *
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
+from anymail.message import EmailMessage
 from .permissions import IsUserStayInstance, ObjectPermission
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -91,12 +92,10 @@ class EventListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = [
         "date_posted",
-        ("event_price"),
         "rooms",
         "beds",
         "bathrooms",
     ]
-    ordering = ["event_price"]
     pagination_class = StayPagination
 
     def get_queryset(self):
@@ -308,6 +307,34 @@ class OrderCreateView(generics.CreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         serializer.save(user=self.request.user, stay=stay)
+
+
+class EventCreateView(generics.CreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4208873"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+
+        message.send()
+
+        serializer.save(stay=stay)
 
 
 class OrderListView(generics.ListAPIView):

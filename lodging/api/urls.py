@@ -14,6 +14,11 @@ urlpatterns = [
         name="add_view_to_stay",
     ),
     path(
+        "stays/<stay_slug>/create-event/",
+        EventCreateView.as_view(),
+        name="create_event_to_stay",
+    ),
+    path(
         "stays/<stay_slug>/images/",
         StayImageListView.as_view(),
         name="stay-images-list",

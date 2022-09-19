@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    "nested_inline",
+    "anymail",
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
@@ -214,16 +216,23 @@ MEDIA_URL = "/media/"
 #     }
 # }
 
-EMAIL_BACKEND = "django_ses.SESBackend"
-EMAIL_HOST = os.environ.get("WINDA_SMTP_HOST")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get("WINDA_SMTP_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("WINDA_SMTP_PASSWORD")
+EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
+
+ANYMAIL = {
+    "MAILJET_API_KEY": os.environ.get("WINDA_MAILJET_API_KEY"),
+    "MAILJET_SECRET_KEY": os.environ.get("WINDA_MAILJET_SECRET_KEY"),
+}
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
-AWS_SES_REGION_NAME = "eu-west-2"
-AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
+
+# EMAIL_HOST = os.environ.get("WINDA_SMTP_HOST")
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.environ.get("WINDA_SMTP_USER")
+# EMAIL_HOST_PASSWORD = os.environ.get("WINDA_SMTP_PASSWORD")
+
+# AWS_SES_REGION_NAME = "eu-west-2"
+# AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
 ACCOUNT_EMAIL_VERIFICATION = None
 OLD_PASSWORD_FIELD_ENABLED = True

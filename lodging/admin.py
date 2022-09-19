@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
 
 class StayImageInline(admin.TabularInline):
@@ -22,12 +23,79 @@ class InclusionsInline(admin.TabularInline):
     extra = 1
 
 
-class StayAdmin(admin.ModelAdmin):
+class TypeOfRoomsImageInline(NestedStackedInline):
+    model = TypeOfRoomsImages
+    extra = 1
+    fk_name = "room"
+
+
+class TypeOfRoomsAdmin(NestedStackedInline):
+    model = TypeOfRooms
+    extra = 1
+    fk_name = "stay"
+    inlines = [TypeOfRoomsImageInline]
+
+
+# admin.site.register(TypeOfRooms, TypeOfRoomsAdmin)
+
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "from_date",
+        "to_date",
+        "rooms",
+        "adults",
+        "children",
+        "transport",
+        "paid",
+    )
+
+    list_filter = ("date_posted", "from_date", "rooms", "adults", "children", "paid")
+
+    fieldsets = (
+        (
+            "Personal Information",
+            {"fields": ("first_name", "last_name", "email", "phone")},
+        ),
+        (
+            "Booking Information",
+            {
+                "fields": (
+                    "stay",
+                    "from_date",
+                    "to_date",
+                    "rooms",
+                    "adults",
+                    "children",
+                    "transport",
+                )
+            },
+        ),
+        ("Other Information", {"fields": ("message", "paid")}),
+    )
+
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "stay__name",
+        "stay__property_name",
+    )
+
+    ordering = ("date_posted",)
+
+
+class StayAdmin(NestedModelAdmin):
     inlines = (
         ExtrasIncludedInline,
         FactsInline,
         InclusionsInline,
         StayImageInline,
+        TypeOfRoomsAdmin,
     )
     raw_id_fields = ("user",)
 
@@ -171,7 +239,6 @@ class StayAdmin(admin.ModelAdmin):
             "Contact",
             {"fields": ("contact_name", "contact_email", "contact_phone", "company")},
         ),
-        ("Event", {"fields": ("is_an_event", "event_price")}),
         (
             "Standard pricing",
             {
@@ -527,6 +594,8 @@ class StayAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        ("Transport", {"fields": ("car_transfer_price", "bus_transfer_price")}),
+        ("Event", {"fields": ("is_an_event",)}),
     )
 
     search_fields = (
@@ -541,6 +610,7 @@ class StayAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Stays, StayAdmin)
+admin.site.register(Event, EventAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)
 admin.site.register(Cart)

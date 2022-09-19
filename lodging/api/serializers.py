@@ -43,9 +43,24 @@ class InclusionsSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class TypeOfRoomsImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypeOfRoomsImages
+        exclude = ["room"]
+
+
+class TypeOfRoomsSerializer(serializers.ModelSerializer):
+    type_of_room_images = TypeOfRoomsImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TypeOfRooms
+        exclude = ["stay"]
+
+
 class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)
+    type_of_rooms = TypeOfRoomsSerializer(many=True, read_only=True)
     is_user_stay = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
@@ -174,6 +189,15 @@ class OrderSerializer(serializers.ModelSerializer):
         order_review = Review.objects.filter(stay=instance.stay, user=request.user)
 
         return order_review.exists()
+
+
+class EventSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    stay = StaysSerializer(read_only=True)
+
+    class Meta:
+        model = Event
+        fields = "__all__"
 
 
 class SaveStaysSerializer(serializers.ModelSerializer):

@@ -1,5 +1,6 @@
 from asyncio import transports
 from dbm.ndbm import library
+from email import message
 from os import access
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -14,6 +15,8 @@ from datetime import datetime, timedelta, date
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from transport.models import Transportation
+
+TRANSPORT_OPTIONS = ((0, "No Transport"), (1, "Car"), (2, "Bus"))
 
 ROOM_IS_ENSUITE = (("YES", "YES"), ("NO", "NO"))
 
@@ -566,7 +569,12 @@ class Stays(models.Model):
 
     is_an_event = models.BooleanField(default=False)
 
-    event_price = models.FloatField(blank=True, null=True)
+    car_transfer_price = models.FloatField(
+        blank=True, null=True, help_text="Add if car service is available"
+    )
+    bus_transfer_price = models.FloatField(
+        blank=True, null=True, help_text="Add if bus service is available"
+    )
 
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
@@ -579,6 +587,45 @@ class Stays(models.Model):
     class Meta:
         verbose_name = "Stay"
         verbose_name_plural = "Stays"
+
+
+class TypeOfRooms(models.Model):
+    name = models.CharField(max_length=250, blank=True, null=True)
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="type_of_rooms"
+    )
+    short_description = models.CharField(max_length=500, blank=True, null=True)
+    price = models.FloatField(blank=True, null=True)
+    sleeps = models.IntegerField(blank=True, null=True)
+    available_rooms = models.IntegerField(blank=True, null=True)
+    is_standard = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Type of Room"
+        verbose_name_plural = "Types of Rooms"
+
+
+class TypeOfRoomsImages(models.Model):
+    image = ProcessedImageField(
+        upload_to=lodge_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    main = models.BooleanField(default=False)
+    room = models.ForeignKey(
+        TypeOfRooms, on_delete=models.CASCADE, related_name="type_of_room_images"
+    )
+
+    def __str__(self):
+        return self.image.name
+
+    class Meta:
+        verbose_name = "Type of Room Image"
+        verbose_name_plural = "Types of Room Images"
 
 
 class StayImage(models.Model):
@@ -662,6 +709,36 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order by {self.user}"
+
+
+class Event(models.Model):
+    stay = models.ForeignKey(
+        Stays,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="event_order",
+    )
+    from_date = models.DateTimeField(default=timezone.now)
+    to_date = models.DateTimeField(blank=True, null=True)
+    rooms = models.IntegerField(default=1)
+    adults = models.IntegerField(default=2)
+    children = models.IntegerField(default=0)
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    transport = models.CharField(max_length=100, choices=TRANSPORT_OPTIONS, blank=True)
+    paid = models.BooleanField(default=False)
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "Event booking"
+        verbose_name_plural = "Event bookings"
 
 
 class Review(models.Model):
