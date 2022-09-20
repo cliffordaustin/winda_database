@@ -726,11 +726,12 @@ class Event(models.Model):
     children = models.IntegerField(default=0)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    confirmation_code = models.CharField(max_length=120, blank=True, null=True)
     email = models.EmailField(max_length=120, blank=True, null=True)
     phone = PhoneNumberField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
     transport = models.CharField(max_length=100, choices=TRANSPORT_OPTIONS, blank=True)
-    paid = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False, verbose_name="payment confirmed")
     date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

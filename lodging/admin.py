@@ -51,6 +51,7 @@ class EventAdmin(admin.ModelAdmin):
         "adults",
         "children",
         "transport",
+        "confirmation_code",
         "paid",
     )
 
@@ -75,7 +76,7 @@ class EventAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Other Information", {"fields": ("message", "paid")}),
+        ("Other Information", {"fields": ("message", "confirmation_code", "paid")}),
     )
 
     search_fields = (
