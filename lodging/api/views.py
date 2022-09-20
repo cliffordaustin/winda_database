@@ -317,22 +317,22 @@ class EventCreateView(generics.CreateAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        message = EmailMessage(
-            to=[self.request.data["email"]],
-        )
-        message.template_id = "4208873"
-        message.from_email = None
-        message.merge_data = {
-            self.request.data["email"]: {
-                "name": self.request.data["first_name"],
-            },
-        }
+        # message = EmailMessage(
+        #     to=[self.request.data["email"]],
+        # )
+        # message.template_id = "4208873"
+        # message.from_email = None
+        # message.merge_data = {
+        #     self.request.data["email"]: {
+        #         "name": self.request.data["first_name"],
+        #     },
+        # }
 
-        message.merge_global_data = {
-            "name": self.request.data["first_name"],
-        }
+        # message.merge_global_data = {
+        #     "name": self.request.data["first_name"],
+        # }
 
-        message.send()
+        # message.send()
 
         serializer.save(stay=stay)
 
