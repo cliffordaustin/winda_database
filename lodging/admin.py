@@ -44,6 +44,7 @@ class EventAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "email",
+        "passengers",
         "phone",
         "from_date",
         "to_date",
@@ -55,7 +56,14 @@ class EventAdmin(admin.ModelAdmin):
         "paid",
     )
 
-    list_filter = ("date_posted", "from_date", "rooms", "adults", "children", "paid")
+    list_filter = (
+        "date_posted",
+        "from_date",
+        "rooms",
+        "adults",
+        "children",
+        "paid",
+    )
 
     fieldsets = (
         (
@@ -69,6 +77,7 @@ class EventAdmin(admin.ModelAdmin):
                     "stay",
                     "from_date",
                     "to_date",
+                    "passengers",
                     "rooms",
                     "adults",
                     "children",

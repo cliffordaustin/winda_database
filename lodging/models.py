@@ -760,6 +760,7 @@ class Event(models.Model):
     email = models.EmailField(max_length=120, blank=True, null=True)
     phone = PhoneNumberField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
+    passengers = models.IntegerField(default=0)
     transport = models.CharField(max_length=100, choices=TRANSPORT_OPTIONS, blank=True)
     paid = models.BooleanField(default=False, verbose_name="payment confirmed")
     date_posted = models.DateTimeField(default=timezone.now)
