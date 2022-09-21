@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, serializers, status
 from django.db.models import F, Value, CharField
+from django.conf import settings
 
 
 class StaysCreateView(generics.CreateAPIView):
@@ -331,8 +332,24 @@ class EventCreateView(generics.CreateAPIView):
         message.merge_global_data = {
             "name": self.request.data["first_name"],
         }
-
         message.send()
+
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+        }
+
+        order_message.send()
 
         serializer.save(stay=stay)
 
