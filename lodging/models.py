@@ -570,11 +570,41 @@ class Stays(models.Model):
     is_an_event = models.BooleanField(default=False)
 
     car_transfer_price = models.FloatField(
-        blank=True, null=True, help_text="Add if car service is available"
+        blank=True,
+        null=True,
+        help_text="Add if car service is available",
+        verbose_name="Van Transfer Price",
+    )
+    car_transfer_starting_location = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        help_text="Add if car service is available",
+        verbose_name="Van Transfer Starting Location",
+    )
+    car_transfer_end_location = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        help_text="Add if car service is available",
+        verbose_name="Van Transfer End Location",
     )
     bus_transfer_price = models.FloatField(
         blank=True, null=True, help_text="Add if bus service is available"
     )
+    bus_transfer_starting_location = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        help_text="Add if bus service is available",
+    )
+    bus_transfer_end_location = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        help_text="Add if bus service is available",
+    )
+    distance_from_venue = models.FloatField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
