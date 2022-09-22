@@ -1,0 +1,144 @@
+Date : 2022-09-21 22:50:46
+Directory : /Users/clifford/Codings/winda_database
+Total : 98 files,  3022 codes, 22 comments, 641 blanks, all 3685 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| Python           |         97 |      3,019 |         22 |        641 |      3,682 |
+| pip requirements |          1 |          3 |          0 |          0 |          3 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                               |         98 |      3,022 |         22 |        641 |      3,685 |
+| activities                                                                                                                      |          9 |        151 |          7 |         36 |        194 |
+| activities/api                                                                                                                  |          2 |         39 |          2 |          6 |         47 |
+| activities/migrations                                                                                                           |          5 |        100 |          5 |         30 |        135 |
+| curated_trip                                                                                                                    |         13 |        602 |         15 |        147 |        764 |
+| curated_trip/api                                                                                                                |          3 |        278 |          4 |         69 |        351 |
+| curated_trip/migrations                                                                                                         |          7 |        187 |          7 |         42 |        236 |
+| lodging                                                                                                                         |         26 |      1,039 |        -27 |        175 |      1,187 |
+| lodging/api                                                                                                                     |          3 |        111 |          2 |         26 |        139 |
+| lodging/migrations                                                                                                              |         21 |        677 |         21 |        126 |        824 |
+| recommended_trip                                                                                                                |         21 |        563 |        -10 |        121 |        674 |
+| recommended_trip/api                                                                                                            |          4 |         71 |         -1 |         16 |         86 |
+| recommended_trip/migrations                                                                                                     |         14 |        335 |         14 |         84 |        433 |
+| transport                                                                                                                       |         14 |        414 |          8 |         95 |        517 |
+| transport/api                                                                                                                   |          3 |         97 |          0 |         28 |        125 |
+| transport/migrations                                                                                                            |          8 |        185 |          8 |         48 |        241 |
+| trip                                                                                                                            |         11 |        220 |          5 |         54 |        279 |
+| trip/api                                                                                                                        |          3 |         59 |          0 |         14 |         73 |
+| trip/migrations                                                                                                                 |          5 |         92 |          5 |         30 |        127 |
+| user                                                                                                                            |          2 |         25 |         17 |         10 |         52 |
+| user/api                                                                                                                        |          1 |         24 |          0 |          7 |         31 |
+| winda_database                                                                                                                  |          1 |          5 |          7 |          3 |         15 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                                        | language         | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/clifford/Codings/winda_database/activities/admin.py                                                                      | Python           |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda_database/activities/api/urls.py                                                                   | Python           |          3 |          0 |          0 |          3 |
+| /Users/clifford/Codings/winda_database/activities/api/views.py                                                                  | Python           |         36 |          2 |          6 |         44 |
+| /Users/clifford/Codings/winda_database/activities/migrations/0067_auto_20220823_2204.py                                         | Python           |         22 |          1 |          6 |         29 |
+| /Users/clifford/Codings/winda_database/activities/migrations/0068_auto_20220824_0028.py                                         | Python           |         37 |          1 |          6 |         44 |
+| /Users/clifford/Codings/winda_database/activities/migrations/0069_auto_20220824_2236.py                                         | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/activities/migrations/0070_activities_price_is_flexible.py                               | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/activities/migrations/0071_activities_date_updated.py                                    | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/activities/models.py                                                                     | Python           |         11 |          0 |          0 |         11 |
+| /Users/clifford/Codings/winda_database/curated_trip/admin.py                                                                    | Python           |         88 |          2 |         24 |        114 |
+| /Users/clifford/Codings/winda_database/curated_trip/api/serializers.py                                                          | Python           |        118 |          2 |         30 |        150 |
+| /Users/clifford/Codings/winda_database/curated_trip/api/urls.py                                                                 | Python           |         60 |          0 |          0 |         60 |
+| /Users/clifford/Codings/winda_database/curated_trip/api/views.py                                                                | Python           |        100 |          2 |         39 |        141 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0002_useractivitytrip_userstaytrip_usertransporttrip_usertrip.py | Python           |         76 |          1 |          6 |         83 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0003_auto_20220816_0943.py                                       | Python           |         39 |          1 |          6 |         46 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0004_auto_20220816_0951.py                                       | Python           |         18 |          1 |          6 |         25 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0005_alter_usertrip_trips.py                                     | Python           |         13 |          1 |          6 |         20 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0006_auto_20220816_1009.py                                       | Python           |         16 |          1 |          6 |         23 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0007_curatedtrip_essential_information.py                        | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/curated_trip/migrations/0008_curatedtrip_stop_at.py                                      | Python           |         13 |          1 |          6 |         20 |
+| /Users/clifford/Codings/winda_database/curated_trip/models.py                                                                   | Python           |         28 |          0 |          3 |         31 |
+| /Users/clifford/Codings/winda_database/curated_trip/signals.py                                                                  | Python           |         21 |          2 |          9 |         32 |
+| /Users/clifford/Codings/winda_database/lodging/admin.py                                                                         | Python           |        132 |        -37 |         12 |        107 |
+| /Users/clifford/Codings/winda_database/lodging/api/serializers.py                                                               | Python           |         16 |          0 |          8 |         24 |
+| /Users/clifford/Codings/winda_database/lodging/api/urls.py                                                                      | Python           |          7 |          0 |          0 |          7 |
+| /Users/clifford/Codings/winda_database/lodging/api/views.py                                                                     | Python           |         88 |          2 |         18 |        108 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0129_auto_20220823_2204.py                                            | Python           |         22 |          1 |          6 |         29 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0130_alter_stays_type_of_stay.py                                      | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0131_alter_stays_type_of_stay.py                                      | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0132_auto_20220831_0844.py                                            | Python           |        303 |          1 |          6 |        310 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0133_alter_stays_type_of_stay.py                                      | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0134_stays_beachfront.py                                              | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0135_stays_date_updated.py                                            | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0136_auto_20220913_2307.py                                            | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0137_event_typeofrooms_typeofroomsimages.py                           | Python           |         53 |          1 |          6 |         60 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0138_typeofroomsimages_main.py                                        | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0139_auto_20220918_0331.py                                            | Python           |         33 |          1 |          6 |         40 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0140_auto_20220919_0037.py                                            | Python           |         44 |          1 |          6 |         51 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0141_event_phone.py                                                   | Python           |         13 |          1 |          6 |         20 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0142_event_rooms.py                                                   | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0143_typeofrooms_short_description.py                                 | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0144_typeofrooms_is_standard.py                                       | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0145_remove_stays_event_price.py                                      | Python           |         11 |          1 |          6 |         18 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0146_auto_20220920_0747.py                                            | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0147_stays_distance_from_venue.py                                     | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0148_auto_20220921_1109.py                                            | Python           |         32 |          1 |          6 |         39 |
+| /Users/clifford/Codings/winda_database/lodging/migrations/0149_event_passengers.py                                              | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/lodging/models.py                                                                        | Python           |        119 |        -13 |         11 |        117 |
+| /Users/clifford/Codings/winda_database/recommended_trip/admin.py                                                                | Python           |         82 |          0 |         14 |         96 |
+| /Users/clifford/Codings/winda_database/recommended_trip/api/filterset.py                                                        | Python           |          5 |          0 |          1 |          6 |
+| /Users/clifford/Codings/winda_database/recommended_trip/api/serializers.py                                                      | Python           |         30 |          0 |          4 |         34 |
+| /Users/clifford/Codings/winda_database/recommended_trip/api/urls.py                                                             | Python           |         12 |          0 |          0 |         12 |
+| /Users/clifford/Codings/winda_database/recommended_trip/api/views.py                                                            | Python           |         24 |         -1 |         11 |         34 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0021_singletrip_essential_information.py                     | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0022_singletrip_flight.py                                    | Python           |         14 |          1 |          6 |         21 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0023_singletrip_stop_at.py                                   | Python           |         13 |          1 |          6 |         20 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0024_singletrip_countries_covered.py                         | Python           |         13 |          1 |          6 |         20 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0025_singletrip_max_number_of_days.py                        | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0026_remove_singletrip_max_number_of_days.py                 | Python           |         11 |          1 |          6 |         18 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0027_auto_20220822_1134.py                                   | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0028_singletrip_nights.py                                    | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0029_auto_20220827_0931.py                                   | Python           |        127 |          1 |          6 |        134 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0030_auto_20220827_1022.py                                   | Python           |         36 |          1 |          6 |         43 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0031_requestcustomtrip.py                                    | Python           |         20 |          1 |          6 |         27 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0032_singletrip_old_price.py                                 | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0033_singletrip_general_transfer.py                          | Python           |         14 |          1 |          6 |         21 |
+| /Users/clifford/Codings/winda_database/recommended_trip/migrations/0034_requestinfo.py                                          | Python           |         22 |          1 |          6 |         29 |
+| /Users/clifford/Codings/winda_database/recommended_trip/models.py                                                               | Python           |         65 |        -23 |          3 |         45 |
+| /Users/clifford/Codings/winda_database/recommended_trip/signals.py                                                              | Python           |         10 |          0 |          4 |         14 |
+| /Users/clifford/Codings/winda_database/requirements.txt                                                                         | pip requirements |          3 |          0 |          0 |          3 |
+| /Users/clifford/Codings/winda_database/transport/admin.py                                                                       | Python           |         80 |          0 |          5 |         85 |
+| /Users/clifford/Codings/winda_database/transport/api/serializers.py                                                             | Python           |         10 |          0 |          6 |         16 |
+| /Users/clifford/Codings/winda_database/transport/api/urls.py                                                                    | Python           |         30 |          0 |          0 |         30 |
+| /Users/clifford/Codings/winda_database/transport/api/views.py                                                                   | Python           |         57 |          0 |         22 |         79 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0019_flight.py                                                      | Python           |         27 |          1 |          6 |         34 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0020_flight_number_of_people.py                                     | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0021_auto_20220823_2204.py                                          | Python           |         22 |          1 |          6 |         29 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0022_auto_20220823_2244.py                                          | Python           |         27 |          1 |          6 |         34 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0023_flight_flight_types.py                                         | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0024_flight_is_admin_entry.py                                       | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0025_generaltransfers.py                                            | Python           |         33 |          1 |          6 |         40 |
+| /Users/clifford/Codings/winda_database/transport/migrations/0026_auto_20220906_1537.py                                          | Python           |         40 |          1 |          6 |         47 |
+| /Users/clifford/Codings/winda_database/transport/models.py                                                                      | Python           |         42 |          0 |          9 |         51 |
+| /Users/clifford/Codings/winda_database/transport/signals.py                                                                     | Python           |         10 |          0 |          5 |         15 |
+| /Users/clifford/Codings/winda_database/trip/admin.py                                                                            | Python           |         39 |          0 |          4 |         43 |
+| /Users/clifford/Codings/winda_database/trip/api/serializers.py                                                                  | Python           |         15 |          0 |          2 |         17 |
+| /Users/clifford/Codings/winda_database/trip/api/urls.py                                                                         | Python           |         11 |          0 |          0 |         11 |
+| /Users/clifford/Codings/winda_database/trip/api/views.py                                                                        | Python           |         33 |          0 |         12 |         45 |
+| /Users/clifford/Codings/winda_database/trip/migrations/0051_trip_flight.py                                                      | Python           |         14 |          1 |          6 |         21 |
+| /Users/clifford/Codings/winda_database/trip/migrations/0052_bookedtrip.py                                                       | Python           |         32 |          1 |          6 |         39 |
+| /Users/clifford/Codings/winda_database/trip/migrations/0053_auto_20220822_1305.py                                               | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/trip/migrations/0054_auto_20220822_1812.py                                               | Python           |         17 |          1 |          6 |         24 |
+| /Users/clifford/Codings/winda_database/trip/migrations/0055_bookedtrip_cancelled.py                                             | Python           |         12 |          1 |          6 |         19 |
+| /Users/clifford/Codings/winda_database/trip/models.py                                                                           | Python           |         25 |          0 |          4 |         29 |
+| /Users/clifford/Codings/winda_database/trip/signals.py                                                                          | Python           |          5 |          0 |          2 |          7 |
+| /Users/clifford/Codings/winda_database/user/api/serializer.py                                                                   | Python           |         24 |          0 |          7 |         31 |
+| /Users/clifford/Codings/winda_database/user/signals.py                                                                          | Python           |          1 |         17 |          3 |         21 |
+| /Users/clifford/Codings/winda_database/winda_database/settings.py                                                               | Python           |          5 |          7 |          3 |         15 |
+| Total                                                                                                                           |                  |      3,022 |         22 |        641 |      3,685 |
++---------------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

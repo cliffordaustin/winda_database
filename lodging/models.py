@@ -755,6 +755,7 @@ class Event(models.Model):
     adults = models.IntegerField(default=2)
     children = models.IntegerField(default=0)
     first_name = models.CharField(max_length=120, blank=True, null=True)
+    type_of_room = models.CharField(max_length=300, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     confirmation_code = models.CharField(max_length=120, blank=True, null=True)
     email = models.EmailField(max_length=120, blank=True, null=True)

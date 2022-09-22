@@ -49,9 +49,9 @@ class EventAdmin(admin.ModelAdmin):
         "from_date",
         "to_date",
         "rooms",
+        "type_of_room",
         "adults",
         "children",
-        "transport",
         "confirmation_code",
         "paid",
     )
@@ -78,6 +78,7 @@ class EventAdmin(admin.ModelAdmin):
                     "from_date",
                     "to_date",
                     "passengers",
+                    "type_of_room",
                     "rooms",
                     "adults",
                     "children",
