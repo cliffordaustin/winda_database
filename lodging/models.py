@@ -625,6 +625,7 @@ class TypeOfRooms(models.Model):
         Stays, on_delete=models.CASCADE, related_name="type_of_rooms"
     )
     short_description = models.CharField(max_length=500, blank=True, null=True)
+    is_tented_camp = models.BooleanField(default=False)
     price = models.FloatField(blank=True, null=True)
     sleeps = models.IntegerField(blank=True, null=True)
     available_rooms = models.IntegerField(blank=True, null=True)
