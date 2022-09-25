@@ -575,35 +575,36 @@ class Stays(models.Model):
         help_text="Add if car service is available",
         verbose_name="Van Transfer Price",
     )
-    car_transfer_starting_location = models.CharField(
+    car_transfer_text_location = models.CharField(
         max_length=250,
         blank=True,
         null=True,
         help_text="Add if car service is available",
-        verbose_name="Van Transfer Starting Location",
+        verbose_name="Van Transfer Text Location",
     )
-    car_transfer_end_location = models.CharField(
-        max_length=250,
-        blank=True,
-        null=True,
-        help_text="Add if car service is available",
-        verbose_name="Van Transfer End Location",
-    )
+    # car_transfer_end_location = models.CharField(
+    #     max_length=250,
+    #     blank=True,
+    #     null=True,
+    #     help_text="Add if car service is available",
+    #     verbose_name="Van Transfer End Location",
+    # )
     bus_transfer_price = models.FloatField(
         blank=True, null=True, help_text="Add if bus service is available"
     )
-    bus_transfer_starting_location = models.CharField(
+    bus_transfer_text_location = models.CharField(
         max_length=250,
         blank=True,
         null=True,
         help_text="Add if bus service is available",
+        verbose_name="Bus Transfer Text Location",
     )
-    bus_transfer_end_location = models.CharField(
-        max_length=250,
-        blank=True,
-        null=True,
-        help_text="Add if bus service is available",
-    )
+    # bus_transfer_end_location = models.CharField(
+    #     max_length=250,
+    #     blank=True,
+    #     null=True,
+    #     help_text="Add if bus service is available",
+    # )
     distance_from_venue = models.FloatField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
