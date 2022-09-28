@@ -631,6 +631,7 @@ class TypeOfRooms(models.Model):
     sleeps = models.IntegerField(blank=True, null=True)
     available_rooms = models.IntegerField(blank=True, null=True)
     is_standard = models.BooleanField(default=False)
+    not_available = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
