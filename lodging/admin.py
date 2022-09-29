@@ -616,14 +616,12 @@ class StayAdmin(NestedModelAdmin):
                 "fields": (
                     "car_transfer_price",
                     "car_transfer_text_location",
-                    # "car_transfer_end_location",
                     "bus_transfer_price",
                     "bus_transfer_text_location",
-                    # "bus_transfer_end_location",
                 )
             },
         ),
-        ("Event", {"fields": ("is_an_event", "distance_from_venue")}),
+        ("Event", {"fields": ("is_an_event", "distance_from_venue", "has_min_date")}),
     )
 
     search_fields = (
