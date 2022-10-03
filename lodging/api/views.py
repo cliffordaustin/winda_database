@@ -318,6 +318,8 @@ class EventCreateView(generics.CreateAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
+        serializer.save(stay=stay)
+
         message = EmailMessage(
             to=[self.request.data["email"]],
         )
@@ -332,7 +334,7 @@ class EventCreateView(generics.CreateAPIView):
         message.merge_global_data = {
             "name": self.request.data["first_name"],
         }
-        message.send()
+        message.send(fail_silently=True)
 
         order_message = EmailMessage(
             to=[settings.DEFAULT_FROM_EMAIL],
@@ -349,9 +351,7 @@ class EventCreateView(generics.CreateAPIView):
             "user_email": self.request.data["email"],
         }
 
-        order_message.send()
-
-        serializer.save(stay=stay)
+        order_message.send(fail_silently=True)
 
 
 class OrderListView(generics.ListAPIView):
