@@ -23,6 +23,7 @@ from rest_auth.registration.views import VerifyEmailView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
+    path("tinymce/", include("tinymce.urls")),
     path("api/v1/", include("user.api.urls")),
     path("api/v1/", include("trip.api.urls")),
     path("api/v1/", include("lodging.api.urls")),
@@ -30,6 +31,7 @@ urlpatterns = [
     path("api/v1/", include("transport.api.urls")),
     path("api/v1/", include("recommended_trip.api.urls")),
     path("api/v1/", include("curated_trip.api.urls")),
+    path("api/v1/", include("blog.api.urls")),
     re_path(
         r"^account-confirm-email/(?P<key>[-:\w]+)/$",
         VerifyEmailView.as_view(),
