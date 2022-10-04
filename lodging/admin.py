@@ -625,7 +625,17 @@ class StayAdmin(NestedModelAdmin):
                 )
             },
         ),
-        ("Event", {"fields": ("is_an_event", "distance_from_venue", "has_min_date")}),
+        (
+            "Event",
+            {
+                "fields": (
+                    "is_an_event",
+                    "distance_from_venue",
+                    "has_min_date",
+                    "date_starts_from_ninth",
+                )
+            },
+        ),
     )
 
     search_fields = (

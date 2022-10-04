@@ -569,6 +569,7 @@ class Stays(models.Model):
 
     is_an_event = models.BooleanField(default=False)
     has_min_date = models.BooleanField(default=False)
+    date_starts_from_ninth = models.BooleanField(default=False)
 
     car_transfer_price = models.FloatField(
         blank=True,
@@ -616,6 +617,7 @@ class TypeOfRooms(models.Model):
     short_description = models.CharField(max_length=500, blank=True, null=True)
     is_tented_camp = models.BooleanField(default=False)
     price = models.FloatField(blank=True, null=True)
+    old_price = models.FloatField(blank=True, null=True)
     sleeps = models.IntegerField(blank=True, null=True)
     available_rooms = models.IntegerField(blank=True, null=True)
     is_standard = models.BooleanField(default=False)
