@@ -1,24 +1,28 @@
 from django.contrib import admin
 from .models import *
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+from nested_inline.admin import (
+    NestedStackedInline,
+    NestedModelAdmin,
+    NestedTabularInline,
+)
 
 
-class StayImageInline(admin.TabularInline):
+class StayImageInline(NestedTabularInline):
     model = StayImage
     extra = 1
 
 
-class ExtrasIncludedInline(admin.TabularInline):
+class ExtrasIncludedInline(NestedTabularInline):
     model = ExtrasIncluded
     extra = 1
 
 
-class FactsInline(admin.TabularInline):
+class FactsInline(NestedTabularInline):
     model = Facts
     extra = 1
 
 
-class InclusionsInline(admin.TabularInline):
+class InclusionsInline(NestedTabularInline):
     model = Inclusions
     extra = 1
 
