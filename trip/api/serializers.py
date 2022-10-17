@@ -10,7 +10,6 @@ from transport.api.serializers import TransportSerializer, FlightSerializer
 
 
 class BookedTripSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
     trip = TripSerializer(read_only=True)
 
     class Meta:

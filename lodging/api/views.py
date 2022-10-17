@@ -26,7 +26,7 @@ class StaysCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -35,11 +35,16 @@ class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        queryset = Stays.objects.filter(is_active=True)
+        queryset = Stays.objects.filter(
+            is_active=True,
+        )
         slug = self.kwargs.get("slug")
 
         if slug is not None:
-            queryset = Stays.objects.filter(slug=slug)
+            queryset = Stays.objects.filter(
+                slug=slug,
+                is_active=True,
+            )
         return queryset
 
 
@@ -69,7 +74,9 @@ class StaysListView(generics.ListAPIView):
             for word in words:
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
-            queryset = Stays.objects.filter(query, is_active=True).all()
+            queryset = Stays.objects.filter(
+                query, is_active=True, is_an_event=False
+            ).all()
 
         if querystring_detail_search:
             querystring_detail_search = querystring_detail_search.split(",")[0]
@@ -82,7 +89,9 @@ class StaysListView(generics.ListAPIView):
                     | Q(city__icontains=word)
                     | Q(country__icontains=word)
                 )
-            queryset = Stays.objects.filter(query, is_active=True).all()
+            queryset = Stays.objects.filter(
+                query, is_active=True, is_an_event=False
+            ).all()
 
         return queryset
 
@@ -118,7 +127,7 @@ class AllStaysListView(generics.ListAPIView):
     ordering = ["price_non_resident"]
 
     def get_queryset(self):
-        queryset = Stays.objects.all()
+        queryset = Stays.objects.filter(is_active=True, is_an_event=False)
 
         querystring = self.request.GET.get("search")
         querystring_detail_search = self.request.GET.get("d_search")
@@ -129,7 +138,9 @@ class AllStaysListView(generics.ListAPIView):
             for word in words:
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
-            queryset = Stays.objects.filter(query, is_active=True).all()
+            queryset = Stays.objects.filter(
+                query, is_active=True, is_an_event=False
+            ).all()
 
         if querystring_detail_search:
             querystring_detail_search = querystring_detail_search.split(",")[0]
@@ -142,7 +153,9 @@ class AllStaysListView(generics.ListAPIView):
                     | Q(city__icontains=word)
                     | Q(country__icontains=word)
                 )
-            queryset = Stays.objects.filter(query, is_active=True).all()
+            queryset = Stays.objects.filter(
+                query, is_active=True, is_an_event=False
+            ).all()
 
         return queryset
 
@@ -309,6 +322,46 @@ class OrderCreateView(generics.CreateAPIView):
 
         serializer.save(user=self.request.user, stay=stay)
 
+        # message sent to the user
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4282998"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+                "stay_name": stay.name,
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+            "stay_name": stay.name,
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+                "booking_type": "an accommodation",
+                "name": stay.name,
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+            "booking_type": "an accommodation",
+            "name": stay.name,
+        }
+        order_message.send(fail_silently=True)
+
 
 class EventCreateView(generics.CreateAPIView):
     queryset = Event.objects.all()
@@ -319,6 +372,47 @@ class EventCreateView(generics.CreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         serializer.save(stay=stay)
+
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4208873"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+        message.send(fail_silently=True)
+
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+        }
+
+        order_message.send(fail_silently=True)
+
+
+class EventTransportCreateView(generics.CreateAPIView):
+    queryset = EventTransport.objects.all()
+    serializer_class = EventTransportSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
 
         message = EmailMessage(
             to=[self.request.data["email"]],

@@ -26,24 +26,33 @@ class GroupTripAdmin(admin.ModelAdmin):
 
 
 class BookedTripAdmin(admin.ModelAdmin):
-    raw_id_fields = ("user", "trip")
-    search_fields = ("user__email", "user__first_name", "user__last_name", "trip__name")
+    raw_id_fields = ("trip",)
+    search_fields = ("trip__name",)
     ordering = ("updated_at",)
     list_display = (
-        "user",
-        "trip",
+        "trip_name",
         "starting_date",
         "guests",
         "non_residents",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
         "created_at",
+        "paid",
+        "booking_request",
     )
+
+    def trip_name(self, obj):
+        return obj.trip.name if obj.trip else None
+
+    list_filter = ("booking_request", "paid")
 
     fieldsets = (
         (
-            None,
+            "Booking Details",
             {
                 "fields": (
-                    "user",
                     "trip",
                     "starting_date",
                     "guests",
@@ -53,9 +62,21 @@ class BookedTripAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Personal Details",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "phone",
+                )
+            },
+        ),
+        (
             "Status",
             {
                 "fields": (
+                    "booking_request",
                     "reviewing",
                     "email_sent",
                     "cancelled",
@@ -64,6 +85,8 @@ class BookedTripAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+    ordering = ("created_at",)
 
 
 admin.site.register(BookedTrip, BookedTripAdmin)

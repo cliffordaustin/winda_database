@@ -19,9 +19,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from user.views import GoogleLogin, FacebookLogin
 from rest_auth.registration.views import VerifyEmailView
+from recommended_trip.views import export
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # path("export-trips/", export),
     path("api-auth/", include("rest_framework.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("api/v1/", include("user.api.urls")),

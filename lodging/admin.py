@@ -102,6 +102,51 @@ class EventAdmin(admin.ModelAdmin):
     ordering = ("date_posted",)
 
 
+class EventTransportAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "passengers",
+        "type_of_transport",
+        "phone",
+        "confirmation_code",
+        "paid",
+    )
+
+    list_filter = (
+        "passengers",
+        "date_posted",
+        "paid",
+    )
+
+    fieldsets = (
+        (
+            "Personal Information",
+            {"fields": ("first_name", "last_name", "email", "phone")},
+        ),
+        (
+            "Booking Information",
+            {
+                "fields": (
+                    "passengers",
+                    "type_of_transport",
+                )
+            },
+        ),
+        ("Other Information", {"fields": ("message", "confirmation_code", "paid")}),
+    )
+
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "type_of_transport",
+    )
+
+    ordering = ("date_posted",)
+
+
 class StayAdmin(NestedModelAdmin):
     inlines = (
         ExtrasIncludedInline,
@@ -651,6 +696,7 @@ class StayAdmin(NestedModelAdmin):
 
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(EventTransport, EventTransportAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)
 admin.site.register(Cart)

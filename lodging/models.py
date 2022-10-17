@@ -727,6 +727,8 @@ class Order(models.Model):
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
 
@@ -765,6 +767,26 @@ class Event(models.Model):
     class Meta:
         verbose_name = "Event booking"
         verbose_name_plural = "Event bookings"
+
+
+class EventTransport(models.Model):
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    type_of_transport = models.CharField(max_length=300, blank=True, null=True)
+    confirmation_code = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    passengers = models.IntegerField(default=0)
+    paid = models.BooleanField(default=False, verbose_name="payment confirmed")
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "Event Transport booking"
+        verbose_name_plural = "Event Transport bookings"
 
 
 class Review(models.Model):

@@ -200,6 +200,12 @@ class EventSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class EventTransportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventTransport
+        fields = "__all__"
+
+
 class SaveStaysSerializer(serializers.ModelSerializer):
     stay = StaysSerializer(read_only=True)
     user = serializers.StringRelatedField(read_only=True)
