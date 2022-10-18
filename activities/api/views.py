@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .permissions import IsUserActivityInstance, ObjectPermission
 from rest_framework.validators import ValidationError
+from anymail.message import EmailMessage
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -292,6 +293,46 @@ class OrderCreateView(generics.CreateAPIView):
         activity = generics.get_object_or_404(Activities, slug=activity_slug)
 
         serializer.save(user=self.request.user, activity=activity)
+
+        # message sent to the user
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4283047"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+                "activity_name": activity.name,
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+            "activity_name": activity.name,
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+                "booking_type": "an activity",
+                "name": activity.name,
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+            "booking_type": "an activity",
+            "name": activity.name,
+        }
+        order_message.send(fail_silently=True)
 
 
 class OrderListView(generics.ListAPIView):

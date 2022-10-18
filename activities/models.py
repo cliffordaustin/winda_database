@@ -241,6 +241,8 @@ class Order(models.Model):
     from_date = models.DateTimeField(default=timezone.now)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
 

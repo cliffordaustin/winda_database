@@ -568,6 +568,8 @@ class Stays(models.Model):
     is_active = models.BooleanField(default=True)
 
     is_an_event = models.BooleanField(default=False)
+    has_min_date = models.BooleanField(default=False)
+    date_starts_from_ninth = models.BooleanField(default=False)
 
     car_transfer_price = models.FloatField(
         blank=True,
@@ -582,13 +584,6 @@ class Stays(models.Model):
         help_text="Add if car service is available",
         verbose_name="Van Transfer Text Location",
     )
-    # car_transfer_end_location = models.CharField(
-    #     max_length=250,
-    #     blank=True,
-    #     null=True,
-    #     help_text="Add if car service is available",
-    #     verbose_name="Van Transfer End Location",
-    # )
     bus_transfer_price = models.FloatField(
         blank=True, null=True, help_text="Add if bus service is available"
     )
@@ -599,12 +594,6 @@ class Stays(models.Model):
         help_text="Add if bus service is available",
         verbose_name="Bus Transfer Text Location",
     )
-    # bus_transfer_end_location = models.CharField(
-    #     max_length=250,
-    #     blank=True,
-    #     null=True,
-    #     help_text="Add if bus service is available",
-    # )
     distance_from_venue = models.FloatField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
@@ -628,9 +617,11 @@ class TypeOfRooms(models.Model):
     short_description = models.CharField(max_length=500, blank=True, null=True)
     is_tented_camp = models.BooleanField(default=False)
     price = models.FloatField(blank=True, null=True)
+    old_price = models.FloatField(blank=True, null=True)
     sleeps = models.IntegerField(blank=True, null=True)
     available_rooms = models.IntegerField(blank=True, null=True)
     is_standard = models.BooleanField(default=False)
+    not_available = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -736,6 +727,8 @@ class Order(models.Model):
     plan = models.CharField(max_length=100, choices=PLAN_TYPE, default="STANDARD")
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
     paid = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now)
 
@@ -774,6 +767,26 @@ class Event(models.Model):
     class Meta:
         verbose_name = "Event booking"
         verbose_name_plural = "Event bookings"
+
+
+class EventTransport(models.Model):
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    type_of_transport = models.CharField(max_length=300, blank=True, null=True)
+    confirmation_code = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    passengers = models.IntegerField(default=0)
+    paid = models.BooleanField(default=False, verbose_name="payment confirmed")
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "Event Transport booking"
+        verbose_name_plural = "Event Transport bookings"
 
 
 class Review(models.Model):

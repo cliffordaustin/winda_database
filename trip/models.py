@@ -7,6 +7,7 @@ from core.utils import group_trip_image_thumbnail, trip_image_thumbnail
 from lodging.models import Stays
 from transport.models import Transportation, Flight
 from imagekit.models import ProcessedImageField
+from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.processors import ResizeToFill
 from recommended_trip.models import SingleTrip
 from django.utils import timezone
@@ -15,11 +16,15 @@ from activities.models import PRICING_TYPE
 
 
 class BookedTrip(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     trip = models.ForeignKey(
         SingleTrip, on_delete=models.SET_NULL, null=True, blank=True
     )
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+
     starting_date = models.DateField(default=timezone.now)
     guests = models.IntegerField(blank=True, null=True, verbose_name="residents")
     non_residents = models.IntegerField(blank=True, null=True)
@@ -28,6 +33,8 @@ class BookedTrip(models.Model):
     email_sent = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
+    booking_request = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,7 +44,7 @@ class BookedTrip(models.Model):
         verbose_name_plural = "Booked Trips"
 
     def __str__(self):
-        return "{} - {}".format(self.user, self.trip)
+        return "{}".format(self.trip)
 
 
 class Trip(models.Model):

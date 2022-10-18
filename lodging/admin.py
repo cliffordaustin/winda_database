@@ -1,24 +1,28 @@
 from django.contrib import admin
 from .models import *
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+from nested_inline.admin import (
+    NestedStackedInline,
+    NestedModelAdmin,
+    NestedTabularInline,
+)
 
 
-class StayImageInline(admin.TabularInline):
+class StayImageInline(NestedTabularInline):
     model = StayImage
     extra = 1
 
 
-class ExtrasIncludedInline(admin.TabularInline):
+class ExtrasIncludedInline(NestedTabularInline):
     model = ExtrasIncluded
     extra = 1
 
 
-class FactsInline(admin.TabularInline):
+class FactsInline(NestedTabularInline):
     model = Facts
     extra = 1
 
 
-class InclusionsInline(admin.TabularInline):
+class InclusionsInline(NestedTabularInline):
     model = Inclusions
     extra = 1
 
@@ -93,6 +97,51 @@ class EventAdmin(admin.ModelAdmin):
         "last_name",
         "stay__name",
         "stay__property_name",
+    )
+
+    ordering = ("date_posted",)
+
+
+class EventTransportAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "passengers",
+        "type_of_transport",
+        "phone",
+        "confirmation_code",
+        "paid",
+    )
+
+    list_filter = (
+        "passengers",
+        "date_posted",
+        "paid",
+    )
+
+    fieldsets = (
+        (
+            "Personal Information",
+            {"fields": ("first_name", "last_name", "email", "phone")},
+        ),
+        (
+            "Booking Information",
+            {
+                "fields": (
+                    "passengers",
+                    "type_of_transport",
+                )
+            },
+        ),
+        ("Other Information", {"fields": ("message", "confirmation_code", "paid")}),
+    )
+
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "type_of_transport",
     )
 
     ordering = ("date_posted",)
@@ -616,14 +665,22 @@ class StayAdmin(NestedModelAdmin):
                 "fields": (
                     "car_transfer_price",
                     "car_transfer_text_location",
-                    # "car_transfer_end_location",
                     "bus_transfer_price",
                     "bus_transfer_text_location",
-                    # "bus_transfer_end_location",
                 )
             },
         ),
-        ("Event", {"fields": ("is_an_event", "distance_from_venue")}),
+        (
+            "Event",
+            {
+                "fields": (
+                    "is_an_event",
+                    "distance_from_venue",
+                    "has_min_date",
+                    "date_starts_from_ninth",
+                )
+            },
+        ),
     )
 
     search_fields = (
@@ -639,6 +696,7 @@ class StayAdmin(NestedModelAdmin):
 
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(EventTransport, EventTransportAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)
 admin.site.register(Cart)

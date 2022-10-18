@@ -23,8 +23,13 @@ from recommended_trip.views import export
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+<<<<<<< HEAD
     path("export-trips/", export),
+=======
+    # path("export-trips/", export),
+>>>>>>> email_implementation
     path("api-auth/", include("rest_framework.urls")),
+    path("tinymce/", include("tinymce.urls")),
     path("api/v1/", include("user.api.urls")),
     path("api/v1/", include("trip.api.urls")),
     path("api/v1/", include("lodging.api.urls")),
@@ -32,6 +37,7 @@ urlpatterns = [
     path("api/v1/", include("transport.api.urls")),
     path("api/v1/", include("recommended_trip.api.urls")),
     path("api/v1/", include("curated_trip.api.urls")),
+    path("api/v1/", include("blog.api.urls")),
     re_path(
         r"^account-confirm-email/(?P<key>[-:\w]+)/$",
         VerifyEmailView.as_view(),

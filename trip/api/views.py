@@ -8,33 +8,68 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from anymail.message import EmailMessage
 
 
 class BookedTripListAPIView(generics.ListAPIView):
     serializer_class = BookedTripSerializer
-    permission_classes = (IsAuthenticated,)
     pagination_class = None
 
     def get_queryset(self):
-        booked_trips = BookedTrip.objects.filter(user=self.request.user)
+        booked_trips = BookedTrip.objects.all()
         return booked_trips
 
 
 class BookedTripCreateAPIView(generics.CreateAPIView):
     queryset = BookedTrip.objects.all()
     serializer_class = BookedTripSerializer
-    permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
         trip_slug = self.kwargs.get("trip_slug")
         trip = generics.get_object_or_404(SingleTrip, slug=trip_slug)
-        serializer.save(user=self.request.user, trip=trip)
+        serializer.save(trip=trip)
+
+        # message sent to the user
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4208873"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+                "booking_type": "a curated trip",
+                "name": trip.name,
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+            "booking_type": "a curated trip",
+            "name": trip.name,
+        }
+        order_message.send(fail_silently=True)
 
 
 class BookedTripDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookedTripSerializer
-    permission_classes = (IsAuthenticated,)
-
     lookup_field = "slug"
 
     def get_queryset(self):
