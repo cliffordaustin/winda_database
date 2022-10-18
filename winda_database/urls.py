@@ -23,11 +23,6 @@ from recommended_trip.views import export
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-<<<<<<< HEAD
-    path("export-trips/", export),
-=======
-    # path("export-trips/", export),
->>>>>>> email_implementation
     path("api-auth/", include("rest_framework.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("api/v1/", include("user.api.urls")),
