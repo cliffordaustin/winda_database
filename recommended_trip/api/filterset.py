@@ -14,6 +14,7 @@ class RecommendedTripFilter(filters.FilterSet):
         field_name="area_covered", lookup_expr="icontains"
     )
     old_price = filters.NumberFilter(method="deals")
+    has_holiday_package = filters.BooleanFilter(field_name="has_holiday_package")
 
     def deals(self, queryset, name, value):
         if value:

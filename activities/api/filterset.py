@@ -9,14 +9,18 @@ class CharInFilter(filters.BaseInFilter, filters.CharFilter):
     pass
 
 
+def in_tags(queryset, name, value):
+    if not value:
+        return queryset
+    return queryset.filter(tags__iexact=value)
+
+
 class ActivitiesFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="gte")
     max_price = filters.NumberFilter(field_name="price_non_resident", lookup_expr="lte")
     min_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="gte")
     max_capacity = filters.NumberFilter(field_name="capacity", lookup_expr="lte")
-    type_of_activities = CharInFilter(
-        field_name="type_of_activities", lookup_expr="overlap"
-    )
+    tags = filters.CharFilter(lookup_expr="icontains")
 
     class Meta:
         model = Activities
