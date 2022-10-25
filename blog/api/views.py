@@ -8,11 +8,11 @@ class BlogDetailView(generics.RetrieveAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        queryset = Blog.objects.all()
+        queryset = Blog.objects.filter(is_active=True)
         slug = self.kwargs.get("slug")
 
         if slug is not None:
-            queryset = Blog.objects.filter(slug=slug)
+            queryset = Blog.objects.filter(slug=slug, is_active=True)
         return queryset
 
 
@@ -20,4 +20,4 @@ class BlogListView(generics.ListAPIView):
     serializer_class = BlogSerializer
 
     def get_queryset(self):
-        return Blog.objects.all()
+        return Blog.objects.filter(is_active=True)
