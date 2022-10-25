@@ -1,51 +1,76 @@
 from django.contrib import admin
 from .models import *
 
+from nested_inline.admin import (
+    NestedStackedInline,
+    NestedModelAdmin,
+    NestedTabularInline,
+)
+
 
 # Curated trip admin
 
 
-class CuratedTripImageInline(admin.TabularInline):
+class CuratedTripImageInline(NestedTabularInline):
     model = CuratedTripImage
     extra = 1
 
 
-class ItineraryInline(admin.TabularInline):
-    model = Itinerary
+class SimilarTripsInline(NestedTabularInline):
+    model = SimilarTrips.curated_trip.through
     extra = 1
 
 
-class FrequentlyAskedQuestionInline(admin.TabularInline):
-    model = FrequentlyAskedQuestion
+class CuratedTripLocationsInline(NestedStackedInline):
+    model = CuratedTripLocations
     extra = 1
 
 
-class StayTripInline(admin.TabularInline):
+class ItineraryAccommodationInline(NestedStackedInline):
+    model = ItineraryAccommodation
     raw_id_fields = ("stay",)
-    model = StayTrip
     extra = 1
 
 
-class ActivityTripInline(admin.TabularInline):
+class IncludedItineraryActivityInline(NestedStackedInline):
+    model = IncludedItineraryActivity
     raw_id_fields = ("activity",)
-    model = ActivityTrip
     extra = 1
 
 
-class TransportTripInline(admin.TabularInline):
-    raw_id_fields = ("transport",)
-    model = TransportationTrip
+class OptionalItineraryActivityInline(NestedStackedInline):
+    model = OptionalItineraryActivity
     extra = 1
 
 
-class CuratedTripAdmin(admin.ModelAdmin):
+class ItineraryTransportInline(NestedStackedInline):
+    model = ItineraryTransport
+    extra = 1
+
+
+class ItineraryLocationInline(NestedStackedInline):
+    model = ItineraryLocation
+    extra = 1
+
+
+class ItineraryInline(NestedStackedInline):
+    model = Itinerary
+    inlines = [
+        ItineraryLocationInline,
+        ItineraryTransportInline,
+        IncludedItineraryActivityInline,
+        OptionalItineraryActivityInline,
+        ItineraryAccommodationInline,
+    ]
+    extra = 1
+
+
+class CuratedTripAdmin(NestedModelAdmin):
     inlines = (
+        CuratedTripLocationsInline,
         CuratedTripImageInline,
         ItineraryInline,
-        FrequentlyAskedQuestionInline,
-        StayTripInline,
-        ActivityTripInline,
-        TransportTripInline,
+        SimilarTripsInline,
     )
     raw_id_fields = ("user",)
 
@@ -53,12 +78,21 @@ class CuratedTripAdmin(admin.ModelAdmin):
         "user",
         "name",
         "total_number_of_days",
+        "number_of_countries",
+        "max_number_of_people",
         "created_at",
         "updated_at",
         "is_active",
     )
 
-    list_filter = ("created_at", "updated_at")
+    list_filter = (
+        "is_active",
+        "total_number_of_days",
+        "number_of_countries",
+        "max_number_of_people",
+        "created_at",
+        "updated_at",
+    )
 
     fieldsets = (
         (
@@ -67,73 +101,66 @@ class CuratedTripAdmin(admin.ModelAdmin):
                 "fields": (
                     "user",
                     "name",
-                    "area_covered",
                     "total_number_of_days",
+                    "number_of_countries",
+                    "max_number_of_people",
+                    "trip_is_carbon_neutral",
                     "essential_information",
                     "description",
+                )
+            },
+        ),
+        (
+            "Prices",
+            {
+                "fields": (
+                    "old_price",
+                    "price",
+                    "price_non_resident",
                     "pricing_type",
                 )
             },
         ),
         (
-            "Tags",
+            "Categories",
             {
                 "fields": (
-                    "honeymoon",
-                    "cultural",
                     "weekend_getaway",
                     "road_trip",
-                    "hiking",
-                    "beach",
-                    "beachfront",
-                    "all_female_owned",
+                    "day_game_drives",
+                    "cultural",
+                    "romantic",
                     "culinary",
-                    "solo_experience",
-                    "shopping",
+                    "day_trips",
                     "community_owned",
-                    "natural_and_wildlife",
-                    "group_getaway",
-                    "riverside",
-                    "day_trip",
                     "off_grid",
-                    "beautiful_views",
-                    "quirky",
-                    "conservancies",
+                    "solo_getaway",
                     "wellness",
-                    "active_adventure",
-                    "farmstay",
-                    "cycling",
-                    "game",
-                    "romantic_getaway",
-                    "active",
-                    "lake",
-                    "walking",
+                    "unconventional_safaris",
+                    "walking_hiking",
+                    "shopping",
+                    "art",
+                    "watersports",
+                    "sailing",
+                    "night_game_drives",
+                    "sustainable",
+                    "all_female",
                     "family",
-                    "couples",
-                    "friends",
-                    "caves",
-                    "surfing",
-                    "tropical",
-                    "camping",
-                    "mountain",
-                    "cabin",
-                    "desert",
-                    "treehouse",
-                    "boat",
-                    "creative_space",
+                    "groups",
+                    "luxury",
+                    "budget",
+                    "mid_range",
+                    "beach",
+                    "short_getaways",
+                    "cross_country",
+                    "lake",
+                    "park_conservancies",
                 )
             },
         ),
         (
             "Others",
-            {
-                "fields": (
-                    "is_active",
-                    "starting_location",
-                    "stop_at",
-                    "ending_location",
-                )
-            },
+            {"fields": ("is_active",)},
         ),
     )
 
@@ -142,11 +169,6 @@ class CuratedTripAdmin(admin.ModelAdmin):
         "user__email",
         "user__first_name",
         "user__last_name",
-        "stay_trip__stay__name",
-        "stay_trip__stay__property_name",
-        "activity_trip__activity__name",
-        "transport_trip__transport__vehicle_make",
-        "transport_trip__transport__type_of_car",
     )
 
     ordering = (
@@ -156,107 +178,3 @@ class CuratedTripAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CuratedTrip, CuratedTripAdmin)
-
-
-# User trip admin
-class UserStayTripInline(admin.TabularInline):
-    raw_id_fields = ("stay",)
-    model = UserStayTrip
-    extra = 1
-
-
-class UserActivityTripInline(admin.TabularInline):
-    raw_id_fields = ("activity",)
-    model = UserActivityTrip
-    extra = 1
-
-
-class UserTransportTripInline(admin.TabularInline):
-    raw_id_fields = ("transport",)
-    model = UserTransportTrip
-    extra = 1
-
-
-class UserTripAdmin(admin.ModelAdmin):
-    inlines = (
-        UserStayTripInline,
-        UserActivityTripInline,
-        UserTransportTripInline,
-    )
-    raw_id_fields = ("user", "trips")
-
-    list_display = ("user", "name", "created_at", "updated_at")
-
-    list_filter = ("created_at", "updated_at")
-
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "user",
-                    "trips",
-                    "name",
-                )
-            },
-        ),
-    )
-
-    search_fields = (
-        "name",
-        "user__email",
-        "user__first_name",
-        "user__last_name",
-        "user_stay_trip__stay__name",
-        "user_stay_trip__stay__property_name",
-        "user_activity_trip__activity__name",
-        "user_transport_trip__transport__vehicle_make",
-        "user_transport_trip__transport__type_of_car",
-    )
-
-    ordering = (
-        "created_at",
-        "updated_at",
-    )
-
-
-class UserTripsAdmin(admin.ModelAdmin):
-    raw_id_fields = ("user",)
-
-    list_display = ("user", "name", "created_at", "updated_at", "paid")
-
-    list_filter = ("created_at", "updated_at")
-
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "user",
-                    "name",
-                    "paid",
-                )
-            },
-        ),
-    )
-
-    search_fields = (
-        "name",
-        "user__email",
-        "user__first_name",
-        "user__last_name",
-        "trip__user_stay_trip__stay__name",
-        "trip__user_stay_trip__stay__property_name",
-        "trip__user_activity_trip__activity__name",
-        "trip__user_transport_trip__transport__vehicle_make",
-        "trip__user_transport_trip__transport__type_of_car",
-    )
-
-    ordering = (
-        "created_at",
-        "updated_at",
-    )
-
-
-admin.site.register(UserTrips, UserTripsAdmin)
-admin.site.register(UserTrip, UserTripAdmin)

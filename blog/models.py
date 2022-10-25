@@ -35,6 +35,7 @@ class Blog(models.Model):
     category = models.CharField(
         max_length=250, blank=True, null=True, choices=CATEGORIES
     )
+    header_image_src = models.URLField(blank=True, null=True)
     estimated_minute_read = models.IntegerField(
         default=5, help_text="Estimated time to read in minutes"
     )
