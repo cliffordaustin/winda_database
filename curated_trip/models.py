@@ -112,15 +112,15 @@ class CuratedTrip(models.Model):
         ordering = ["-created_at"]
 
 
-class SimilarTrips(models.Model):
-    curated_trip = models.ManyToManyField(CuratedTrip, related_name="similar_trips")
+# class SimilarTrips(models.Model):
+#     curated_trip = models.ManyToManyField(CuratedTrip, related_name="similar_trips")
 
-    def __str__(self):
-        return f"{self.curated_trip}"
+#     def __str__(self):
+#         return f"{self.curated_trip}"
 
-    class Meta:
-        verbose_name = "Similar Trip"
-        verbose_name_plural = "Similar Trips"
+#     class Meta:
+#         verbose_name = "Similar Trip"
+#         verbose_name_plural = "Similar Trips"
 
 
 class CuratedTripLocations(models.Model):

@@ -63,10 +63,10 @@ class FrequentlyAskedQuestionSerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
-class SimilarTripsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SimilarTrips
-        fields = "__all__"
+# class SimilarTripsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SimilarTrips
+#         fields = "__all__"
 
 
 class CuratedTripLocationsSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class CuratedTripSerializer(serializers.ModelSerializer):
     curated_trip_images = CuratedTripImageSerializer(many=True)
     locations = CuratedTripLocationsSerializer(many=True)
     itineraries = ItinerarySerializer(many=True, read_only=True)
-    similar_trips = SimilarTripsSerializer(many=True, read_only=True)
+    # similar_trips = SimilarTripsSerializer(many=True, read_only=True)
     faqs = FrequentlyAskedQuestionSerializer(many=True, read_only=True)
 
     class Meta:

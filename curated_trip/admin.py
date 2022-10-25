@@ -16,9 +16,9 @@ class CuratedTripImageInline(NestedTabularInline):
     extra = 1
 
 
-class SimilarTripsInline(NestedTabularInline):
-    model = SimilarTrips.curated_trip.through
-    extra = 1
+# class SimilarTripsInline(NestedTabularInline):
+#     model = SimilarTrips.curated_trip.through
+#     extra = 1
 
 
 class CuratedTripLocationsInline(NestedStackedInline):
@@ -70,7 +70,7 @@ class CuratedTripAdmin(NestedModelAdmin):
         CuratedTripLocationsInline,
         CuratedTripImageInline,
         ItineraryInline,
-        SimilarTripsInline,
+        # SimilarTripsInline,
     )
     raw_id_fields = ("user",)
 
