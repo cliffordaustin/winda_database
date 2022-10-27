@@ -33,6 +33,7 @@ class TripListView(generics.ListCreateAPIView):
         "name",
         "created_at",
     ]
+    ordering = ["price_non_resident"]
 
     def get_queryset(self):
         queryset = SingleTrip.objects.filter(is_active=True)
@@ -57,6 +58,7 @@ class AllTripsListView(generics.ListAPIView):
         "name",
         "created_at",
     ]
+    ordering = ["price_non_resident"]
 
     def get_queryset(self):
         queryset = SingleTrip.objects.filter(is_active=True)

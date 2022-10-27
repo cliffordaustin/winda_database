@@ -111,6 +111,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "https://www.winda.guide",
+        "https://winda.guide",
+    ]
+
 
 ROOT_URLCONF = "winda_database.urls"
 
