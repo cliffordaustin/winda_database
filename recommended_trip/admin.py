@@ -68,7 +68,7 @@ class SingleTripAdmin(admin.ModelAdmin):
             else None
         )
 
-    list_filter = ("created_at", "updated_at")
+    list_filter = ("created_at", "updated_at", "is_active")
 
     fieldsets = (
         (
