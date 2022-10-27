@@ -170,6 +170,7 @@ class StayAdmin(NestedModelAdmin):
         "date_posted",
         "date_updated",
         "is_an_event",
+        "is_active",
         "bathrooms",
         "rooms",
         "capacity",

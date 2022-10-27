@@ -39,7 +39,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    list_filter = ("date_posted", "date_updated")
+    list_filter = ("date_posted", "date_updated", "is_active")
 
     fieldsets = (
         (
