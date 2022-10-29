@@ -63,7 +63,9 @@ class StaysListView(generics.ListAPIView):
     pagination_class = StayPagination
 
     def get_queryset(self):
-        queryset = Stays.objects.filter(is_active=True, is_an_event=False)
+        queryset = Stays.objects.filter(
+            is_active=True,
+        )
 
         querystring = self.request.GET.get("search")
         querystring_detail_search = self.request.GET.get("d_search")
@@ -75,7 +77,8 @@ class StaysListView(generics.ListAPIView):
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
             queryset = Stays.objects.filter(
-                query, is_active=True, is_an_event=False
+                query,
+                is_active=True,
             ).all()
 
         if querystring_detail_search:
@@ -90,7 +93,8 @@ class StaysListView(generics.ListAPIView):
                     | Q(country__icontains=word)
                 )
             queryset = Stays.objects.filter(
-                query, is_active=True, is_an_event=False
+                query,
+                is_active=True,
             ).all()
 
         return queryset
@@ -373,10 +377,11 @@ class EventCreateView(generics.CreateAPIView):
 
         serializer.save(stay=stay)
 
+        # message sent to the user
         message = EmailMessage(
             to=[self.request.data["email"]],
         )
-        message.template_id = "4208873"
+        message.template_id = "4282998"
         message.from_email = None
         message.merge_data = {
             self.request.data["email"]: {
@@ -389,6 +394,7 @@ class EventCreateView(generics.CreateAPIView):
         }
         message.send(fail_silently=True)
 
+        # message sent to the admin
         order_message = EmailMessage(
             to=[settings.DEFAULT_FROM_EMAIL],
         )
@@ -397,11 +403,15 @@ class EventCreateView(generics.CreateAPIView):
         order_message.merge_data = {
             self.request.data["email"]: {
                 "user_email": self.request.data["email"],
+                "booking_type": "an accommodation",
+                "name": stay.name,
             },
         }
 
         order_message.merge_global_data = {
             "user_email": self.request.data["email"],
+            "booking_type": "an accommodation",
+            "name": stay.name,
         }
 
         order_message.send(fail_silently=True)

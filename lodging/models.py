@@ -568,6 +568,7 @@ class Stays(models.Model):
     is_active = models.BooleanField(default=True)
 
     is_an_event = models.BooleanField(default=False)
+    has_holiday_package = models.BooleanField(default=False)
     has_min_date = models.BooleanField(default=False)
     date_starts_from_ninth = models.BooleanField(default=False)
 
