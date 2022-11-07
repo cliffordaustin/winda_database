@@ -59,7 +59,7 @@ class StayFilter(filters.FilterSet):
         #     "theme",
         # ]
 
-        exclude = ["tags"]
+        exclude = ["tags", "unavailable_dates"]
 
 
 class ReviewFilter(filters.FilterSet):

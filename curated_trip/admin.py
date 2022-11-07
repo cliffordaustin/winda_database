@@ -16,6 +16,27 @@ class CuratedTripImageInline(NestedTabularInline):
     extra = 1
 
 
+class PricePlanAInline(NestedTabularInline):
+    model = PricePlanA
+    extra = 1
+
+
+class PricePlanBInline(NestedTabularInline):
+    model = PricePlanB
+    extra = 1
+
+
+class PricePlanCInline(NestedTabularInline):
+    model = PricePlanC
+    extra = 1
+
+
+class DateAndPricingInline(NestedStackedInline):
+    model = DateAndPricing
+    inlines = [PricePlanAInline, PricePlanBInline, PricePlanCInline]
+    extra = 1
+
+
 # class SimilarTripsInline(NestedTabularInline):
 #     model = SimilarTrips.curated_trip.through
 #     extra = 1
@@ -70,6 +91,7 @@ class CuratedTripAdmin(NestedModelAdmin):
         CuratedTripLocationsInline,
         CuratedTripImageInline,
         ItineraryInline,
+        DateAndPricingInline,
         # SimilarTripsInline,
     )
     raw_id_fields = ("user",)
@@ -177,4 +199,34 @@ class CuratedTripAdmin(NestedModelAdmin):
     )
 
 
+class RequestInfoOnCustomTripAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "created_at",
+    )
+
+    list_filter = ("created_at", "updated_at")
+
+    fieldsets = (
+        (
+            None,
+            {"fields": ("first_name", "last_name", "email", "message", "trip")},
+        ),
+    )
+
+    search_fields = (
+        "first_name",
+        "last_name",
+        "email",
+    )
+
+    ordering = (
+        "created_at",
+        "updated_at",
+    )
+
+
 admin.site.register(CuratedTrip, CuratedTripAdmin)
+admin.site.register(RequestInfoOnCustomTrip, RequestInfoOnCustomTripAdmin)

@@ -67,7 +67,15 @@ class UserAdmin(BaseUserAdmin):
         ),
         (
             "Permissions",
-            {"fields": ("email_verified", "is_admin", "is_staff", "is_superuser")},
+            {
+                "fields": (
+                    "email_verified",
+                    "is_admin",
+                    "is_staff",
+                    "is_partner",
+                    "is_superuser",
+                )
+            },
         ),
     )
 

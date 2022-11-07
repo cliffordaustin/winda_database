@@ -599,6 +599,12 @@ class Stays(models.Model):
 
     description = models.TextField(blank=True, null=True)
     unique_about_place = models.TextField(blank=True, null=True)
+    unavailable_dates = ArrayField(
+        models.CharField(max_length=100),
+        blank=True,
+        null=True,
+        help_text="Select the dates you won't be available ' , '",
+    )
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
 

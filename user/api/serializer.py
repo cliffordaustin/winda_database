@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "profile_pic",
+            "is_partner",
             "avatar_url",
             "instagram_username",
             "tiktok_username",

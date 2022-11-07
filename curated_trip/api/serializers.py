@@ -11,6 +11,24 @@ class CuratedTripImageSerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
+class PricePlanASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PricePlanA
+        exclude = ["date_and_pricing"]
+
+
+class PricePlanBSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PricePlanB
+        exclude = ["date_and_pricing"]
+
+
+class PricePlanCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PricePlanC
+        exclude = ["date_and_pricing"]
+
+
 class ItineraryLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItineraryLocation
@@ -21,6 +39,12 @@ class ItineraryTransportSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItineraryTransport
         exclude = ["itinerary"]
+
+
+class RequestInfoOnCustomTripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequestInfoOnCustomTrip
+        fields = "__all__"
 
 
 class IncludedItineraryActivitySerializer(serializers.ModelSerializer):
@@ -57,6 +81,16 @@ class ItinerarySerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
+class DateAndPricingSerializer(serializers.ModelSerializer):
+    plan_a_price = PricePlanASerializer()
+    plan_b_price = PricePlanBSerializer()
+    plan_c_price = PricePlanCSerializer()
+
+    class Meta:
+        model = DateAndPricing
+        exclude = ["trip"]
+
+
 class FrequentlyAskedQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FrequentlyAskedQuestion
@@ -86,6 +120,7 @@ class CuratedTripSerializer(serializers.ModelSerializer):
     curated_trip_images = CuratedTripImageSerializer(many=True)
     locations = CuratedTripLocationsSerializer(many=True)
     itineraries = ItinerarySerializer(many=True, read_only=True)
+    date_and_pricing = DateAndPricingSerializer(many=True)
     # similar_trips = SimilarTripsSerializer(many=True, read_only=True)
     faqs = FrequentlyAskedQuestionSerializer(many=True, read_only=True)
 

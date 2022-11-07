@@ -100,6 +100,30 @@ class StaysListView(generics.ListAPIView):
         return queryset
 
 
+class UserStays(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Stays.objects.filter(user=self.request.user)
+
+
+class UserStayDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = StaysSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = Stays.objects.filter(
+            user=self.request.user,
+        )
+        slug = self.kwargs.get("slug")
+
+        if slug is not None:
+            queryset = Stays.objects.filter(slug=slug, user=self.request.user)
+        return queryset
+
+
 class EventListView(generics.ListAPIView):
     serializer_class = StaysSerializer
     filterset_class = StayFilter
