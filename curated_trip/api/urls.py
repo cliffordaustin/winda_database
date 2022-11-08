@@ -14,14 +14,4 @@ urlpatterns = [
         RequestInfoOnCustomTripListCreatView.as_view(),
         name="request-info",
     ),
-    path(
-        "curated-trips/<slug:slug>/date-pricing/",
-        DateAndPricingListView.as_view(),
-        name="date-pricing",
-    ),
-    path(
-        "curated-trips/<slug:slug>/date-pricing/<slug:date_pricing_slug>/",
-        DateAndPricingDetailView.as_view(),
-        name="date-pricing-detail",
-    ),
 ]

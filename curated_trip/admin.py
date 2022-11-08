@@ -31,12 +31,6 @@ class PricePlanCInline(NestedTabularInline):
     extra = 1
 
 
-class DateAndPricingInline(NestedStackedInline):
-    model = DateAndPricing
-    inlines = [PricePlanAInline, PricePlanBInline, PricePlanCInline]
-    extra = 1
-
-
 # class SimilarTripsInline(NestedTabularInline):
 #     model = SimilarTrips.curated_trip.through
 #     extra = 1
@@ -91,7 +85,9 @@ class CuratedTripAdmin(NestedModelAdmin):
         CuratedTripLocationsInline,
         CuratedTripImageInline,
         ItineraryInline,
-        DateAndPricingInline,
+        PricePlanAInline,
+        PricePlanBInline,
+        PricePlanCInline,
         # SimilarTripsInline,
     )
     raw_id_fields = ("user",)
@@ -129,16 +125,6 @@ class CuratedTripAdmin(NestedModelAdmin):
                     "trip_is_carbon_neutral",
                     "essential_information",
                     "description",
-                )
-            },
-        ),
-        (
-            "Prices",
-            {
-                "fields": (
-                    "old_price",
-                    "price",
-                    "price_non_resident",
                     "pricing_type",
                 )
             },

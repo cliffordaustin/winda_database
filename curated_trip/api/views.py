@@ -60,27 +60,3 @@ class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):
         custom_trip = CuratedTrip.objects.get(slug=trip_slug)
 
         serializer.save(custom_trip=custom_trip)
-
-
-class DateAndPricingListView(generics.ListAPIView):
-    serializer_class = DateAndPricingSerializer
-
-    def get_queryset(self):
-        trip_slug = self.kwargs.get("slug")
-        custom_trip = CuratedTrip.objects.get(slug=trip_slug)
-        queryset = DateAndPricing.objects.filter(trip=custom_trip)
-        return queryset
-
-
-class DateAndPricingDetailView(generics.RetrieveAPIView):
-    serializer_class = DateAndPricingSerializer
-
-    def get_object(self):
-        trip_slug = self.kwargs.get("slug")
-        date_pricing_slug = self.kwargs.get("date_pricing_slug")
-        date_pricing = generics.get_object_or_404(
-            DateAndPricing,
-            slug=date_pricing_slug,
-            trip__slug=trip_slug,
-        )
-        return date_pricing

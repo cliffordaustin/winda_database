@@ -14,19 +14,19 @@ class CuratedTripImageSerializer(serializers.ModelSerializer):
 class PricePlanASerializer(serializers.ModelSerializer):
     class Meta:
         model = PricePlanA
-        exclude = ["date_and_pricing"]
+        exclude = ["trip"]
 
 
 class PricePlanBSerializer(serializers.ModelSerializer):
     class Meta:
         model = PricePlanB
-        exclude = ["date_and_pricing"]
+        exclude = ["trip"]
 
 
 class PricePlanCSerializer(serializers.ModelSerializer):
     class Meta:
         model = PricePlanC
-        exclude = ["date_and_pricing"]
+        exclude = ["trip"]
 
 
 class ItineraryLocationSerializer(serializers.ModelSerializer):
@@ -81,16 +81,6 @@ class ItinerarySerializer(serializers.ModelSerializer):
         exclude = ["trip"]
 
 
-class DateAndPricingSerializer(serializers.ModelSerializer):
-    plan_a_price = PricePlanASerializer()
-    plan_b_price = PricePlanBSerializer()
-    plan_c_price = PricePlanCSerializer()
-
-    class Meta:
-        model = DateAndPricing
-        exclude = ["trip"]
-
-
 class FrequentlyAskedQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FrequentlyAskedQuestion
@@ -120,7 +110,9 @@ class CuratedTripSerializer(serializers.ModelSerializer):
     curated_trip_images = CuratedTripImageSerializer(many=True)
     locations = CuratedTripLocationsSerializer(many=True)
     itineraries = ItinerarySerializer(many=True, read_only=True)
-    date_and_pricing = DateAndPricingSerializer(many=True)
+    plan_a_price = PricePlanASerializer()
+    plan_b_price = PricePlanBSerializer()
+    plan_c_price = PricePlanCSerializer()
     # similar_trips = SimilarTripsSerializer(many=True, read_only=True)
     faqs = FrequentlyAskedQuestionSerializer(many=True, read_only=True)
 

@@ -96,11 +96,6 @@ class CuratedTrip(models.Model):
         max_length=100, choices=PRICING_TYPE, default="REASONABLE"
     )
     is_active = models.BooleanField(default=True)
-    old_price = models.FloatField(
-        blank=True, null=True, help_text="add the previous price(old price)"
-    )
-    price = models.FloatField(blank=True, null=True)
-    price_non_resident = models.FloatField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -162,24 +157,28 @@ class CuratedTripLocations(models.Model):
         verbose_name_plural = "Curated Trip Locations"
 
 
-class DateAndPricing(models.Model):
-    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
-    trip = models.ForeignKey(
-        CuratedTrip, on_delete=models.CASCADE, related_name="date_and_pricing"
-    )
-    starting_date = models.DateField(
-        blank=True,
-        null=True,
-    )
-    is_not_available = models.BooleanField(default=False)
+# class DateAndPricing(models.Model):
+#     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+#     trip = models.ForeignKey(
+#         CuratedTrip, on_delete=models.CASCADE, related_name="date_and_pricing"
+#     )
+#     starting_date = models.DateField(
+#         blank=True,
+#         null=True,
+#     )
+#     is_not_available = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.trip} - {self.starting_date}"
+#     def __str__(self):
+#         return f"{self.trip} - {self.starting_date}"
 
 
 class PricePlanA(models.Model):
-    date_and_pricing = models.OneToOneField(
-        DateAndPricing, on_delete=models.CASCADE, related_name="plan_a_price"
+    trip = models.OneToOneField(
+        CuratedTrip,
+        on_delete=models.CASCADE,
+        related_name="plan_a_price",
+        null=True,
+        blank=True,
     )
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
@@ -196,8 +195,12 @@ class PricePlanA(models.Model):
 
 
 class PricePlanB(models.Model):
-    date_and_pricing = models.OneToOneField(
-        DateAndPricing, on_delete=models.CASCADE, related_name="plan_b_price"
+    trip = models.OneToOneField(
+        CuratedTrip,
+        on_delete=models.CASCADE,
+        related_name="plan_b_price",
+        null=True,
+        blank=True,
     )
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
@@ -214,8 +217,12 @@ class PricePlanB(models.Model):
 
 
 class PricePlanC(models.Model):
-    date_and_pricing = models.OneToOneField(
-        DateAndPricing, on_delete=models.CASCADE, related_name="plan_c_price"
+    trip = models.OneToOneField(
+        CuratedTrip,
+        on_delete=models.CASCADE,
+        related_name="plan_c_price",
+        null=True,
+        blank=True,
     )
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
