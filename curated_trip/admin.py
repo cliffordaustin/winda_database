@@ -214,5 +214,66 @@ class RequestInfoOnCustomTripAdmin(admin.ModelAdmin):
     )
 
 
+class BookedTripAdmin(admin.ModelAdmin):
+    raw_id_fields = ("trip",)
+    search_fields = ("trip__name",)
+    ordering = ("updated_at",)
+    list_display = (
+        "trip_name",
+        "starting_date",
+        "adults",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "created_at",
+        "paid",
+        "booking_request",
+    )
+
+    def trip_name(self, obj):
+        return obj.trip.name if obj.trip else None
+
+    list_filter = ("booking_request", "paid")
+
+    fieldsets = (
+        (
+            "Booking Details",
+            {
+                "fields": (
+                    "trip",
+                    "starting_date",
+                    "adults",
+                    "message",
+                )
+            },
+        ),
+        (
+            "Personal Details",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "phone",
+                )
+            },
+        ),
+        (
+            "Status",
+            {
+                "fields": (
+                    "booking_request",
+                    "cancelled",
+                    "paid",
+                )
+            },
+        ),
+    )
+
+    ordering = ("created_at",)
+
+
 admin.site.register(CuratedTrip, CuratedTripAdmin)
+admin.site.register(BookedTrip, BookedTripAdmin)
 admin.site.register(RequestInfoOnCustomTrip, RequestInfoOnCustomTripAdmin)

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from anymail.message import EmailMessage
+from django.conf import settings
 
 
 class BookedTripListAPIView(generics.ListAPIView):
@@ -30,10 +31,14 @@ class BookedTripCreateAPIView(generics.CreateAPIView):
         serializer.save(trip=trip)
 
         # message sent to the user
+        booking_request = self.request.data["booking_request"]
         message = EmailMessage(
             to=[self.request.data["email"]],
         )
-        message.template_id = "4208873"
+        if booking_request:
+            message.template_id = "4342930"
+        else:
+            message.template_id = "4208873"
         message.from_email = None
         message.merge_data = {
             self.request.data["email"]: {

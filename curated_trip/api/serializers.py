@@ -119,3 +119,11 @@ class CuratedTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = CuratedTrip
         fields = "__all__"
+
+
+class BookedTripSerializer(serializers.ModelSerializer):
+    trip = CuratedTripSerializer(read_only=True)
+
+    class Meta:
+        model = BookedTrip
+        fields = "__all__"

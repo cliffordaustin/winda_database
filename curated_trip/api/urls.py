@@ -14,4 +14,9 @@ urlpatterns = [
         RequestInfoOnCustomTripListCreatView.as_view(),
         name="request-info",
     ),
+    path(
+        "curated-trips/<trip_slug>/create-booked-trip/",
+        BookedTripCreateAPIView.as_view(),
+        name="booked-curated-trip-create",
+    ),
 ]

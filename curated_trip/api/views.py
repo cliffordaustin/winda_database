@@ -1,4 +1,5 @@
 from rest_framework import generics
+from django.conf import settings
 
 from curated_trip.api.filterset import RecommendedTripFilter
 from .serializers import *
@@ -11,6 +12,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from anymail.message import EmailMessage
 
 # curated trip views
 class CuratedTripDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -49,6 +51,59 @@ class CuratedTripListView(generics.ListCreateAPIView):
             queryset = CuratedTrip.objects.filter(query).filter(is_active=True)
 
         return queryset
+
+
+class BookedTripCreateAPIView(generics.CreateAPIView):
+    queryset = BookedTrip.objects.all()
+    serializer_class = BookedTripSerializer
+
+    def perform_create(self, serializer):
+        trip_slug = self.kwargs.get("trip_slug")
+        trip = generics.get_object_or_404(CuratedTrip, slug=trip_slug)
+        serializer.save(trip=trip)
+
+        # message sent to the user
+        booking_request = self.request.data["booking_request"]
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        if booking_request:
+            message.template_id = "4342930"
+        else:
+            message.template_id = "4208873"
+
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+                "booking_type": "a curated trip",
+                "name": trip.name,
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+            "booking_type": "a curated trip",
+            "name": trip.name,
+        }
+        order_message.send(fail_silently=True)
 
 
 class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):

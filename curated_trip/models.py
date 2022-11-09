@@ -8,6 +8,7 @@ from activities.models import Activities
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.contrib.postgres.fields import ArrayField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from django.conf import settings
 from django.utils import timezone
@@ -105,6 +106,35 @@ class CuratedTrip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class BookedTrip(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    trip = models.ForeignKey(
+        CuratedTrip, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+
+    starting_date = models.DateField(default=timezone.now)
+    adults = models.IntegerField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    paid = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
+    booking_request = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Booked Trip"
+        verbose_name_plural = "Booked Trips"
+
+    def __str__(self):
+        return "{}".format(self.trip)
 
 
 # class SimilarTrips(models.Model):
