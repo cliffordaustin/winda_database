@@ -150,6 +150,24 @@ class RequestInfo(models.Model):
         return f"Created { self.first_name } {self.last_name}"
 
 
+class AvailableDates(models.Model):
+    trip = models.ForeignKey(
+        SingleTrip, on_delete=models.CASCADE, related_name="available_dates"
+    )
+    starting_date = models.DateField(blank=True, null=True)
+    ending_date = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Created available dates for { self.trip.name }"
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Available date"
+        verbose_name_plural = "Available dates"
+
+
 class TripHighlight(models.Model):
     trip = models.ForeignKey(
         SingleTrip, on_delete=models.CASCADE, related_name="trip_highlights"

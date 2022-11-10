@@ -27,11 +27,17 @@ class FrequentlyAskedQuestionInline(admin.TabularInline):
     extra = 1
 
 
+class AvailableDatesInline(admin.TabularInline):
+    model = AvailableDates
+    extra = 1
+
+
 class SingleTripAdmin(admin.ModelAdmin):
     inlines = (
         SingleTripImageInline,
         TripHighlightInline,
         ItineraryInline,
+        AvailableDatesInline,
         FrequentlyAskedQuestionInline,
     )
     raw_id_fields = (

@@ -51,6 +51,12 @@ class RequestInfoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AvailableDatesInlineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailableDates
+        exclude = ["trip"]
+
+
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)
@@ -61,6 +67,7 @@ class TripSerializer(serializers.ModelSerializer):
     single_trip_images = SingleTripImageSerializer(many=True, read_only=True)
     trip_highlights = TripHighlightSerializer(many=True, read_only=True)
     itineraries = ItinerarySerializer(many=True, read_only=True)
+    available_dates = AvailableDatesInlineSerializer(many=True, read_only=True)
     faqs = FrequentlyAskedQuestionSerializer(many=True, read_only=True)
     months = RecommendedMonthsSerializer(many=True, read_only=True)
 
