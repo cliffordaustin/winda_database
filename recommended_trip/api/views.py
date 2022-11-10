@@ -45,7 +45,10 @@ class TripListView(generics.ListCreateAPIView):
             query = Q()  # empty Q object
             for word in words:
                 query |= Q(area_covered__icontains=word)
-            queryset = SingleTrip.objects.filter(query).filter(is_active=True)
+            queryset = SingleTrip.objects.filter(
+                query,
+                is_active=True,
+            ).all()
 
         return queryset
 
