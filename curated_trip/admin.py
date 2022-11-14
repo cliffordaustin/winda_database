@@ -282,6 +282,7 @@ class TripWizardAdmin(admin.ModelAdmin):
         "last_name",
         "number_of_people",
         "location",
+        "tags",
         "month",
         "year",
     )
