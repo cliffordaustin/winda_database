@@ -19,4 +19,7 @@ urlpatterns = [
         BookedTripCreateAPIView.as_view(),
         name="booked-curated-trip-create",
     ),
+    path(
+        "create-trip-wizard/", TripWizardCreateView.as_view(), name="create-trip-wizard"
+    ),
 ]

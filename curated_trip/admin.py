@@ -228,13 +228,14 @@ class BookedTripAdmin(admin.ModelAdmin):
         "phone",
         "created_at",
         "paid",
+        "plan",
         "booking_request",
     )
 
     def trip_name(self, obj):
         return obj.trip.name if obj.trip else None
 
-    list_filter = ("booking_request", "paid")
+    list_filter = ("booking_request", "plan", "paid")
 
     fieldsets = (
         (
@@ -245,6 +246,7 @@ class BookedTripAdmin(admin.ModelAdmin):
                     "starting_date",
                     "adults",
                     "message",
+                    "plan",
                 )
             },
         ),
@@ -274,6 +276,48 @@ class BookedTripAdmin(admin.ModelAdmin):
     ordering = ("created_at",)
 
 
+class TripWizardAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "number_of_people",
+        "location",
+        "month",
+        "year",
+    )
+    ordering = ("number_of_people",)
+    search_fields = ("first_name", "last_name", "location", "month", "year")
+
+    fieldsets = (
+        (
+            "Personal Info",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "phone",
+                    "number_of_people",
+                )
+            },
+        ),
+        (
+            "Trip Info",
+            {
+                "fields": (
+                    "location",
+                    "month",
+                    "year",
+                    "tags",
+                )
+            },
+        ),
+    )
+
+    ordering = ("created_at",)
+
+
 admin.site.register(CuratedTrip, CuratedTripAdmin)
 admin.site.register(BookedTrip, BookedTripAdmin)
 admin.site.register(RequestInfoOnCustomTrip, RequestInfoOnCustomTripAdmin)
+admin.site.register(TripWizard, TripWizardAdmin)

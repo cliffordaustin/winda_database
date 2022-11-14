@@ -46,6 +46,8 @@ TRANSPORT_TYPE = (
     ("FLIGHT", "FLIGHT"),
 )
 
+PLANS = (("PLAN A", "PLAN A"), ("PLAN B", "PLAN B"), ("PLAN C", "PLAN C"))
+
 
 class CuratedTrip(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
@@ -119,6 +121,7 @@ class BookedTrip(models.Model):
     phone = PhoneNumberField(blank=True, null=True)
 
     starting_date = models.DateField(default=timezone.now)
+    plan = models.CharField(max_length=100, choices=PLANS, default="PLAN A")
     adults = models.IntegerField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
     paid = models.BooleanField(default=False)
@@ -399,3 +402,20 @@ class CuratedTripImage(models.Model):
 
     def __str__(self):
         return f"Created by ${self.trip.user}"
+
+
+class TripWizard(models.Model):
+    location = models.CharField(max_length=250, blank=True, null=True)
+    month = models.CharField(max_length=100, blank=True, null=True)
+    year = models.CharField(max_length=100, blank=True, null=True)
+    tags = ArrayField(models.CharField(max_length=100), blank=True, null=True)
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    email = models.EmailField(max_length=250, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    number_of_people = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

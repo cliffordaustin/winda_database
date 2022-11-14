@@ -127,3 +127,9 @@ class BookedTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookedTrip
         fields = "__all__"
+
+
+class TripWizardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripWizard
+        fields = "__all__"

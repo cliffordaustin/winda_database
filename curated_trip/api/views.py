@@ -115,3 +115,43 @@ class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):
         custom_trip = CuratedTrip.objects.get(slug=trip_slug)
 
         serializer.save(custom_trip=custom_trip)
+
+
+class TripWizardCreateView(generics.CreateAPIView):
+    serializer_class = TripWizardSerializer
+    queryset = TripWizard.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+        # message sent to the user
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4353127"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4353135"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+            },
+        }
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+        }
+        order_message.send(fail_silently=True)
