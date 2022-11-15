@@ -406,6 +406,7 @@ class CuratedTripImage(models.Model):
 
 class TripWizard(models.Model):
     location = models.CharField(max_length=250, blank=True, null=True)
+    locations = ArrayField(models.CharField(max_length=250), blank=True, null=True)
     month = models.CharField(max_length=100, blank=True, null=True)
     year = models.CharField(max_length=100, blank=True, null=True)
     tags = ArrayField(models.CharField(max_length=100), blank=True, null=True)

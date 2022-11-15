@@ -282,12 +282,13 @@ class TripWizardAdmin(admin.ModelAdmin):
         "last_name",
         "number_of_people",
         "location",
+        "locations",
         "tags",
         "month",
         "year",
     )
     ordering = ("number_of_people",)
-    search_fields = ("first_name", "last_name", "location", "month", "year")
+    search_fields = ("first_name", "last_name", "locations", "month", "year")
 
     fieldsets = (
         (
@@ -307,6 +308,7 @@ class TripWizardAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "location",
+                    "locations",
                     "month",
                     "year",
                     "tags",
