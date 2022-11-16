@@ -40,10 +40,11 @@ PLAN_TYPE = (
 )
 
 TRANSPORT_TYPE = (
-    ("CAR", "CAR"),
-    ("BUS", "BUS"),
-    ("TRAIN", "TRAIN"),
-    ("FLIGHT", "FLIGHT"),
+    ("CAR HIRE", "CAR HIRE"),
+    ("CAR TRANSFER", "CAR TRANSFER"),
+    ("BUS TRANSFER", "BUS TRANSFER"),
+    ("TRAIN TRANSFER", "TRAIN TRANSFER"),
+    ("FLIGHT TRANSFER", "FLIGHT TRANSFER"),
 )
 
 PLANS = (("PLAN A", "PLAN A"), ("PLAN B", "PLAN B"), ("PLAN C", "PLAN C"))
@@ -320,13 +321,7 @@ class ItineraryTransport(models.Model):
         help_text="No need to add this if the transport is an all round trip",
     )
     transport_type = models.CharField(
-        max_length=100, choices=TRANSPORT_TYPE, default="CAR"
-    )
-    driver_included_in_car = models.BooleanField(
-        default=False, help_text="Is a driver included?"
-    )
-    all_round_trip = models.BooleanField(
-        default=False, help_text="Is this an all round trip?"
+        max_length=100, choices=TRANSPORT_TYPE, default="CAR TRANSFER"
     )
 
 
