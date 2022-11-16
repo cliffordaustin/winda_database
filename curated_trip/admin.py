@@ -281,7 +281,6 @@ class TripWizardAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "number_of_people",
-        "location",
         "locations",
         "tags",
         "month",
@@ -307,7 +306,6 @@ class TripWizardAdmin(admin.ModelAdmin):
             "Trip Info",
             {
                 "fields": (
-                    "location",
                     "locations",
                     "month",
                     "year",
