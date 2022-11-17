@@ -44,7 +44,9 @@ class TripListView(generics.ListCreateAPIView):
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
-                query |= Q(area_covered__icontains=word)
+                query |= Q(area_covered__icontains=word) | Q(
+                    countries_covered__icontains=word
+                )
             queryset = SingleTrip.objects.filter(
                 query,
                 is_active=True,
@@ -72,7 +74,9 @@ class AllTripsListView(generics.ListAPIView):
             words = re.split(r"[^A-Za-z']+", querystring)
             query = Q()  # empty Q object
             for word in words:
-                query |= Q(area_covered__icontains=word)
+                query |= Q(area_covered__icontains=word) | Q(
+                    countries_covered__icontains=word
+                )
             queryset = SingleTrip.objects.filter(query).filter(is_active=True)
 
         return queryset
