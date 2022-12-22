@@ -42,6 +42,8 @@ class StayFilter(filters.FilterSet):
     type_of_stay = CharInFilter(field_name="type_of_stay", lookup_expr="in")
     pricing_type = filters.ChoiceFilter(field_name="pricing_type", choices=PRICING_TYPE)
     has_holiday_package = filters.BooleanFilter(field_name="has_holiday_package")
+    in_homepage = filters.BooleanFilter(field_name="in_homepage")
+    has_options = filters.BooleanFilter(field_name="has_options")
     # theme = CharInFilter(label="Travel Theme", method=multiple_search)
 
     class Meta:

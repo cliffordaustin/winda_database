@@ -40,6 +40,32 @@ class TypeOfRoomsAdmin(NestedStackedInline):
     inlines = [TypeOfRoomsImageInline]
 
 
+class PrivateSafariImagesInline(NestedStackedInline):
+    model = PrivateSafariImages
+    extra = 1
+    fk_name = "private_safari"
+
+
+class PrivateSafariAdmin(NestedStackedInline):
+    model = PrivateSafari
+    extra = 1
+    fk_name = "stay"
+    inlines = [PrivateSafariImagesInline]
+
+
+class SharedSafariImagesInline(NestedStackedInline):
+    model = SharedSafariImages
+    extra = 1
+    fk_name = "shared_safari"
+
+
+class SharedSafariAdmin(NestedStackedInline):
+    model = SharedSafari
+    extra = 1
+    fk_name = "stay"
+    inlines = [SharedSafariImagesInline]
+
+
 # admin.site.register(TypeOfRooms, TypeOfRoomsAdmin)
 
 
@@ -153,7 +179,8 @@ class StayAdmin(NestedModelAdmin):
         FactsInline,
         InclusionsInline,
         StayImageInline,
-        TypeOfRoomsAdmin,
+        PrivateSafariAdmin,
+        SharedSafariAdmin,
     )
     raw_id_fields = ("user",)
 
@@ -311,61 +338,8 @@ class StayAdmin(NestedModelAdmin):
             {
                 "fields": (
                     "standard",
-                    # "standard_capacity",
                     "price_non_resident",
-                    "single_price_non_resident",
-                    "teen_price_non_resident",
-                    "single_teen_price_non_resident",
-                    "children_price_non_resident",
-                    "single_child_price_non_resident",
                     "price",
-                    "single_price",
-                    "teen_price",
-                    "single_teen_price",
-                    "children_price",
-                    "single_child_price",
-                )
-            },
-        ),
-        (
-            "Deluxe pricing",
-            {
-                "fields": (
-                    "deluxe",
-                    # "deluxe_capacity",
-                    "deluxe_price_non_resident",
-                    "deluxe_single_price_non_resident",
-                    "deluxe_teen_price_non_resident",
-                    "deluxe_single_teen_price_non_resident",
-                    "deluxe_children_price_non_resident",
-                    "deluxe_single_child_price_non_resident",
-                    "deluxe_price",
-                    "deluxe_single_price",
-                    "deluxe_teen_price",
-                    "deluxe_single_teen_price",
-                    "deluxe_children_price",
-                    "deluxe_single_child_price",
-                )
-            },
-        ),
-        (
-            "Family room pricing",
-            {
-                "fields": (
-                    "family_room",
-                    # "family_room_capacity",
-                    "family_room_price_non_resident",
-                    "family_room_single_price_non_resident",
-                    "family_room_teen_price_non_resident",
-                    "family_room_single_teen_price_non_resident",
-                    "family_room_children_price_non_resident",
-                    "family_room_single_child_price_non_resident",
-                    "family_room_price",
-                    "family_room_single_price",
-                    "family_room_teen_price",
-                    "family_room_single_teen_price",
-                    "family_room_children_price",
-                    "family_room_single_child_price",
                 )
             },
         ),
@@ -379,272 +353,9 @@ class StayAdmin(NestedModelAdmin):
             },
         ),
         (
-            "Park or conservation pricing",
-            {
-                "fields": (
-                    "conservation_or_park",
-                    # "conservation_or_park_capacity",
-                    "conservation_or_park_price_non_resident",
-                    "conservation_or_park_single_price_non_resident",
-                    "conservation_or_park_teen_price_non_resident",
-                    "conservation_or_park_single_teen_price_non_resident",
-                    "conservation_or_park_children_price_non_resident",
-                    "conservation_or_park_single_child_price_non_resident",
-                    "conservation_or_park_price",
-                    "conservation_or_park_single_price",
-                    "conservation_or_park_teen_price",
-                    "conservation_or_park_single_teen_price",
-                    "conservation_or_park_children_price",
-                    "conservation_or_park_single_child_price",
-                )
-            },
-        ),
-        # (
-        #     "Super deluxe pricing",
-        #     {
-        #         "fields": (
-        #             "super_deluxe",
-        #             "super_deluxe_capacity",
-        #             "super_deluxe_price_non_resident",
-        #             "super_deluxe_single_price_non_resident",
-        #             "super_deluxe_price",
-        #             "super_deluxe_single_price",
-        #             "super_deluxe_children_price_non_resident",
-        #             "super_deluxe_single_child_price_non_resident",
-        #             "super_deluxe_children_price",
-        #             "super_deluxe_single_child_price",
-        #             "super_deluxe_teen_price_non_resident",
-        #             "super_deluxe_single_teen_price_non_resident",
-        #             "super_deluxe_teen_price",
-        #             "super_deluxe_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Studio pricing",
-        #     {
-        #         "fields": (
-        #             "studio",
-        #             "studio_capacity",
-        #             "studio_price_non_resident",
-        #             "studio_single_price_non_resident",
-        #             "studio_price",
-        #             "studio_single_price",
-        #             "studio_children_price_non_resident",
-        #             "studio_single_child_price_non_resident",
-        #             "studio_children_price",
-        #             "studio_single_child_price",
-        #             "studio_teen_price_non_resident",
-        #             "studio_single_teen_price_non_resident",
-        #             "studio_teen_price",
-        #             "studio_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Double room pricing",
-        #     {
-        #         "fields": (
-        #             "double_room",
-        #             "double_room_capacity",
-        #             "double_room_price_non_resident",
-        #             "double_room_single_price_non_resident",
-        #             "double_room_price",
-        #             "double_room_single_price",
-        #             "double_room_children_price_non_resident",
-        #             "double_room_single_child_price_non_resident",
-        #             "double_room_children_price",
-        #             "double_room_single_child_price",
-        #             "double_room_teen_price_non_resident",
-        #             "double_room_single_teen_price_non_resident",
-        #             "double_room_teen_price",
-        #             "double_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Tripple room pricing",
-        #     {
-        #         "fields": (
-        #             "tripple_room",
-        #             "tripple_room_capacity",
-        #             "tripple_room_price_non_resident",
-        #             "tripple_room_single_price_non_resident",
-        #             "tripple_room_price",
-        #             "tripple_room_single_price",
-        #             "tripple_room_children_price_non_resident",
-        #             "tripple_room_single_child_price_non_resident",
-        #             "tripple_room_children_price",
-        #             "tripple_room_single_child_price",
-        #             "tripple_room_teen_price_non_resident",
-        #             "tripple_room_single_teen_price_non_resident",
-        #             "tripple_room_teen_price",
-        #             "tripple_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Quad room pricing",
-        #     {
-        #         "fields": (
-        #             "quad_room",
-        #             "quad_room_capacity",
-        #             "quad_room_price_non_resident",
-        #             "quad_room_single_price_non_resident",
-        #             "quad_room_price",
-        #             "quad_room_single_price",
-        #             "quad_room_children_price_non_resident",
-        #             "quad_room_single_child_price_non_resident",
-        #             "quad_room_children_price",
-        #             "quad_room_single_child_price",
-        #             "quad_room_teen_price_non_resident",
-        #             "quad_room_single_teen_price_non_resident",
-        #             "quad_room_teen_price",
-        #             "quad_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Queen room pricing",
-        #     {
-        #         "fields": (
-        #             "queen_room",
-        #             "queen_room_capacity",
-        #             "queen_room_price_non_resident",
-        #             "queen_room_single_price_non_resident",
-        #             "queen_room_price",
-        #             "queen_room_single_price",
-        #             "queen_room_children_price_non_resident",
-        #             "queen_room_single_child_price_non_resident",
-        #             "queen_room_children_price",
-        #             "queen_room_single_child_price",
-        #             "queen_room_teen_price_non_resident",
-        #             "queen_room_single_teen_price_non_resident",
-        #             "queen_room_teen_price",
-        #             "queen_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "King room pricing",
-        #     {
-        #         "fields": (
-        #             "king_room",
-        #             "king_room_capacity",
-        #             "king_room_price_non_resident",
-        #             "king_room_single_price_non_resident",
-        #             "king_room_price",
-        #             "king_room_single_price",
-        #             "king_room_children_price_non_resident",
-        #             "king_room_single_child_price_non_resident",
-        #             "king_room_children_price",
-        #             "king_room_single_child_price",
-        #             "king_room_teen_price_non_resident",
-        #             "king_room_single_teen_price_non_resident",
-        #             "king_room_teen_price",
-        #             "king_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        # (
-        #     "Twin room pricing",
-        #     {
-        #         "fields": (
-        #             "twin_room",
-        #             "twin_room_capacity",
-        #             "twin_room_price_non_resident",
-        #             "twin_room_single_price_non_resident",
-        #             "twin_room_price",
-        #             "twin_room_single_price",
-        #             "twin_room_children_price_non_resident",
-        #             "twin_room_single_child_price_non_resident",
-        #             "twin_room_children_price",
-        #             "twin_room_single_child_price",
-        #             "twin_room_teen_price_non_resident",
-        #             "twin_room_single_teen_price_non_resident",
-        #             "twin_room_teen_price",
-        #             "twin_room_single_teen_price",
-        #         )
-        #     },
-        # ),
-        (
-            "Presidential suite room pricing",
-            {
-                "fields": (
-                    "presidential_suite_room",
-                    # "presidential_suite_room_capacity",
-                    "presidential_suite_room_price_non_resident",
-                    "presidential_suite_room_single_price_non_resident",
-                    "presidential_suite_room_teen_price_non_resident",
-                    "presidential_suite_room_single_teen_price_non_resident",
-                    "presidential_suite_room_children_price_non_resident",
-                    "presidential_suite_room_single_child_price_non_resident",
-                    "presidential_suite_room_price",
-                    "presidential_suite_room_single_price",
-                    "presidential_suite_room_teen_price",
-                    "presidential_suite_room_single_teen_price",
-                    "presidential_suite_room_children_price",
-                    "presidential_suite_room_single_child_price",
-                )
-            },
-        ),
-        (
-            "Emperor suite room pricing",
-            {
-                "fields": (
-                    "emperor_suite_room",
-                    # "emperor_suite_room_capacity",
-                    "emperor_suite_room_price_non_resident",
-                    "emperor_suite_room_single_price_non_resident",
-                    "emperor_suite_room_teen_price_non_resident",
-                    "emperor_suite_room_single_teen_price_non_resident",
-                    "emperor_suite_room_children_price_non_resident",
-                    "emperor_suite_room_single_child_price_non_resident",
-                    "emperor_suite_room_price",
-                    "emperor_suite_room_single_price",
-                    "emperor_suite_room_teen_price",
-                    "emperor_suite_room_single_teen_price",
-                    "emperor_suite_room_children_price",
-                    "emperor_suite_room_single_child_price",
-                )
-            },
-        ),
-        (
-            "Executive suite room pricing",
-            {
-                "fields": (
-                    "executive_suite_room",
-                    # "executive_suite_room_capacity",
-                    "executive_suite_room_price_non_resident",
-                    "executive_suite_room_single_price_non_resident",
-                    "executive_suite_room_teen_price_non_resident",
-                    "executive_suite_room_single_teen_price_non_resident",
-                    "executive_suite_room_children_price_non_resident",
-                    "executive_suite_room_single_child_price_non_resident",
-                    "executive_suite_room_price",
-                    "executive_suite_room_single_price",
-                    "executive_suite_room_teen_price",
-                    "executive_suite_room_single_teen_price",
-                    "executive_suite_room_children_price",
-                    "executive_suite_room_single_child_price",
-                )
-            },
-        ),
-        (
             "Policies",
             {
                 "fields": (
-                    # "check_in_time",
-                    # "check_out_time",
-                    # "refundable",
-                    # "refund_policy",
-                    # "damage_policy",
-                    # "children_allowed",
-                    # "pets_allowed",
-                    # "smoking_allowed",
-                    # "events_allowed",
-                    # "covid_19_compliance",
-                    # "covid_19_compliance_details",
                     "cancellation_policy",
                     "cancellation_policy_by_provider",
                     "health_and_safety_policy",
@@ -657,6 +368,8 @@ class StayAdmin(NestedModelAdmin):
             {
                 "fields": (
                     "pricing_type",
+                    "in_homepage",
+                    "has_options",
                     "is_active",
                 )
             },

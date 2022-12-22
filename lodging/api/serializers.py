@@ -57,6 +57,34 @@ class TypeOfRoomsSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class PrivateSafariImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivateSafariImages
+        exclude = ["private_safari"]
+
+
+class PrivateSafariSerializer(serializers.ModelSerializer):
+    private_safari_images = PrivateSafariImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PrivateSafari
+        exclude = ["stay"]
+
+
+class SharedSafariImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SharedSafariImages
+        exclude = ["shared_safari"]
+
+
+class SharedSafariSerializer(serializers.ModelSerializer):
+    shared_safari_images = SharedSafariImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = SharedSafari
+        exclude = ["stay"]
+
+
 class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)
@@ -71,6 +99,8 @@ class StaysSerializer(serializers.ModelSerializer):
     num_of_one_stars = serializers.SerializerMethodField()
     total_num_of_reviews = serializers.SerializerMethodField()
     count_total_review_rates = serializers.SerializerMethodField()
+    private_safari = PrivateSafariSerializer(read_only=True)
+    shared_safari = SharedSafariSerializer(read_only=True)
     extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
     facts = FactsSerializer(many=True, read_only=True)
     inclusions = InclusionsSerializer(many=True, read_only=True)

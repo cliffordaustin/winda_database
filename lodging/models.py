@@ -605,6 +605,8 @@ class Stays(models.Model):
         null=True,
         help_text="Select the dates you won't be available ' , '",
     )
+    in_homepage = models.BooleanField(default=False)
+    has_options = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -614,6 +616,76 @@ class Stays(models.Model):
     class Meta:
         verbose_name = "Stay"
         verbose_name_plural = "Stays"
+
+
+class PrivateSafari(models.Model):
+    stay = models.OneToOneField(
+        Stays, on_delete=models.CASCADE, related_name="private_safari"
+    )
+    price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Private Safari"
+        verbose_name_plural = "Private Safaris"
+
+
+class SharedSafari(models.Model):
+    stay = models.OneToOneField(
+        Stays, on_delete=models.CASCADE, related_name="shared_safari"
+    )
+    price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Shared Safari"
+        verbose_name_plural = "Shared Safaris"
+
+
+class PrivateSafariImages(models.Model):
+    image = ProcessedImageField(
+        upload_to=lodge_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    private_safari = models.ForeignKey(
+        PrivateSafari, on_delete=models.CASCADE, related_name="private_safari_images"
+    )
+    main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.private_safari.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Private Safari Image"
+        verbose_name_plural = "Private Safari Images"
+
+
+class SharedSafariImages(models.Model):
+    image = ProcessedImageField(
+        upload_to=lodge_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    shared_safari = models.ForeignKey(
+        SharedSafari, on_delete=models.CASCADE, related_name="shared_safari_images"
+    )
+    main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.shared_safari.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Shared Safari Image"
+        verbose_name_plural = "Shared Safari Images"
 
 
 class TypeOfRooms(models.Model):
