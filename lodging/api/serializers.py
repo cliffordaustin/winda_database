@@ -71,6 +71,20 @@ class PrivateSafariSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class AllInclusiveImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllInclusiveImages
+        exclude = ["all_inclusive"]
+
+
+class AllInclusiveSerializer(serializers.ModelSerializer):
+    all_inclusive_images = AllInclusiveImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = AllInclusive
+        exclude = ["stay"]
+
+
 class SharedSafariImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SharedSafariImages
@@ -101,6 +115,7 @@ class StaysSerializer(serializers.ModelSerializer):
     count_total_review_rates = serializers.SerializerMethodField()
     private_safari = PrivateSafariSerializer(read_only=True)
     shared_safari = SharedSafariSerializer(read_only=True)
+    all_inclusive = AllInclusiveSerializer(read_only=True)
     extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
     facts = FactsSerializer(many=True, read_only=True)
     inclusions = InclusionsSerializer(many=True, read_only=True)
@@ -219,6 +234,14 @@ class OrderSerializer(serializers.ModelSerializer):
         order_review = Review.objects.filter(stay=instance.stay, user=request.user)
 
         return order_review.exists()
+
+
+class LodgePackageBookingSerializer(serializers.ModelSerializer):
+    stay = StaysSerializer(read_only=True)
+
+    class Meta:
+        model = LodgePackageBooking
+        fields = "__all__"
 
 
 class EventSerializer(serializers.ModelSerializer):

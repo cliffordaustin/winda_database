@@ -623,14 +623,15 @@ class PrivateSafari(models.Model):
         Stays, on_delete=models.CASCADE, related_name="private_safari"
     )
     price = models.FloatField(blank=True, null=True)
-    available = models.BooleanField(default=True)
+    available = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stay.name} - {self.id}"
 
+    # rather than changing the name of the model, we can change the name of the model in the admin
     class Meta:
-        verbose_name = "Private Safari"
-        verbose_name_plural = "Private Safaris"
+        verbose_name = "Full Board"
+        verbose_name_plural = "Full Boards"
 
 
 class SharedSafari(models.Model):
@@ -638,14 +639,31 @@ class SharedSafari(models.Model):
         Stays, on_delete=models.CASCADE, related_name="shared_safari"
     )
     price = models.FloatField(blank=True, null=True)
-    available = models.BooleanField(default=True)
+    available = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stay.name} - {self.id}"
 
+    # rather than changing the name of the model, we can change the name of the model in the admin
     class Meta:
-        verbose_name = "Shared Safari"
-        verbose_name_plural = "Shared Safaris"
+        verbose_name = "Game Package"
+        verbose_name_plural = "Game Packages"
+
+
+class AllInclusive(models.Model):
+    stay = models.OneToOneField(
+        Stays, on_delete=models.CASCADE, related_name="all_inclusive"
+    )
+    price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.stay.name} - {self.id}"
+
+    # rather than changing the name of the model, we can change the name of the model in the admin
+    class Meta:
+        verbose_name = "All Inclusive"
+        verbose_name_plural = "All Inclusive"
 
 
 class PrivateSafariImages(models.Model):
@@ -663,9 +681,10 @@ class PrivateSafariImages(models.Model):
     def __str__(self):
         return f"{self.private_safari.stay.name} - {self.id}"
 
+    # rather than changing the name of the model, we can change the name of the model in the admin
     class Meta:
-        verbose_name = "Private Safari Image"
-        verbose_name_plural = "Private Safari Images"
+        verbose_name = "Full Board Image"
+        verbose_name_plural = "Full Board Images"
 
 
 class SharedSafariImages(models.Model):
@@ -683,9 +702,31 @@ class SharedSafariImages(models.Model):
     def __str__(self):
         return f"{self.shared_safari.stay.name} - {self.id}"
 
+    # rather than changing the name of the model, we can change the name of the model in the admin
     class Meta:
-        verbose_name = "Shared Safari Image"
-        verbose_name_plural = "Shared Safari Images"
+        verbose_name = "Game Package Image"
+        verbose_name_plural = "Game Package Images"
+
+
+class AllInclusiveImages(models.Model):
+    image = ProcessedImageField(
+        upload_to=lodge_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    all_inclusive = models.ForeignKey(
+        AllInclusive, on_delete=models.CASCADE, related_name="all_inclusive_images"
+    )
+    main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.all_inclusive.stay.name} - {self.id}"
+
+    # rather than changing the name of the model, we can change the name of the model in the admin
+    class Meta:
+        verbose_name = "All Inclusive Image"
+        verbose_name_plural = "All Inclusive Images"
 
 
 class TypeOfRooms(models.Model):
@@ -846,6 +887,33 @@ class Event(models.Model):
     class Meta:
         verbose_name = "Event booking"
         verbose_name_plural = "Event bookings"
+
+
+class LodgePackageBooking(models.Model):
+    stay = models.ForeignKey(
+        Stays,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="lodge_package_order",
+    )
+    from_date = models.DateTimeField(default=timezone.now)
+    to_date = models.DateTimeField(blank=True, null=True)
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    type_of_package = models.CharField(max_length=300, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    paid = models.BooleanField(default=False, verbose_name="payment confirmed")
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "Lodge package booking"
+        verbose_name_plural = "Lodge package bookings"
 
 
 class EventTransport(models.Model):

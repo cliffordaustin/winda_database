@@ -21,6 +21,11 @@ urlpatterns = [
         name="create_event_to_stay",
     ),
     path(
+        "stays/<stay_slug>/create-lodge-package/",
+        LodgePackageBookingCreateView.as_view(),
+        name="create_lodge_package_stay",
+    ),
+    path(
         "event/create-transport/",
         EventTransportCreateView.as_view(),
         name="create_event_transport",

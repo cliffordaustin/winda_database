@@ -66,6 +66,19 @@ class SharedSafariAdmin(NestedStackedInline):
     inlines = [SharedSafariImagesInline]
 
 
+class AllInclusiveImageInline(NestedStackedInline):
+    model = AllInclusiveImages
+    extra = 1
+    fk_name = "all_inclusive"
+
+
+class AllInclusiveAdmin(NestedStackedInline):
+    model = AllInclusive
+    extra = 1
+    fk_name = "stay"
+    inlines = [AllInclusiveImageInline]
+
+
 # admin.site.register(TypeOfRooms, TypeOfRoomsAdmin)
 
 
@@ -115,6 +128,54 @@ class EventAdmin(admin.ModelAdmin):
             },
         ),
         ("Other Information", {"fields": ("message", "confirmation_code", "paid")}),
+    )
+
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "stay__name",
+        "stay__property_name",
+    )
+
+    ordering = ("date_posted",)
+
+
+class LodgePackageBookingAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "from_date",
+        "to_date",
+        "type_of_package",
+        "paid",
+    )
+
+    list_filter = (
+        "date_posted",
+        "from_date",
+        "paid",
+    )
+
+    fieldsets = (
+        (
+            "Personal Information",
+            {"fields": ("first_name", "last_name", "email", "phone")},
+        ),
+        (
+            "Booking Information",
+            {
+                "fields": (
+                    "stay",
+                    "from_date",
+                    "to_date",
+                    "type_of_package",
+                )
+            },
+        ),
+        ("Other Information", {"fields": ("message", "paid")}),
     )
 
     search_fields = (
@@ -181,6 +242,7 @@ class StayAdmin(NestedModelAdmin):
         StayImageInline,
         PrivateSafariAdmin,
         SharedSafariAdmin,
+        AllInclusiveAdmin,
     )
     raw_id_fields = ("user",)
 
@@ -412,6 +474,7 @@ class StayAdmin(NestedModelAdmin):
 
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(LodgePackageBooking, LodgePackageBookingAdmin)
 admin.site.register(EventTransport, EventTransportAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)

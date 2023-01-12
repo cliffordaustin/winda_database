@@ -441,6 +441,56 @@ class EventCreateView(generics.CreateAPIView):
         order_message.send(fail_silently=True)
 
 
+class LodgePackageBookingCreateView(generics.CreateAPIView):
+    queryset = LodgePackageBooking.objects.all()
+    serializer_class = LodgePackageBookingSerializer
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        serializer.save(stay=stay)
+
+        # message sent to the user
+        message = EmailMessage(
+            to=[self.request.data["email"]],
+        )
+        message.template_id = "4491051"
+        message.from_email = None
+        message.merge_data = {
+            self.request.data["email"]: {
+                "name": self.request.data["first_name"],
+            },
+        }
+
+        message.merge_global_data = {
+            "name": self.request.data["first_name"],
+        }
+        message.send(fail_silently=True)
+
+        # message sent to the admin
+        order_message = EmailMessage(
+            to=[settings.DEFAULT_FROM_EMAIL],
+        )
+        order_message.template_id = "4219329"
+        order_message.from_email = None
+        order_message.merge_data = {
+            self.request.data["email"]: {
+                "user_email": self.request.data["email"],
+                "booking_type": "a lodge",
+                "name": stay.name,
+            },
+        }
+
+        order_message.merge_global_data = {
+            "user_email": self.request.data["email"],
+            "booking_type": "a lodge",
+            "name": stay.name,
+        }
+
+        order_message.send(fail_silently=True)
+
+
 class EventTransportCreateView(generics.CreateAPIView):
     queryset = EventTransport.objects.all()
     serializer_class = EventTransportSerializer
