@@ -72,10 +72,10 @@ class ItineraryInline(NestedStackedInline):
     model = Itinerary
     inlines = [
         ItineraryLocationInline,
-        ItineraryTransportInline,
+        ItineraryAccommodationInline,
         IncludedItineraryActivityInline,
         OptionalItineraryActivityInline,
-        ItineraryAccommodationInline,
+        ItineraryTransportInline,
     ]
     extra = 1
 

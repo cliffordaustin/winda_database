@@ -276,10 +276,15 @@ class Itinerary(models.Model):
     trip = models.ForeignKey(
         CuratedTrip, on_delete=models.CASCADE, related_name="itineraries"
     )
-    day = models.IntegerField(
+    start_day = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Select the day of this itinerary",
+        help_text="Select the start day of this itinerary",
+    )
+    end_day = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Select the end day of this itinerary",
     )
     title = models.CharField(max_length=255, blank=True, null=True)
     breakfast_included = models.BooleanField(default=False)
@@ -287,7 +292,7 @@ class Itinerary(models.Model):
     dinner_included = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.trip} - itinerary {self.day}"
+        return f"{self.trip} - itinerary {self.start_day}"
 
     class Meta:
         verbose_name = "Itinerary"
