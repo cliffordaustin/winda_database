@@ -53,6 +53,15 @@ class CuratedTripListView(generics.ListCreateAPIView):
         return queryset
 
 
+class LocationListView(generics.ListAPIView):
+    serializer_class = CuratedTripLocationsSerializer
+
+    def get_queryset(self):
+        trip_slug = self.kwargs.get("trip_slug")
+        trip = generics.get_object_or_404(CuratedTrip, slug=trip_slug)
+        return trip.locations.all()
+
+
 class BookedTripCreateAPIView(generics.CreateAPIView):
     queryset = BookedTrip.objects.all()
     serializer_class = BookedTripSerializer

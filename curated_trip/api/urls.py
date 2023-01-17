@@ -22,4 +22,9 @@ urlpatterns = [
     path(
         "create-trip-wizard/", TripWizardCreateView.as_view(), name="create-trip-wizard"
     ),
+    path(
+        "curated-trips/<trip_slug>/locations/",
+        LocationListView.as_view(),
+        name="itinerary-locations",
+    ),
 ]
