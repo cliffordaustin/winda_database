@@ -14,6 +14,8 @@ from django.conf import settings
 from django.utils import timezone
 
 from core.utils import trip_image_thumbnail
+from core.utils import generate_random_string
+from copy import deepcopy
 
 
 PRICING_TYPE = (
@@ -95,7 +97,7 @@ class CuratedTrip(models.Model):
     park_conservancies = models.BooleanField(
         default=False, verbose_name="Park & Conservancies"
     )
-
+    valentine_offer = models.BooleanField(default=False)
     pricing_type = models.CharField(
         max_length=100, choices=PRICING_TYPE, default="REASONABLE"
     )
@@ -103,6 +105,73 @@ class CuratedTrip(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def duplicate(self):
+        obj_copy = deepcopy(self)
+        obj_copy.pk = None
+        obj_copy.slug = generate_random_string(length=24)
+        obj_copy.is_active = False
+        obj_copy.save()
+
+        for location in self.locations.all():
+            location.pk = None
+            location.curated_trip = obj_copy
+            location.save()
+
+        for itinerary in self.itineraries.all():
+            itinerary_copy = deepcopy(itinerary)
+            itinerary_copy.pk = None
+            itinerary_copy.trip = obj_copy
+            itinerary_copy.save()
+
+            for itinerary_location in itinerary.itinerary_locations.all():
+                itinerary_location.pk = None
+                itinerary_location.itinerary = itinerary_copy
+                itinerary_location.save()
+
+            for itinerary_transport in itinerary.itinerary_transports.all():
+                itinerary_transport.pk = None
+                itinerary_transport.itinerary = itinerary_copy
+                itinerary_transport.save()
+
+            for itinerary_activity in itinerary.itinerary_activities.all():
+                itinerary_activity.pk = None
+                itinerary_activity.itinerary = itinerary_copy
+                itinerary_activity.save()
+
+            for optional_activity in itinerary.optional_activities.all():
+                optional_activity.pk = None
+                optional_activity.itinerary = itinerary_copy
+                optional_activity.save()
+
+            for itinerary_accommodation in itinerary.itinerary_accommodations.all():
+                itinerary_accommodation.pk = None
+                itinerary_accommodation.itinerary = itinerary_copy
+                itinerary_accommodation.save()
+
+        for faq in self.faqs.all():
+            faq.pk = None
+            faq.trip = obj_copy
+            faq.save()
+
+        for curated_trip_image in self.curated_trip_images.all():
+            curated_trip_image.pk = None
+            curated_trip_image.trip = obj_copy
+            curated_trip_image.save()
+
+        self.plan_a_price.pk = None
+        self.plan_a_price.trip = obj_copy
+        self.plan_a_price.save()
+
+        self.plan_b_price.pk = None
+        self.plan_b_price.trip = obj_copy
+        self.plan_b_price.save()
+
+        self.plan_c_price.pk = None
+        self.plan_c_price.trip = obj_copy
+        self.plan_c_price.save()
+
+        obj_copy.save()
 
     def __str__(self):
         return f"Created { self.name } by {self.user}"

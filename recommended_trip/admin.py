@@ -159,6 +159,7 @@ class SingleTripAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "is_active",
+                    "valentine_offer",
                     "has_holiday_package",
                     "starting_location",
                     "ending_location",

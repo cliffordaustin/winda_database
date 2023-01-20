@@ -168,7 +168,12 @@ class CuratedTripAdmin(NestedModelAdmin):
         ),
         (
             "Others",
-            {"fields": ("is_active",)},
+            {
+                "fields": (
+                    "is_active",
+                    "valentine_offer",
+                )
+            },
         ),
     )
 

@@ -7,6 +7,8 @@ from transport.admin import GeneralTransferAdmin
 from transport.models import Flight, GeneralTransfers, Transportation
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
+from core.utils import generate_random_string
+from copy import deepcopy
 
 
 PRICING_TYPE = (
@@ -108,12 +110,47 @@ class SingleTrip(models.Model):
     is_active = models.BooleanField(default=True)
 
     has_holiday_package = models.BooleanField(default=False)
+    valentine_offer = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Created { self.name } by {self.user}"
+
+    def duplicate(self):
+        obj_copy = deepcopy(self)
+        obj_copy.pk = None
+        obj_copy.slug = generate_random_string(length=24)
+        obj_copy.is_active = False
+        obj_copy.save()
+
+        for trip_image in self.single_trip_images.all():
+            trip_image.pk = None
+            trip_image.trip = obj_copy
+            trip_image.save()
+
+        for highlight in self.trip_highlights.all():
+            highlight.pk = None
+            highlight.trip = obj_copy
+            highlight.save()
+
+        for month in self.months.all():
+            month.pk = None
+            month.trip = obj_copy
+            month.save()
+
+        for itinerary in self.itineraries.all():
+            itinerary.pk = None
+            itinerary.trip = obj_copy
+            itinerary.save()
+
+        for faq in self.faqs.all():
+            faq.pk = None
+            faq.trip = obj_copy
+            faq.save()
+
+        obj_copy.save()
 
     class Meta:
         ordering = ["-created_at"]
