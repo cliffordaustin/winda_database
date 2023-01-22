@@ -666,6 +666,23 @@ class AllInclusive(models.Model):
         verbose_name_plural = "All Inclusive"
 
 
+class OtherOption(models.Model):
+    stay = models.OneToOneField(
+        Stays, on_delete=models.CASCADE, related_name="other_option"
+    )
+    price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField(default=False)
+    title = models.CharField(max_length=120, blank=True, null=True)
+    about = models.CharField(max_length=250, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Other Option"
+        verbose_name_plural = "Other Options"
+
+
 class PrivateSafariImages(models.Model):
     image = ProcessedImageField(
         upload_to=lodge_image_thumbnail,
@@ -727,6 +744,26 @@ class AllInclusiveImages(models.Model):
     class Meta:
         verbose_name = "All Inclusive Image"
         verbose_name_plural = "All Inclusive Images"
+
+
+class OtherOptionImages(models.Model):
+    image = ProcessedImageField(
+        upload_to=lodge_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    other_option = models.ForeignKey(
+        OtherOption, on_delete=models.CASCADE, related_name="other_option_images"
+    )
+    main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.other_option.stay.name} - {self.id}"
+
+    class Meta:
+        verbose_name = "Other Option Image"
+        verbose_name_plural = "Other Option Images"
 
 
 class TypeOfRooms(models.Model):

@@ -85,6 +85,20 @@ class AllInclusiveSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class OtherOptionImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OtherOptionImages
+        exclude = ["other_option"]
+
+
+class OtherOptionSerializer(serializers.ModelSerializer):
+    other_option_images = OtherOptionImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = OtherOption
+        exclude = ["stay"]
+
+
 class SharedSafariImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SharedSafariImages
@@ -116,6 +130,7 @@ class StaysSerializer(serializers.ModelSerializer):
     private_safari = PrivateSafariSerializer(read_only=True)
     shared_safari = SharedSafariSerializer(read_only=True)
     all_inclusive = AllInclusiveSerializer(read_only=True)
+    other_option = OtherOptionSerializer(read_only=True)
     extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
     facts = FactsSerializer(many=True, read_only=True)
     inclusions = InclusionsSerializer(many=True, read_only=True)

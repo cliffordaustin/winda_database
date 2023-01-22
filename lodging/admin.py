@@ -79,6 +79,19 @@ class AllInclusiveAdmin(NestedStackedInline):
     inlines = [AllInclusiveImageInline]
 
 
+class OtherOptionImagesInline(NestedStackedInline):
+    model = OtherOptionImages
+    extra = 1
+    fk_name = "other_option"
+
+
+class OtherOptionAdmin(NestedStackedInline):
+    model = OtherOption
+    extra = 1
+    fk_name = "stay"
+    inlines = [OtherOptionImagesInline]
+
+
 # admin.site.register(TypeOfRooms, TypeOfRoomsAdmin)
 
 
@@ -243,6 +256,7 @@ class StayAdmin(NestedModelAdmin):
         PrivateSafariAdmin,
         SharedSafariAdmin,
         AllInclusiveAdmin,
+        OtherOptionAdmin,
     )
     raw_id_fields = ("user",)
 
