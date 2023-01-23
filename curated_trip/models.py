@@ -286,6 +286,7 @@ class PricePlanA(models.Model):
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -308,6 +309,7 @@ class PricePlanB(models.Model):
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -330,6 +332,7 @@ class PricePlanC(models.Model):
     old_price = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     price_non_resident = models.FloatField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

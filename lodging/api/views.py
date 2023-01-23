@@ -491,6 +491,17 @@ class LodgePackageBookingCreateView(generics.CreateAPIView):
         order_message.send(fail_silently=True)
 
 
+class LodgePackageBookingInstallmentCreateView(generics.CreateAPIView):
+    queryset = LodgePackageBookingInstallment.objects.all()
+    serializer_class = LodgePackageBookingInstallmentSerializer
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        serializer.save(stay=stay)
+
+
 class EventTransportCreateView(generics.CreateAPIView):
     queryset = EventTransport.objects.all()
     serializer_class = EventTransportSerializer

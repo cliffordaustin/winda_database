@@ -259,6 +259,14 @@ class LodgePackageBookingSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class LodgePackageBookingInstallmentSerializer(serializers.ModelSerializer):
+    stay = StaysSerializer(read_only=True)
+
+    class Meta:
+        model = LodgePackageBookingInstallment
+        fields = "__all__"
+
+
 class EventSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay = StaysSerializer(read_only=True)

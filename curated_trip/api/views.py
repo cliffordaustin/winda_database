@@ -41,14 +41,16 @@ class CuratedTripListView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = CuratedTrip.objects.filter(is_active=True)
 
-        # querystring = self.request.GET.get("location")
-        # if querystring:
-        #     querystring = querystring.split(",")[0]
-        #     words = re.split(r"[^A-Za-z']+", querystring)
-        #     query = Q()  # empty Q object
-        #     for word in words:
-        #         query |= Q(area_covered__icontains=word)
-        #     queryset = CuratedTrip.objects.filter(query).filter(is_active=True)
+        querystring = self.request.GET.get("location")
+        if querystring:
+            querystring = querystring.split(",")[0]
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                query |= Q(locations__location__icontains=word)
+            queryset = (
+                CuratedTrip.objects.filter(query).filter(is_active=True).distinct()
+            )
 
         return queryset
 

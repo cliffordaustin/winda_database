@@ -202,6 +202,68 @@ class LodgePackageBookingAdmin(admin.ModelAdmin):
     ordering = ("date_posted",)
 
 
+class LodgePackageBookingInstallmentAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "from_date",
+        "to_date",
+        "type_of_package",
+        "paid_installment_1",
+        "paid_installment_2",
+        "paid_installment_3",
+    )
+
+    list_filter = (
+        "date_posted",
+        "from_date",
+        "paid_installment_1",
+        "paid_installment_2",
+        "paid_installment_3",
+    )
+
+    fieldsets = (
+        (
+            "Personal Information",
+            {"fields": ("first_name", "last_name", "email", "phone")},
+        ),
+        (
+            "Booking Information",
+            {
+                "fields": (
+                    "stay",
+                    "from_date",
+                    "to_date",
+                    "type_of_package",
+                )
+            },
+        ),
+        (
+            "Other Information",
+            {
+                "fields": (
+                    "message",
+                    "paid_installment_1",
+                    "paid_installment_2",
+                    "paid_installment_3",
+                )
+            },
+        ),
+    )
+
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "stay__name",
+        "stay__property_name",
+    )
+
+    ordering = ("date_posted",)
+
+
 class EventTransportAdmin(admin.ModelAdmin):
     list_display = (
         "first_name",
@@ -489,6 +551,7 @@ class StayAdmin(NestedModelAdmin):
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(LodgePackageBooking, LodgePackageBookingAdmin)
+admin.site.register(LodgePackageBookingInstallment, LodgePackageBookingInstallmentAdmin)
 admin.site.register(EventTransport, EventTransportAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)

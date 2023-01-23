@@ -953,6 +953,41 @@ class LodgePackageBooking(models.Model):
         verbose_name_plural = "Lodge package bookings"
 
 
+class LodgePackageBookingInstallment(models.Model):
+    stay = models.ForeignKey(
+        Stays,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="lodge_package_order_installment",
+    )
+    from_date = models.DateTimeField(default=timezone.now)
+    to_date = models.DateTimeField(blank=True, null=True)
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+    type_of_package = models.CharField(max_length=300, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    phone = PhoneNumberField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    paid_installment_1 = models.BooleanField(
+        default=False, verbose_name="payment confirmed for installment 1"
+    )
+    paid_installment_2 = models.BooleanField(
+        default=False, verbose_name="payment confirmed for installment 2"
+    )
+    paid_installment_3 = models.BooleanField(
+        default=False, verbose_name="payment confirmed for installment 3"
+    )
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "Lodge package booking Installment"
+        verbose_name_plural = "Lodge package bookings Installment"
+
+
 class EventTransport(models.Model):
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
