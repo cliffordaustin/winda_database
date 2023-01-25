@@ -130,7 +130,7 @@ class StaysSerializer(serializers.ModelSerializer):
     private_safari = PrivateSafariSerializer(read_only=True)
     shared_safari = SharedSafariSerializer(read_only=True)
     all_inclusive = AllInclusiveSerializer(read_only=True)
-    other_option = OtherOptionSerializer(read_only=True)
+    other_options = OtherOptionSerializer(read_only=True, many=True)
     extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
     facts = FactsSerializer(many=True, read_only=True)
     inclusions = InclusionsSerializer(many=True, read_only=True)

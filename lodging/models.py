@@ -568,6 +568,7 @@ class Stays(models.Model):
     is_active = models.BooleanField(default=True)
 
     is_an_event = models.BooleanField(default=False)
+    is_kaleidoscope_event = models.BooleanField(default=False)
     has_holiday_package = models.BooleanField(default=False)
     has_min_date = models.BooleanField(default=False)
     date_starts_from_ninth = models.BooleanField(default=False)
@@ -667,8 +668,8 @@ class AllInclusive(models.Model):
 
 
 class OtherOption(models.Model):
-    stay = models.OneToOneField(
-        Stays, on_delete=models.CASCADE, related_name="other_option"
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="other_options"
     )
     price = models.FloatField(blank=True, null=True)
     available = models.BooleanField(default=False)

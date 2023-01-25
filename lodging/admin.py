@@ -335,6 +335,7 @@ class StayAdmin(NestedModelAdmin):
         "date_posted",
         "date_updated",
         "is_an_event",
+        "is_kaleidoscope_event",
         "has_holiday_package",
         "is_active",
         "bathrooms",
@@ -527,7 +528,7 @@ class StayAdmin(NestedModelAdmin):
             "Event",
             {
                 "fields": (
-                    "is_an_event",
+                    "is_kaleidoscope_event",
                     "has_holiday_package",
                     "distance_from_venue",
                     "has_min_date",

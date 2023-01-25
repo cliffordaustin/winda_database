@@ -44,6 +44,7 @@ class StayFilter(filters.FilterSet):
     has_holiday_package = filters.BooleanFilter(field_name="has_holiday_package")
     in_homepage = filters.BooleanFilter(field_name="in_homepage")
     has_options = filters.BooleanFilter(field_name="has_options")
+    is_kaleidoscope_event = filters.BooleanFilter(field_name="is_kaleidoscope_event")
     # theme = CharInFilter(label="Travel Theme", method=multiple_search)
 
     class Meta:
