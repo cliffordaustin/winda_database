@@ -92,9 +92,6 @@ class OtherOptionAdmin(NestedStackedInline):
     inlines = [OtherOptionImagesInline]
 
 
-# admin.site.register(TypeOfRooms, TypeOfRoomsAdmin)
-
-
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "first_name",

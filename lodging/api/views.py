@@ -155,7 +155,9 @@ class AllStaysListView(generics.ListAPIView):
     ordering = ["price_non_resident"]
 
     def get_queryset(self):
-        queryset = Stays.objects.filter(is_active=True, is_an_event=False)
+        queryset = Stays.objects.filter(
+            is_active=True,
+        )
 
         querystring = self.request.GET.get("search")
         querystring_detail_search = self.request.GET.get("d_search")
@@ -167,7 +169,8 @@ class AllStaysListView(generics.ListAPIView):
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
             queryset = Stays.objects.filter(
-                query, is_active=True, is_an_event=False
+                query,
+                is_active=True,
             ).all()
 
         if querystring_detail_search:
@@ -182,7 +185,8 @@ class AllStaysListView(generics.ListAPIView):
                     | Q(country__icontains=word)
                 )
             queryset = Stays.objects.filter(
-                query, is_active=True, is_an_event=False
+                query,
+                is_active=True,
             ).all()
 
         return queryset
