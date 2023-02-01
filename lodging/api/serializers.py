@@ -113,10 +113,25 @@ class SharedSafariSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class RoomAvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomAvailability
+        exclude = ["room_type"]
+
+
+class RoomTypeSerializer(serializers.ModelSerializer):
+    room_availabilities = RoomAvailabilitySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RoomType
+        exclude = ["stay"]
+
+
 class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)
     type_of_rooms = TypeOfRoomsSerializer(many=True, read_only=True)
+    room_types = RoomTypeSerializer(many=True, read_only=True)
     is_user_stay = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()

@@ -1031,3 +1031,30 @@ class SaveStays(models.Model):
 
     def __str__(self):
         return str(self.stay)
+
+
+class RoomType(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="room_types")
+    name = models.CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name) + " - " + str(self.stay.name)
+
+    class Meta:
+        verbose_name = "Room type"
+        verbose_name_plural = "Room types"
+
+
+class RoomAvailability(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    room_type = models.ForeignKey(
+        RoomType, on_delete=models.CASCADE, related_name="room_availabilities"
+    )
+    num_of_available_rooms = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    date = models.DateField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Room availability"
+        verbose_name_plural = "Room availabilities"

@@ -6,7 +6,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from anymail.message import EmailMessage
-from .permissions import IsUserStayInstance, ObjectPermission
+from .permissions import IsUserStayInstance, ObjectPermission, IsUserRoomStayInstance
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from .filterset import StayFilter, ReviewFilter
@@ -108,9 +108,101 @@ class UserStays(generics.ListAPIView):
         return Stays.objects.filter(user=self.request.user)
 
 
+class RoomTypeCreateView(generics.CreateAPIView):
+    serializer_class = RoomTypeSerializer
+    queryset = RoomType.objects.all()
+    permission_classes = [IsAuthenticated, IsUserStayInstance]
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        if stay.user != self.request.user:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        serializer.save(stay=stay)
+
+
+class RoomTypeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = RoomTypeSerializer
+    permission_classes = [IsAuthenticated, IsUserStayInstance]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        if stay.user != self.request.user:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        queryset = RoomType.objects.filter(stay=stay)
+
+        return queryset
+
+
+class RoomTypeListView(generics.ListAPIView):
+    serializer_class = RoomTypeSerializer
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        queryset = RoomType.objects.filter(stay=stay)
+
+        return queryset
+
+
+class RoomAvailabilityListView(generics.ListAPIView):
+    serializer_class = RoomAvailabilitySerializer
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        queryset = RoomAvailability.objects.filter(room_type=room_type)
+
+        return queryset
+
+
+class RoomAvailabilityDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = RoomAvailabilitySerializer
+    permission_classes = [IsAuthenticated, IsUserRoomStayInstance]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        if room_type.stay.user != self.request.user:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        queryset = RoomAvailability.objects.filter(room_type=room_type)
+
+        return queryset
+
+
+class RoomAvailabilityCreateView(generics.CreateAPIView):
+    serializer_class = RoomAvailabilitySerializer
+    queryset = RoomAvailability.objects.all()
+    permission_classes = [IsAuthenticated, IsUserRoomStayInstance]
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        date = self.request.data.get("date")
+        if date:
+            RoomAvailability.objects.filter(room_type=room_type, date=date).delete()
+
+        if room_type.stay.user != self.request.user:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        serializer.save(room_type=room_type)
+
+
 class UserStayDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StaysSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsUserStayInstance]
     lookup_field = "slug"
 
     def get_queryset(self):

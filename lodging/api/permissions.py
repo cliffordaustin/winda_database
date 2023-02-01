@@ -9,6 +9,14 @@ class IsUserStayInstance(permissions.BasePermission):
             return True
 
 
+class IsUserRoomStayInstance(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        elif obj.room_type.stay.user == request.user:
+            return True
+
+
 class ObjectPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:

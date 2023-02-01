@@ -96,4 +96,34 @@ urlpatterns = [
         SaveStaysDetailView.as_view(),
         name="user-saved-stays-detail",
     ),
+    path(
+        "stays/<stay_slug>/add-room-type/",
+        RoomTypeCreateView.as_view(),
+        name="room-type-create",
+    ),
+    path(
+        "stays/<stay_slug>/room-types/",
+        RoomTypeListView.as_view(),
+        name="room-type-list",
+    ),
+    path(
+        "stays/<stay_slug>/room-types/<slug>/",
+        RoomTypeDetailView.as_view(),
+        name="room-type-detail",
+    ),
+    path(
+        "room-types/<room_type_slug>/availabilities/",
+        RoomAvailabilityListView.as_view(),
+        name="room-availability-list",
+    ),
+    path(
+        "room-types/<room_type_slug>/availabilities/<slug>/",
+        RoomAvailabilityDetailView.as_view(),
+        name="room-availability-detail",
+    ),
+    path(
+        "room-types/<room_type_slug>/add-availability/",
+        RoomAvailabilityCreateView.as_view(),
+        name="room-availability-create",
+    ),
 ]

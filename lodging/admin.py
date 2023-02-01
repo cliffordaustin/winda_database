@@ -546,11 +546,28 @@ class StayAdmin(NestedModelAdmin):
     ordering = ("date_posted", "date_updated")
 
 
+class RoomAvailabilityAdmin(admin.ModelAdmin):
+    list_display = ("room_type", "date", "num_of_available_rooms", "price")
+    list_filter = ("date", "num_of_available_rooms", "price")
+    search_fields = (
+        "room_type__stay__name",
+        "room_type__name",
+        "room_type__stay__property_name",
+    )
+
+
+class RoomTypeAdmin(admin.ModelAdmin):
+    list_display = ("stay", "name")
+    search_fields = ("stay__name", "stay__property_name", "name")
+
+
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(LodgePackageBooking, LodgePackageBookingAdmin)
 admin.site.register(LodgePackageBookingInstallment, LodgePackageBookingInstallmentAdmin)
 admin.site.register(EventTransport, EventTransportAdmin)
+admin.site.register(RoomAvailability, RoomAvailabilityAdmin)
+admin.site.register(RoomType, RoomTypeAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)
 admin.site.register(Cart)
