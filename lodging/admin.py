@@ -556,6 +556,23 @@ class RoomAvailabilityAdmin(admin.ModelAdmin):
     )
 
 
+class BookingsAdmin(admin.ModelAdmin):
+    list_display = (
+        "room_type",
+        "full_name",
+        "check_in_date",
+        "check_out_date",
+        "num_of_rooms",
+        "num_of_guests",
+    )
+    list_filter = ("check_in_date", "check_out_date", "num_of_rooms")
+    search_fields = (
+        "room_type__stay__name",
+        "room_type__name",
+        "room_type__stay__property_name",
+    )
+
+
 class RoomTypeAdmin(admin.ModelAdmin):
     list_display = ("stay", "name")
     search_fields = ("stay__name", "stay__property_name", "name")
@@ -567,6 +584,7 @@ admin.site.register(LodgePackageBooking, LodgePackageBookingAdmin)
 admin.site.register(LodgePackageBookingInstallment, LodgePackageBookingInstallmentAdmin)
 admin.site.register(EventTransport, EventTransportAdmin)
 admin.site.register(RoomAvailability, RoomAvailabilityAdmin)
+admin.site.register(Bookings, BookingsAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)
 # admin.site.register(StayImage)
 admin.site.register(Review)

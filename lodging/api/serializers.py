@@ -113,6 +113,12 @@ class SharedSafariSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class BookingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bookings
+        exclude = ["room_type"]
+
+
 class RoomAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomAvailability
@@ -121,6 +127,7 @@ class RoomAvailabilitySerializer(serializers.ModelSerializer):
 
 class RoomTypeSerializer(serializers.ModelSerializer):
     room_availabilities = RoomAvailabilitySerializer(many=True, read_only=True)
+    bookings = BookingsSerializer(many=True, read_only=True)
 
     class Meta:
         model = RoomType

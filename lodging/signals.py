@@ -1,6 +1,6 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from .models import Stays, RoomAvailability, RoomType
+from .models import Stays, RoomAvailability, RoomType, Bookings
 from django.utils.text import slugify
 from core.utils import generate_random_string
 
@@ -22,6 +22,13 @@ def create_room_availability_slug(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=RoomType)
 def create_room_type_slug(sender, instance, *args, **kwargs):
+    if instance and not instance.slug:
+        random_string = generate_random_string(length=12)
+        instance.slug = random_string
+
+
+@receiver(pre_save, sender=Bookings)
+def create_booking_slug(sender, instance, *args, **kwargs):
     if instance and not instance.slug:
         random_string = generate_random_string(length=12)
         instance.slug = random_string

@@ -126,4 +126,14 @@ urlpatterns = [
         RoomAvailabilityCreateView.as_view(),
         name="room-availability-create",
     ),
+    path(
+        "room-types/<room_type_slug>/add-booking/",
+        BookingsCreateView.as_view(),
+        name="room-booking-create",
+    ),
+    path(
+        "room-types/<room_type_slug>/bookings/",
+        BookingsListView.as_view(),
+        name="room-booking-list",
+    ),
 ]

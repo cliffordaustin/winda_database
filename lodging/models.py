@@ -1046,6 +1046,26 @@ class RoomType(models.Model):
         verbose_name_plural = "Room types"
 
 
+class Bookings(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    room_type = models.ForeignKey(
+        RoomType, on_delete=models.CASCADE, related_name="bookings"
+    )
+    num_of_rooms = models.IntegerField(default=0)
+    num_of_guests = models.IntegerField(default=0)
+    full_name = models.CharField(max_length=200, blank=True, null=True)
+    check_in_date = models.DateField(default=timezone.now)
+    check_out_date = models.DateField(default=timezone.now)
+    date_posted = models.DateTimeField(default=timezone.now, editable=False)
+
+    def __str__(self):
+        return str(self.user) + " - " + str(self.stay.name)
+
+    class Meta:
+        verbose_name = "Booking"
+        verbose_name_plural = "Bookings"
+
+
 class RoomAvailability(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     room_type = models.ForeignKey(

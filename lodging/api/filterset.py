@@ -2,7 +2,7 @@ from django_filters import rest_framework as filters
 from rest_framework import fields
 from lodging.models import Stays, TYPE_OF_STAY, PRICING_TYPE
 from django.db.models import Q
-from lodging.models import Review
+from lodging.models import Review, Bookings
 
 
 RATES = (("1", "1"), ("2", "2"), ("3" "3"), ("4", "4"), ("5", "5"))
@@ -63,6 +63,12 @@ class StayFilter(filters.FilterSet):
         # ]
 
         exclude = ["tags", "unavailable_dates"]
+
+
+class BookingsFilter(filters.FilterSet):
+    class Meta:
+        model = Bookings
+        exclude = ["room_type"]
 
 
 class ReviewFilter(filters.FilterSet):

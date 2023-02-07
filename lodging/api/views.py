@@ -9,7 +9,7 @@ from anymail.message import EmailMessage
 from .permissions import IsUserStayInstance, ObjectPermission, IsUserRoomStayInstance
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .filterset import StayFilter, ReviewFilter
+from .filterset import StayFilter, ReviewFilter, BookingsFilter
 from django.db.models import Q
 from lodging.models import Review
 from rest_framework.validators import ValidationError
@@ -198,6 +198,34 @@ class RoomAvailabilityCreateView(generics.CreateAPIView):
             raise PermissionDenied("You are not the owner of this stay")
 
         serializer.save(room_type=room_type)
+
+
+class BookingsCreateView(generics.CreateAPIView):
+    serializer_class = BookingsSerializer
+    queryset = Bookings.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        serializer.save(room_type=room_type)
+
+
+class BookingsListView(generics.ListAPIView):
+    serializer_class = BookingsSerializer
+    permission_classes = [IsAuthenticated]
+    filterset_class = BookingsFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_queryset(self):
+        queryset = Bookings.objects.all()
+        date = self.request.query_params.get("date")
+        if date:
+            queryset = Bookings.objects.filter(
+                Q(check_in_date__lte=date) & Q(check_out_date__gte=date)
+            )
+        return queryset
 
 
 class UserStayDetailView(generics.RetrieveUpdateDestroyAPIView):
