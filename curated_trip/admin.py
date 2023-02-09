@@ -323,7 +323,14 @@ class TripWizardAdmin(admin.ModelAdmin):
     ordering = ("created_at",)
 
 
+class EbookEmailAdmin(admin.ModelAdmin):
+    list_display = ("email", "created_at")
+    ordering = ("created_at",)
+    search_fields = ("email",)
+
+
 admin.site.register(CuratedTrip, CuratedTripAdmin)
 admin.site.register(BookedTrip, BookedTripAdmin)
 admin.site.register(RequestInfoOnCustomTrip, RequestInfoOnCustomTripAdmin)
 admin.site.register(TripWizard, TripWizardAdmin)
+admin.site.register(EbookEmail, EbookEmailAdmin)

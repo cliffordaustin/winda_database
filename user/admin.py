@@ -95,6 +95,7 @@ class UserAdmin(BaseUserAdmin):
                     "password2",
                     "email_verified",
                     "is_admin",
+                    "is_partner",
                     "is_staff",
                     "is_superuser",
                 ),

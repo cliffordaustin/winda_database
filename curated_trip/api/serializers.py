@@ -133,3 +133,9 @@ class TripWizardSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripWizard
         fields = "__all__"
+
+
+class EbookEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EbookEmail
+        fields = "__all__"

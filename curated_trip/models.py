@@ -491,3 +491,16 @@ class TripWizard(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class EbookEmail(models.Model):
+    email = models.EmailField(max_length=250, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.email}"
+
+    class Meta:
+        verbose_name = "Ebook Email"
+        verbose_name_plural = "Ebook Emails"

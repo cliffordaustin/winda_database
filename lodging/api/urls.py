@@ -132,6 +132,12 @@ urlpatterns = [
         name="room-booking-create",
     ),
     path(
+        "user-stays-email/",
+        UserStaysEmail.as_view(),
+        name="user-stays-email",
+    ),
+    path("send-request-mail/", RequestMail.as_view(), name="send-request-mail"),
+    path(
         "room-types/<room_type_slug>/bookings/",
         BookingsListView.as_view(),
         name="room-booking-list",

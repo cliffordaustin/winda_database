@@ -108,6 +108,15 @@ class UserStays(generics.ListAPIView):
         return Stays.objects.filter(user=self.request.user)
 
 
+class UserStaysEmail(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        email = self.request.user.email
+        return Stays.objects.filter(contact_email=email)
+
+
 class RoomTypeCreateView(generics.CreateAPIView):
     serializer_class = RoomTypeSerializer
     queryset = RoomType.objects.all()
@@ -624,6 +633,33 @@ class LodgePackageBookingInstallmentCreateView(generics.CreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         serializer.save(stay=stay)
+
+
+class RequestMail(APIView):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_partner:
+            raise PermissionDenied
+
+        elif request.method == "POST":
+            message = EmailMessage(
+                to=[settings.DEFAULT_FROM_EMAIL],
+            )
+            message.template_id = "4571457"
+            message.from_email = None
+            message.merge_data = {
+                request.user.email: {
+                    "name": request.user.first_name,
+                    "user_email": request.user.email,
+                },
+            }
+
+            message.merge_global_data = {
+                "name": request.user.first_name,
+                "user_email": request.user.email,
+            }
+            message.send(fail_silently=True)
+
+            return Response({"message": "Mail sent successfully"})
 
 
 class EventTransportCreateView(generics.CreateAPIView):

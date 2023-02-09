@@ -128,6 +128,11 @@ class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):
         serializer.save(custom_trip=custom_trip)
 
 
+class EbookEmailCreateView(generics.CreateAPIView):
+    serializer_class = EbookEmailSerializer
+    queryset = EbookEmail.objects.all()
+
+
 class TripWizardCreateView(generics.CreateAPIView):
     serializer_class = TripWizardSerializer
     queryset = TripWizard.objects.all()

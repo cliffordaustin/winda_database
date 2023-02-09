@@ -51,6 +51,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "instagram_username",
             "tiktok_username",
             "profile_pic",
+            "is_partner",
             "avatar_url",
             "password1",
             "password2",
@@ -84,6 +85,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "instagram_username": self.validated_data.get("instagram_username", ""),
             "tiktok_username": self.validated_data.get("tiktok_username", ""),
             "profile_pic": self.validated_data.get("profile_pic", ""),
+            "is_partner": self.validated_data.get("is_partner", False),
             "avatar_url": self.validated_data.get("avatar_url", ""),
             "password1": self.validated_data.get("password1", ""),
             "email": self.validated_data.get("email", ""),
@@ -96,6 +98,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         adapter.save_user(request, user, self)
         if self.cleaned_data.get("profile_pic"):
             user.profile_pic = self.cleaned_data.get("profile_pic")
+        user.is_partner = self.cleaned_data.get("is_partner")
         setup_user_email(request, user, [])
         user.save()
 
