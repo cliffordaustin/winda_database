@@ -561,7 +561,12 @@ class Stays(models.Model):
     )
 
     contact_name = models.CharField(max_length=250, blank=True, null=True)
-    contact_email = models.EmailField(blank=True, null=True)
+    contact_email = models.EmailField(max_length=250, blank=True, null=True)
+    contact_emails = ArrayField(
+        models.EmailField(max_length=250, blank=True, null=True),
+        default=list,
+        help_text="Add multiple emails separated by comma",
+    )
     contact_phone = PhoneNumberField(blank=True)
     company = models.CharField(max_length=250, blank=True, null=True)
 
