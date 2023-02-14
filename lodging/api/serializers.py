@@ -18,6 +18,11 @@ from django.db.models import Sum
 from transport.api.serializers import TransportSerializer
 from transport.models import Transportation
 
+from rest_framework_bulk import (
+    BulkListSerializer,
+    BulkSerializerMixin,
+)
+
 
 class StayImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -125,8 +130,58 @@ class RoomAvailabilitySerializer(serializers.ModelSerializer):
         exclude = ["room_type"]
 
 
+class RoomAvailabilityResidentGuestSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
+    class Meta:
+        model = RoomAvailabilityResidentGuest
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_availability_resident"]
+
+
+class RoomAvailabilityResidentSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
+    room_resident_guest_availabilities = RoomAvailabilityResidentGuestSerializer(
+        many=True, read_only=True
+    )
+
+    class Meta:
+        model = RoomAvailabilityResident
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_type"]
+
+
+class RoomAvailabilityNonResidentGuestSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
+    class Meta:
+        model = RoomAvailabilityNonResidentGuest
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_availability_non_resident"]
+
+
+class RoomAvailabilityNonResidentSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
+    room_non_resident_guest_availabilities = RoomAvailabilityNonResidentGuestSerializer(
+        many=True, read_only=True
+    )
+
+    class Meta:
+        model = RoomAvailabilityNonResident
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_type"]
+
+
 class RoomTypeSerializer(serializers.ModelSerializer):
     room_availabilities = RoomAvailabilitySerializer(many=True, read_only=True)
+    room_resident_availabilities = RoomAvailabilityResidentSerializer(
+        many=True, read_only=True
+    )
+    room_non_resident_availabilities = RoomAvailabilityNonResidentSerializer(
+        many=True, read_only=True
+    )
     bookings = BookingsSerializer(many=True, read_only=True)
 
     class Meta:

@@ -19,6 +19,10 @@ from rest_framework import generics, serializers, status
 from django.db.models import F, Value, CharField
 from django.conf import settings
 
+from rest_framework_bulk import (
+    ListBulkCreateUpdateDestroyAPIView,
+)
+
 
 class StaysCreateView(generics.CreateAPIView):
     serializer_class = StaysSerializer
@@ -186,6 +190,158 @@ class RoomAvailabilityListView(generics.ListAPIView):
 
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
         queryset = RoomAvailability.objects.filter(room_type=room_type)
+
+        return queryset
+
+
+class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
+    serializer_class = RoomAvailabilityResidentSerializer
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        queryset = RoomAvailabilityResident.objects.filter(room_type=room_type)
+
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
+
+        if start_date and end_date:
+            queryset = RoomAvailabilityResident.objects.filter(
+                room_type=room_type,
+                date__range=[start_date, end_date],
+            ).order_by("date")
+
+        return queryset
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        if room_type.stay.contact_email != self.request.user.email:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        # check if date already exists then delete it
+        for data in self.request.data:
+            date = data["date"]
+            RoomAvailabilityResident.objects.filter(
+                room_type=room_type, date=date
+            ).delete()
+
+        availabilities = serializer.save(room_type=room_type)
+
+        for (data, availability) in zip(self.request.data, availabilities):
+            for item in data["room_resident_guest_availabilities"]:
+                RoomAvailabilityResidentGuest.objects.create(
+                    room_availability_resident=availability, **item
+                )
+
+    def perform_update(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        if room_type.stay.contact_email != self.request.user.email:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        availabilities = serializer.save(room_type=room_type)
+
+        for (data, availability) in zip(self.request.data, availabilities):
+            for item in data["room_resident_guest_availabilities"]:
+                RoomAvailabilityResidentGuest.objects.update_or_create(
+                    room_availability_resident=availability,
+                    id=item["id"],
+                    defaults=item,
+                )
+
+
+class RoomAvailabilityResidentDeleteView(generics.DestroyAPIView):
+    serializer_class = RoomAvailabilityResidentSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        queryset = RoomAvailabilityResident.objects.filter(room_type=room_type)
+
+        return queryset
+
+
+class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
+    serializer_class = RoomAvailabilityNonResidentSerializer
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        queryset = RoomAvailabilityNonResident.objects.filter(room_type=room_type)
+
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
+
+        if start_date and end_date:
+            queryset = RoomAvailabilityNonResident.objects.filter(
+                room_type=room_type,
+                date__range=[start_date, end_date],
+            ).order_by("date")
+
+        return queryset
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        if room_type.stay.contact_email != self.request.user.email:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        # check if date already exists then delete it
+        for data in self.request.data:
+            date = data["date"]
+            RoomAvailabilityNonResident.objects.filter(
+                room_type=room_type, date=date
+            ).delete()
+
+        availabilities = serializer.save(room_type=room_type)
+
+        for (data, availability) in zip(self.request.data, availabilities):
+            for item in data["room_non_resident_guest_availabilities"]:
+                RoomAvailabilityNonResidentGuest.objects.create(
+                    room_availability_non_resident=availability, **item
+                )
+
+    def perform_update(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        if room_type.stay.contact_email != self.request.user.email:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        availabilities = serializer.save(room_type=room_type)
+
+        for (data, availability) in zip(self.request.data, availabilities):
+            for item in data["room_non_resident_guest_availabilities"]:
+                RoomAvailabilityNonResidentGuest.objects.update_or_create(
+                    room_availability_non_resident=availability,
+                    id=item["id"],
+                    defaults=item,
+                )
+
+    def allow_bulk_destroy(self, qs, filtered):
+        return qs is not filtered
+
+
+class RoomAvailabilityNonResidentDeleteView(generics.DestroyAPIView):
+    serializer_class = RoomAvailabilityNonResidentSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        queryset = RoomAvailabilityNonResident.objects.filter(room_type=room_type)
 
         return queryset
 

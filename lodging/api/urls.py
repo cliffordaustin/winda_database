@@ -117,6 +117,26 @@ urlpatterns = [
         name="room-availability-list",
     ),
     path(
+        "room-types/<room_type_slug>/resident-availabilities/",
+        RoomAvailabilityResidentView.as_view(),
+        name="room-resident-availability-list",
+    ),
+    path(
+        "room-types/<room_type_slug>/resident-availabilities/<slug>/",
+        RoomAvailabilityResidentDeleteView.as_view(),
+        name="room-resident-availability-delete",
+    ),
+    path(
+        "room-types/<room_type_slug>/nonresident-availabilities/<slug>/",
+        RoomAvailabilityNonResidentDeleteView.as_view(),
+        name="room-non-resident-availability-delete",
+    ),
+    path(
+        "room-types/<room_type_slug>/nonresident-availabilities/",
+        RoomAvailabilityNonResidentView.as_view(),
+        name="room-non-resident-availability-list",
+    ),
+    path(
         "room-types/<room_type_slug>/availabilities/<slug>/",
         RoomAvailabilityDetailView.as_view(),
         name="room-availability-detail",

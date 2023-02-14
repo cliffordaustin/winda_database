@@ -1083,3 +1083,61 @@ class RoomAvailability(models.Model):
     class Meta:
         verbose_name = "Room availability"
         verbose_name_plural = "Room availabilities"
+
+
+class RoomAvailabilityResident(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    room_type = models.ForeignKey(
+        RoomType, on_delete=models.CASCADE, related_name="room_resident_availabilities"
+    )
+    num_of_available_rooms = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    date = models.DateField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Room availability Resident"
+        verbose_name_plural = "Room availabilities Resident"
+
+
+class RoomAvailabilityResidentGuest(models.Model):
+    room_availability_resident = models.ForeignKey(
+        RoomAvailabilityResident,
+        on_delete=models.CASCADE,
+        related_name="room_resident_guest_availabilities",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Room availability Resident Guest"
+        verbose_name_plural = "Room availabilities Resident Guest"
+
+
+class RoomAvailabilityNonResident(models.Model):
+    slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
+    room_type = models.ForeignKey(
+        RoomType,
+        on_delete=models.CASCADE,
+        related_name="room_non_resident_availabilities",
+    )
+    num_of_available_rooms = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    date = models.DateField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Room availability Non-Resident"
+        verbose_name_plural = "Room availabilities Non-Resident"
+
+
+class RoomAvailabilityNonResidentGuest(models.Model):
+    room_availability_non_resident = models.ForeignKey(
+        RoomAvailabilityNonResident,
+        on_delete=models.CASCADE,
+        related_name="room_non_resident_guest_availabilities",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Room availability Non-Resident Guest"
+        verbose_name_plural = "Room availabilities Non-Resident Guest"
