@@ -175,13 +175,8 @@ import dj_database_url
 #     DATABASES["default"].update(db_from_env)
 
 
-DATABASES["default"] = {
-    "ENGINE": "django.db.backends.postgresql",
-    "NAME": os.environ.get("WINDA_DATABASE_NAME"),
-    "USER": os.environ.get("WINDA_DATABASE_USER"),
-    "PASSWORD": os.environ.get("WINDA_DATABASE_PASSWORD"),
-    "HOST": os.environ.get("WINDA_DATABASE_HOST"),
-}
+db_from_env = dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+DATABASES["default"].update(db_from_env)
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
