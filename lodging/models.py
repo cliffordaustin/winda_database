@@ -1064,7 +1064,7 @@ class Bookings(models.Model):
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
-        return str(self.user) + " - " + str(self.stay.name)
+        return str(self.full_name)
 
     class Meta:
         verbose_name = "Booking"
