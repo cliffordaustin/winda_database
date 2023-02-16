@@ -1052,6 +1052,7 @@ class RoomType(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="room_types")
     name = models.CharField(max_length=120, blank=True, null=True)
+    capacity = models.IntegerField(default=2)
 
     def __str__(self):
         return str(self.name)
@@ -1118,6 +1119,7 @@ class RoomAvailabilityResidentGuest(models.Model):
     name = models.CharField(
         max_length=120, choices=GUEST_OPTIONS, blank=True, null=True
     )
+    age_group = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
 
     class Meta:
@@ -1150,6 +1152,7 @@ class RoomAvailabilityNonResidentGuest(models.Model):
     name = models.CharField(
         max_length=120, choices=GUEST_OPTIONS, blank=True, null=True
     )
+    age_group = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
 
     class Meta:
