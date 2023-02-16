@@ -26,6 +26,16 @@ PRICING_TYPE = (
     ("HIGH-END", "HIGH-END"),
 )
 
+GUEST_OPTIONS = (
+    ("ADULT SINGLE", "ADULT SINGLE"),
+    ("ADULT DOUBLE", "ADULT DOUBLE"),
+    ("ADULT TRIPLE", "ADULT TRIPLE"),
+    ("CHILD SINGLE", "CHILD SINGLE"),
+    ("CHILD DOUBLE", "CHILD DOUBLE"),
+    ("CHILD TRIPLE", "CHILD TRIPLE"),
+    ("INFANT", "INFANT"),
+)
+
 TYPE_OF_STAY = (
     ("TENTED CAMP", "TENTED CAMP"),
     ("LODGE", "LODGE"),
@@ -1105,7 +1115,9 @@ class RoomAvailabilityResidentGuest(models.Model):
         on_delete=models.CASCADE,
         related_name="room_resident_guest_availabilities",
     )
-    name = models.CharField(max_length=120, blank=True, null=True)
+    name = models.CharField(
+        max_length=120, choices=GUEST_OPTIONS, blank=True, null=True
+    )
     price = models.FloatField(default=0)
 
     class Meta:
@@ -1135,7 +1147,9 @@ class RoomAvailabilityNonResidentGuest(models.Model):
         on_delete=models.CASCADE,
         related_name="room_non_resident_guest_availabilities",
     )
-    name = models.CharField(max_length=120, blank=True, null=True)
+    name = models.CharField(
+        max_length=120, choices=GUEST_OPTIONS, blank=True, null=True
+    )
     price = models.FloatField(default=0)
 
     class Meta:

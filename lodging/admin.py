@@ -595,6 +595,7 @@ admin.site.register(LodgePackageBookingInstallment, LodgePackageBookingInstallme
 admin.site.register(EventTransport, EventTransportAdmin)
 admin.site.register(RoomAvailabilityResident, RoomAvailabilityResidentAdmin)
 admin.site.register(RoomAvailabilityNonResident, RoomAvailabilityNonResidentAdmin)
+admin.site.register(RoomAvailabilityResidentGuest)
 admin.site.register(Bookings, BookingsAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)
 admin.site.register(Review)
