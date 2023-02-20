@@ -99,7 +99,6 @@ class CuratedTripAdmin(NestedModelAdmin):
         PricePlanAInline,
         PricePlanBInline,
         PricePlanCInline,
-        # SimilarTripsInline,
     )
     actions = [duplicate_selected]
     raw_id_fields = ("user",)
