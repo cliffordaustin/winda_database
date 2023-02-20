@@ -80,6 +80,17 @@ class ItineraryInline(NestedStackedInline):
     extra = 1
 
 
+def duplicate_selected(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.duplicate()
+
+    message = f"Successfully duplicated {queryset.count()} lodges."
+    modeladmin.message_user(request, message)
+
+
+duplicate_selected.short_description = "Duplicate selected lodges"
+
+
 class CuratedTripAdmin(NestedModelAdmin):
     inlines = (
         CuratedTripLocationsInline,
@@ -90,6 +101,7 @@ class CuratedTripAdmin(NestedModelAdmin):
         PricePlanCInline,
         # SimilarTripsInline,
     )
+    actions = [duplicate_selected]
     raw_id_fields = ("user",)
 
     list_display = (

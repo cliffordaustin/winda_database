@@ -153,7 +153,7 @@ urlpatterns = [
     ),
     path(
         "user-stays-email/",
-        UserStaysEmail.as_view(),
+        UserStaysEmail.as_view(), 
         name="user-stays-email",
     ),
     path(
