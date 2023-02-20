@@ -179,6 +179,40 @@ class RoomTypeListView(generics.ListAPIView):
 
         queryset = RoomType.objects.filter(stay=stay)
 
+        num_of_rooms_resident = self.request.query_params.get("num_of_rooms_resident")
+        num_of_rooms_non_resident = self.request.query_params.get(
+            "num_of_rooms_non_resident"
+        )
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
+
+        if (
+            num_of_rooms_resident is not None
+            and num_of_rooms_non_resident == "0"
+            and start_date
+            and end_date
+        ):
+            num_of_rooms_resident = num_of_rooms_resident or 0
+            num_of_rooms_non_resident = num_of_rooms_non_resident or 0
+            queryset = RoomType.objects.filter(
+                stay=stay,
+                room_resident_availabilities__num_of_available_rooms__gte=num_of_rooms_resident,
+                room_resident_availabilities__date__range=[start_date, end_date],
+            ).distinct()
+        elif (
+            num_of_rooms_resident == "0"
+            and num_of_rooms_non_resident is not None
+            and start_date
+            and end_date
+        ):
+            num_of_rooms_resident = num_of_rooms_resident or 0
+            num_of_rooms_non_resident = num_of_rooms_non_resident or 0
+            queryset = RoomType.objects.filter(
+                stay=stay,
+                room_non_resident_availabilities__num_of_available_rooms__gte=num_of_rooms_non_resident,
+                room_non_resident_availabilities__date__range=[start_date, end_date],
+            ).distinct()
+
         return queryset
 
 
@@ -236,6 +270,10 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
                 RoomAvailabilityResidentGuest.objects.create(
                     room_availability_resident=availability, **item
                 )
+            for item in data["resident_other_fees"]:
+                ResidentOtherFees.objects.create(
+                    room_availability_resident=availability, **item
+                )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
@@ -249,6 +287,12 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
         for (data, availability) in zip(self.request.data, availabilities):
             for item in data["room_resident_guest_availabilities"]:
                 RoomAvailabilityResidentGuest.objects.update_or_create(
+                    room_availability_resident=availability,
+                    id=item["id"],
+                    defaults=item,
+                )
+            for item in data["resident_other_fees"]:
+                ResidentOtherFees.objects.update_or_create(
                     room_availability_resident=availability,
                     id=item["id"],
                     defaults=item,
@@ -310,6 +354,10 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
                 RoomAvailabilityNonResidentGuest.objects.create(
                     room_availability_non_resident=availability, **item
                 )
+            for item in data["non_resident_other_fees"]:
+                NonResidentOtherFees.objects.create(
+                    room_availability_non_resident=availability, **item
+                )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
@@ -323,6 +371,12 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
         for (data, availability) in zip(self.request.data, availabilities):
             for item in data["room_non_resident_guest_availabilities"]:
                 RoomAvailabilityNonResidentGuest.objects.update_or_create(
+                    room_availability_non_resident=availability,
+                    id=item["id"],
+                    defaults=item,
+                )
+            for item in data["non_resident_other_fees"]:
+                NonResidentOtherFees.objects.update_or_create(
                     room_availability_non_resident=availability,
                     id=item["id"],
                     defaults=item,

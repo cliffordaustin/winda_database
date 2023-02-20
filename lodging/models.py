@@ -1053,6 +1053,8 @@ class RoomType(models.Model):
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="room_types")
     name = models.CharField(max_length=120, blank=True, null=True)
     capacity = models.IntegerField(default=2)
+    child_capacity = models.IntegerField(default=0)
+    infant_capacity = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.name)
@@ -1110,6 +1112,20 @@ class RoomAvailabilityResident(models.Model):
         verbose_name_plural = "Room availabilities Resident"
 
 
+class ResidentOtherFees(models.Model):
+    room_availability_resident = models.ForeignKey(
+        RoomAvailabilityResident,
+        on_delete=models.CASCADE,
+        related_name="resident_other_fees",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Resident Other Fees"
+        verbose_name_plural = "Resident Other Fees"
+
+
 class RoomAvailabilityResidentGuest(models.Model):
     room_availability_resident = models.ForeignKey(
         RoomAvailabilityResident,
@@ -1141,6 +1157,20 @@ class RoomAvailabilityNonResident(models.Model):
     class Meta:
         verbose_name = "Room availability Non-Resident"
         verbose_name_plural = "Room availabilities Non-Resident"
+
+
+class NonResidentOtherFees(models.Model):
+    room_availability_non_resident = models.ForeignKey(
+        RoomAvailabilityNonResident,
+        on_delete=models.CASCADE,
+        related_name="non_resident_other_fees",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Non-Resident Other Fees"
+        verbose_name_plural = "Non-Resident Other Fees"
 
 
 class RoomAvailabilityNonResidentGuest(models.Model):
