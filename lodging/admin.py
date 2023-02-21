@@ -334,6 +334,7 @@ class StayAdmin(NestedModelAdmin):
         "is_an_event",
         "is_kaleidoscope_event",
         "has_holiday_package",
+        "is_partner_property",
         "is_active",
         "bathrooms",
         "rooms",
@@ -504,6 +505,7 @@ class StayAdmin(NestedModelAdmin):
             {
                 "fields": (
                     "pricing_type",
+                    "is_partner_property",
                     "in_homepage",
                     "has_options",
                     "is_active",

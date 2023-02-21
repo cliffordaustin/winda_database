@@ -623,6 +623,7 @@ class Stays(models.Model):
     )
     in_homepage = models.BooleanField(default=False)
     has_options = models.BooleanField(default=False)
+    is_partner_property = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
 

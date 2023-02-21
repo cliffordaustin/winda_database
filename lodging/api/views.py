@@ -121,6 +121,29 @@ class UserStaysEmail(generics.ListAPIView):
         return Stays.objects.filter(contact_email=email)
 
 
+class PartnerStaysListView(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Stays.objects.filter(is_partner_property=True)
+
+        querystring = self.request.GET.get("search")
+        if querystring:
+            querystring = querystring.split(",")[0]
+            words = re.split(r"[^A-Za-z']+", querystring)
+            query = Q()  # empty Q object
+            for word in words:
+                # 'or' the queries together
+                query |= Q(location__icontains=word) | Q(city__icontains=word)
+            queryset = Stays.objects.filter(
+                query,
+                is_active=True,
+            ).all()
+
+        return queryset
+
+
 class UserStaysEmailDetailView(generics.RetrieveUpdateAPIView):
     serializer_class = StaysSerializer
     permission_classes = [IsAuthenticated]

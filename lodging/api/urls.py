@@ -153,13 +153,18 @@ urlpatterns = [
     ),
     path(
         "user-stays-email/",
-        UserStaysEmail.as_view(), 
+        UserStaysEmail.as_view(),
         name="user-stays-email",
     ),
     path(
         "user-stays-email/<slug>/",
         UserStaysEmailDetailView.as_view(),
         name="user-stays-detail-email",
+    ),
+    path(
+        "partner-stays/",
+        PartnerStaysListView.as_view(),
+        name="partner-stays-list",
     ),
     path("send-request-mail/", RequestMail.as_view(), name="send-request-mail"),
     path(

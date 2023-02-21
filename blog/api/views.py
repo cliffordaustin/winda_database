@@ -20,4 +20,4 @@ class BlogListView(generics.ListAPIView):
     serializer_class = BlogSerializer
 
     def get_queryset(self):
-        return Blog.objects.filter(is_active=True)
+        return Blog.objects.filter(is_active=True).order_by("-id")
