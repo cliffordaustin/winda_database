@@ -152,7 +152,6 @@ class RoomAvailabilityResidentSerializer(
     room_resident_guest_availabilities = RoomAvailabilityResidentGuestSerializer(
         many=True, read_only=True
     )
-    resident_other_fees = ResidentOtherFeesSerializer(many=True, read_only=True)
 
     class Meta:
         model = RoomAvailabilityResident
@@ -182,10 +181,23 @@ class RoomAvailabilityNonResidentSerializer(
     room_non_resident_guest_availabilities = RoomAvailabilityNonResidentGuestSerializer(
         many=True, read_only=True
     )
-    non_resident_other_fees = NonResidentOtherFeesSerializer(many=True, read_only=True)
 
     class Meta:
         model = RoomAvailabilityNonResident
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_type"]
+
+
+class OtherFeesResidentSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = OtherFeesResident
+        list_serializer_class = BulkListSerializer
+        exclude = ["room_type"]
+
+
+class OtherFeesNonResidentSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = OtherFeesNonResident
         list_serializer_class = BulkListSerializer
         exclude = ["room_type"]
 
@@ -198,6 +210,8 @@ class RoomTypeSerializer(serializers.ModelSerializer):
     room_non_resident_availabilities = RoomAvailabilityNonResidentSerializer(
         many=True, read_only=True
     )
+    other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
+    other_fees_non_resident = OtherFeesNonResidentSerializer(many=True, read_only=True)
     bookings = BookingsSerializer(many=True, read_only=True)
 
     class Meta:

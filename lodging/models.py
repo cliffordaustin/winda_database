@@ -1160,6 +1160,34 @@ class RoomAvailabilityNonResident(models.Model):
         verbose_name_plural = "Room availabilities Non-Resident"
 
 
+class OtherFeesResident(models.Model):
+    room_type = models.ForeignKey(
+        RoomType,
+        on_delete=models.CASCADE,
+        related_name="other_fees_resident",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Resident Other Fees"
+        verbose_name_plural = "Resident Other Fees"
+
+
+class OtherFeesNonResident(models.Model):
+    room_type = models.ForeignKey(
+        RoomType,
+        on_delete=models.CASCADE,
+        related_name="other_fees_non_resident",
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Non-Resident Other Fees"
+        verbose_name_plural = "Non-Resident Other Fees"
+
+
 class NonResidentOtherFees(models.Model):
     room_availability_non_resident = models.ForeignKey(
         RoomAvailabilityNonResident,

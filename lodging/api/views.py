@@ -251,6 +251,74 @@ class RoomAvailabilityListView(generics.ListAPIView):
         return queryset
 
 
+class OtherFeesResidentListView(generics.ListCreateAPIView):
+    serializer_class = OtherFeesResidentSerializer
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        queryset = OtherFeesResident.objects.filter(room_type=room_type)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        serializer.save(room_type=room_type)
+
+
+class OtherFeesNonResidentListView(generics.ListCreateAPIView):
+    serializer_class = OtherFeesNonResidentSerializer
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        queryset = OtherFeesNonResident.objects.filter(room_type=room_type)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        serializer.save(room_type=room_type)
+
+
+class ResidentOtherFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ResidentOtherFeesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        queryset = ResidentOtherFees.objects.filter(room_type=room_type)
+
+        return queryset
+
+
+class NonResidentOtherFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = NonResidentOtherFeesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        room_type_slug = self.kwargs.get("room_type_slug")
+
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+
+        queryset = NonResidentOtherFees.objects.filter(room_type=room_type)
+
+        return queryset
+
+
 class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
     serializer_class = RoomAvailabilityResidentSerializer
 
@@ -293,10 +361,6 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
                 RoomAvailabilityResidentGuest.objects.create(
                     room_availability_resident=availability, **item
                 )
-            for item in data["resident_other_fees"]:
-                ResidentOtherFees.objects.create(
-                    room_availability_resident=availability, **item
-                )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
@@ -310,12 +374,6 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
         for (data, availability) in zip(self.request.data, availabilities):
             for item in data["room_resident_guest_availabilities"]:
                 RoomAvailabilityResidentGuest.objects.update_or_create(
-                    room_availability_resident=availability,
-                    id=item["id"],
-                    defaults=item,
-                )
-            for item in data["resident_other_fees"]:
-                ResidentOtherFees.objects.update_or_create(
                     room_availability_resident=availability,
                     id=item["id"],
                     defaults=item,
@@ -377,10 +435,6 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
                 RoomAvailabilityNonResidentGuest.objects.create(
                     room_availability_non_resident=availability, **item
                 )
-            for item in data["non_resident_other_fees"]:
-                NonResidentOtherFees.objects.create(
-                    room_availability_non_resident=availability, **item
-                )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
@@ -394,12 +448,6 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
         for (data, availability) in zip(self.request.data, availabilities):
             for item in data["room_non_resident_guest_availabilities"]:
                 RoomAvailabilityNonResidentGuest.objects.update_or_create(
-                    room_availability_non_resident=availability,
-                    id=item["id"],
-                    defaults=item,
-                )
-            for item in data["non_resident_other_fees"]:
-                NonResidentOtherFees.objects.update_or_create(
                     room_availability_non_resident=availability,
                     id=item["id"],
                     defaults=item,

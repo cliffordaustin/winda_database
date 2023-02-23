@@ -147,6 +147,26 @@ urlpatterns = [
         name="room-availability-create",
     ),
     path(
+        "room-types/<room_type_slug>/resident-other-fees/",
+        OtherFeesResidentListView.as_view(),
+        name="resident-other-fees-list",
+    ),
+    path(
+        "room-types/<room_type_slug>/nonresident-other-fees/",
+        OtherFeesNonResidentListView.as_view(),
+        name="nonresident-other-fees-list",
+    ),
+    path(
+        "room-types/<room_type_slug>/resident-other-fees/<int:pk>/",
+        ResidentOtherFeesDetailView.as_view(),
+        name="resident-other-fees-detail",
+    ),
+    path(
+        "room-types/<room_type_slug>/nonresident-other-fees/<int:pk>/",
+        NonResidentOtherFeesDetailView.as_view(),
+        name="nonresident-other-fees-detail",
+    ),
+    path(
         "room-types/<room_type_slug>/add-booking/",
         BookingsCreateView.as_view(),
         name="room-booking-create",
