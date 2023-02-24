@@ -192,14 +192,14 @@ class OtherFeesResidentSerializer(BulkSerializerMixin, serializers.ModelSerializ
     class Meta:
         model = OtherFeesResident
         list_serializer_class = BulkListSerializer
-        exclude = ["room_type"]
+        exclude = ["stay"]
 
 
 class OtherFeesNonResidentSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = OtherFeesNonResident
         list_serializer_class = BulkListSerializer
-        exclude = ["room_type"]
+        exclude = ["stay"]
 
 
 class RoomTypeSerializer(serializers.ModelSerializer):
@@ -210,8 +210,6 @@ class RoomTypeSerializer(serializers.ModelSerializer):
     room_non_resident_availabilities = RoomAvailabilityNonResidentSerializer(
         many=True, read_only=True
     )
-    other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
-    other_fees_non_resident = OtherFeesNonResidentSerializer(many=True, read_only=True)
     bookings = BookingsSerializer(many=True, read_only=True)
 
     class Meta:
@@ -224,6 +222,8 @@ class StaysSerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
     type_of_rooms = TypeOfRoomsSerializer(many=True, read_only=True)
     room_types = RoomTypeSerializer(many=True, read_only=True)
+    other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
+    other_fees_non_resident = OtherFeesNonResidentSerializer(many=True, read_only=True)
     is_user_stay = serializers.SerializerMethodField()
     has_user_reviewed = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()

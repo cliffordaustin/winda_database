@@ -202,37 +202,17 @@ class RoomTypeListView(generics.ListAPIView):
 
         queryset = RoomType.objects.filter(stay=stay)
 
-        num_of_rooms_resident = self.request.query_params.get("num_of_rooms_resident")
-        num_of_rooms_non_resident = self.request.query_params.get(
-            "num_of_rooms_non_resident"
-        )
+        # num_of_rooms_resident = self.request.query_params.get("num_of_rooms_resident")
+        # num_of_rooms_non_resident = self.request.query_params.get(
+        #     "num_of_rooms_non_resident"
+        # )
         start_date = self.request.query_params.get("start_date")
         end_date = self.request.query_params.get("end_date")
 
-        if (
-            num_of_rooms_resident is not None
-            and num_of_rooms_non_resident == "0"
-            and start_date
-            and end_date
-        ):
-            num_of_rooms_resident = num_of_rooms_resident or 0
-            num_of_rooms_non_resident = num_of_rooms_non_resident or 0
+        if start_date and end_date:
             queryset = RoomType.objects.filter(
                 stay=stay,
-                room_resident_availabilities__num_of_available_rooms__gte=num_of_rooms_resident,
                 room_resident_availabilities__date__range=[start_date, end_date],
-            ).distinct()
-        elif (
-            num_of_rooms_resident == "0"
-            and num_of_rooms_non_resident is not None
-            and start_date
-            and end_date
-        ):
-            num_of_rooms_resident = num_of_rooms_resident or 0
-            num_of_rooms_non_resident = num_of_rooms_non_resident or 0
-            queryset = RoomType.objects.filter(
-                stay=stay,
-                room_non_resident_availabilities__num_of_available_rooms__gte=num_of_rooms_non_resident,
                 room_non_resident_availabilities__date__range=[start_date, end_date],
             ).distinct()
 
@@ -255,66 +235,60 @@ class OtherFeesResidentListView(generics.ListCreateAPIView):
     serializer_class = OtherFeesResidentSerializer
 
     def get_queryset(self):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        queryset = OtherFeesResident.objects.filter(room_type=room_type)
+        queryset = OtherFeesResident.objects.filter(stay=stay)
 
         return queryset
 
     def perform_create(self, serializer):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        serializer.save(room_type=room_type)
+        serializer.save(stay=stay)
 
 
 class OtherFeesNonResidentListView(generics.ListCreateAPIView):
     serializer_class = OtherFeesNonResidentSerializer
 
     def get_queryset(self):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        queryset = OtherFeesNonResident.objects.filter(room_type=room_type)
+        queryset = OtherFeesNonResident.objects.filter(stay=stay)
 
         return queryset
 
     def perform_create(self, serializer):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        serializer.save(room_type=room_type)
+        serializer.save(stay=stay)
 
 
-class ResidentOtherFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ResidentOtherFeesSerializer
+class OtherFeesResidentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = OtherFeesResidentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        queryset = ResidentOtherFees.objects.filter(room_type=room_type)
+        queryset = OtherFeesResident.objects.filter(stay=stay)
 
         return queryset
 
 
-class NonResidentOtherFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = NonResidentOtherFeesSerializer
+class OtherFeesNonResidentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = OtherFeesNonResidentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        room_type_slug = self.kwargs.get("room_type_slug")
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
-
-        queryset = NonResidentOtherFees.objects.filter(room_type=room_type)
+        queryset = OtherFeesNonResident.objects.filter(stay=stay)
 
         return queryset
 

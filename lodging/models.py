@@ -1161,10 +1161,8 @@ class RoomAvailabilityNonResident(models.Model):
 
 
 class OtherFeesResident(models.Model):
-    room_type = models.ForeignKey(
-        RoomType,
-        on_delete=models.CASCADE,
-        related_name="other_fees_resident",
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="other_fees_resident"
     )
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
@@ -1175,10 +1173,8 @@ class OtherFeesResident(models.Model):
 
 
 class OtherFeesNonResident(models.Model):
-    room_type = models.ForeignKey(
-        RoomType,
-        on_delete=models.CASCADE,
-        related_name="other_fees_non_resident",
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="other_fees_non_resident"
     )
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
