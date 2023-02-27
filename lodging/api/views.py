@@ -123,7 +123,6 @@ class UserStaysEmail(generics.ListAPIView):
 
 class PartnerStaysListView(generics.ListAPIView):
     serializer_class = StaysSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Stays.objects.filter(is_partner_property=True)
