@@ -97,6 +97,13 @@ PLAN_TYPE = (
 )
 
 
+FEE_OPTIONS = (
+    ("PER PERSON", "PER PERSON"),
+    ("PER PERSON PER NIGHT", "PER PERSON PER NIGHT"),
+    ("WHOLE GROUP", "WHOLE GROUP"),
+)
+
+
 class ExtrasIncluded(models.Model):
     stay = models.ForeignKey(
         "Stays", on_delete=models.CASCADE, related_name="extras_included"
@@ -1166,6 +1173,9 @@ class OtherFeesResident(models.Model):
     )
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
+    resident_fee_type = models.CharField(
+        max_length=120, choices=FEE_OPTIONS, blank=True, null=True
+    )
 
     class Meta:
         verbose_name = "Resident Other Fees"
@@ -1178,6 +1188,9 @@ class OtherFeesNonResident(models.Model):
     )
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
+    nonresident_fee_type = models.CharField(
+        max_length=120, choices=FEE_OPTIONS, blank=True, null=True
+    )
 
     class Meta:
         verbose_name = "Non-Resident Other Fees"
