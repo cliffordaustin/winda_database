@@ -26,6 +26,12 @@ PRICING_TYPE = (
     ("HIGH-END", "HIGH-END"),
 )
 
+FEE_GUEST_OPTIONS = (
+    ("ADULT", "ADULT"),
+    ("CHILD", "CHILD"),
+    ("INFANT", "INFANT"),
+)
+
 GUEST_OPTIONS = (
     ("ADULT SINGLE", "ADULT SINGLE"),
     ("ADULT DOUBLE", "ADULT DOUBLE"),
@@ -1174,7 +1180,14 @@ class OtherFeesResident(models.Model):
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
     resident_fee_type = models.CharField(
-        max_length=120, choices=FEE_OPTIONS, blank=True, null=True
+        max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
+    )
+    guest_type = models.CharField(
+        max_length=120,
+        choices=FEE_GUEST_OPTIONS,
+        blank=True,
+        null=True,
+        default="ADULT",
     )
 
     class Meta:
@@ -1189,7 +1202,14 @@ class OtherFeesNonResident(models.Model):
     name = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
     nonresident_fee_type = models.CharField(
-        max_length=120, choices=FEE_OPTIONS, blank=True, null=True
+        max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
+    )
+    guest_type = models.CharField(
+        max_length=120,
+        choices=FEE_GUEST_OPTIONS,
+        blank=True,
+        null=True,
+        default="ADULT",
     )
 
     class Meta:
