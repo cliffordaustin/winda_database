@@ -132,6 +132,14 @@ class EbookEmailCreateView(generics.CreateAPIView):
     serializer_class = EbookEmailSerializer
     queryset = EbookEmail.objects.all()
 
+    def perform_create(self, serializer):
+        if EbookEmail.objects.filter(email=self.request.data["email"]).exists():
+            EbookEmail.objects.filter(email=self.request.data["email"]).update(
+                email=self.request.data["email"]
+            )
+        else:
+            serializer.save()
+
 
 class TripWizardCreateView(generics.CreateAPIView):
     serializer_class = TripWizardSerializer
