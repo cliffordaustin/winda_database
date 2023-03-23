@@ -508,6 +508,7 @@ class StayAdmin(NestedModelAdmin):
                     "is_partner_property",
                     "in_homepage",
                     "has_options",
+                    "sheety_url",
                     "is_active",
                 )
             },

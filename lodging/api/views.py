@@ -136,8 +136,7 @@ class PartnerStaysListView(generics.ListAPIView):
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
             queryset = Stays.objects.filter(
-                query,
-                is_active=True,
+                query, is_active=True, is_partner_property=True
             ).all()
 
         return queryset

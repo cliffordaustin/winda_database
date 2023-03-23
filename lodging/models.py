@@ -213,6 +213,7 @@ class Stays(models.Model):
     owner_operated = models.BooleanField(default=False)
     popular = models.BooleanField(default=False)
     wellness_retreat = models.BooleanField(default=False)
+    sheety_url = models.URLField(max_length=500, blank=True, null=True)
 
     # Amenities
     swimming_pool = models.BooleanField(default=False)
