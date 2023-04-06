@@ -114,6 +114,7 @@ else:
         "https://www.winda.guide",
         "https://winda.guide",
         "https://www.windastays.com",
+        "http://localhost:3000",
         "https://windastays.com",
     ]
 

@@ -248,8 +248,6 @@ class Stays(models.Model):
     photography_room = models.BooleanField(default=False)
     themed_room = models.BooleanField(default=False)
     pet_friendly = models.BooleanField(default=False)
-
-    # work on this in the frontend
     barber_shop = models.BooleanField(default=False)
     beauty_salon = models.BooleanField(default=False)
     ensuite_room = models.BooleanField(default=False)

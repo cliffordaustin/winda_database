@@ -104,6 +104,22 @@ class StaysListView(generics.ListAPIView):
         return queryset
 
 
+class HighlightedStaysListView(generics.ListAPIView):
+    serializer_class = StaysSerializer
+
+    def get_queryset(self):
+        return Stays.objects.filter(in_homepage=True, has_options=True)
+
+
+class HighlightedStaysDetailView(generics.RetrieveAPIView):
+    serializer_class = StaysSerializer
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        return Stays.objects.filter(in_homepage=True, has_options=True, slug=slug)
+
+
 class UserStays(generics.ListAPIView):
     serializer_class = StaysSerializer
     permission_classes = [IsAuthenticated]

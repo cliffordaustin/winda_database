@@ -4,6 +4,16 @@ from .views import *
 
 urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
+    path(
+        "highlighted-stays/",
+        HighlightedStaysListView.as_view(),
+        name="highlighted-stays-list",
+    ),
+    path(
+        "highlighted-stays/<slug>/",
+        HighlightedStaysDetailView.as_view(),
+        name="highlighted-stays-detail",
+    ),
     path("user-stays/", UserStays.as_view(), name="user-stays-list"),
     path("user-stays/<slug>/", UserStayDetailView.as_view(), name="user-stay"),
     path("events/", EventListView.as_view(), name="events-list"),
