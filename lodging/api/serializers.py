@@ -202,6 +202,13 @@ class OtherFeesNonResidentSerializer(BulkSerializerMixin, serializers.ModelSeria
         exclude = ["stay"]
 
 
+class ActivityFeesSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = ActivityFee
+        list_serializer_class = BulkListSerializer
+        exclude = ["stay"]
+
+
 class RoomTypeSerializer(serializers.ModelSerializer):
     room_availabilities = RoomAvailabilitySerializer(many=True, read_only=True)
     room_resident_availabilities = RoomAvailabilityResidentSerializer(
@@ -238,6 +245,7 @@ class StaysSerializer(serializers.ModelSerializer):
     shared_safari = SharedSafariSerializer(read_only=True)
     all_inclusive = AllInclusiveSerializer(read_only=True)
     other_options = OtherOptionSerializer(read_only=True, many=True)
+    activity_fees = ActivityFeesSerializer(read_only=True, many=True)
     extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
     facts = FactsSerializer(many=True, read_only=True)
     inclusions = InclusionsSerializer(many=True, read_only=True)

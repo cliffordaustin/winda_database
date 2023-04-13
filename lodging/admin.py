@@ -591,6 +591,7 @@ class RoomTypeAdmin(admin.ModelAdmin):
     search_fields = ("stay__name", "stay__property_name", "name")
 
 
+admin.site.register(ActivityFee)
 admin.site.register(Stays, StayAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(LodgePackageBooking, LodgePackageBookingAdmin)

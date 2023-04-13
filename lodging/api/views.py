@@ -142,20 +142,40 @@ class PartnerStaysListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Stays.objects.filter(is_partner_property=True)
-
+        # list of stay id
+        list_ids = self.request.GET.get("list_ids")
         querystring = self.request.GET.get("search")
+
+        query = Q()  # empty Q object
+
         if querystring:
             querystring = querystring.split(",")[0]
             words = re.split(r"[^A-Za-z']+", querystring)
-            query = Q()  # empty Q object
+
             for word in words:
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
+
+        if list_ids:
             queryset = Stays.objects.filter(
-                query, is_active=True, is_partner_property=True
+                query,
+                is_active=True,
+                is_partner_property=True,
+                id__in=list_ids.split(","),
+            ).all()
+        else:
+            queryset = Stays.objects.filter(
+                query,
+                is_active=True,
+                is_partner_property=True,
             ).all()
 
         return queryset
+
+
+class PartnerStaysDetailView(generics.RetrieveAPIView):
+    serializer_class = StaysSerializer
+    queryset = Stays.objects.filter(is_partner_property=True)
 
 
 class UserStaysEmailDetailView(generics.RetrieveUpdateAPIView):
@@ -253,6 +273,26 @@ class OtherFeesResidentListView(generics.ListCreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         queryset = OtherFeesResident.objects.filter(stay=stay)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        serializer.save(stay=stay)
+
+
+class ActivityFeesListCreateView(generics.ListCreateAPIView):
+    serializer_class = ActivityFeesSerializer
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(
+            Stays, slug=stay_slug, is_partner_property=True
+        )
+
+        queryset = ActivityFee.objects.filter(stay=stay)
 
         return queryset
 

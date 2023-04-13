@@ -108,6 +108,7 @@ MIDDLEWARE = [
 if DEBUG:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
+        "http://localhost:3001",
     ]
 else:
     CORS_ALLOWED_ORIGINS = [

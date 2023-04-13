@@ -9,7 +9,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from phonenumber_field.modelfields import PhoneNumberField
 from activities.models import Activities
-from core.utils import lodge_image_thumbnail
+from core.utils import lodge_image_thumbnail, activity_fees_image_thumbnail
 from django.utils import timezone
 from datetime import datetime, timedelta, date
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -107,6 +107,15 @@ FEE_OPTIONS = (
     ("PER PERSON", "PER PERSON"),
     ("PER PERSON PER NIGHT", "PER PERSON PER NIGHT"),
     ("WHOLE GROUP", "WHOLE GROUP"),
+)
+
+
+PACKAGE = (
+    ("ALL INCLUSIVE", "ALL INCLUSIVE"),
+    ("GAME PACKAGE", "GAME PACKAGE"),
+    ("FULL BOARD", "FULL BOARD"),
+    ("HALF BOARD", "HALF BOARD"),
+    ("BED AND BREAKFAST", "BED AND BREAKFAST"),
 )
 
 
@@ -1068,6 +1077,7 @@ class RoomType(models.Model):
     capacity = models.IntegerField(default=2)
     child_capacity = models.IntegerField(default=0)
     infant_capacity = models.IntegerField(default=0)
+    package = models.CharField(max_length=120, choices=PACKAGE, default="ALL INCLUSIVE")
 
     def __str__(self):
         return str(self.name)
@@ -1188,10 +1198,36 @@ class OtherFeesResident(models.Model):
         null=True,
         default="ADULT",
     )
+    is_park_fee = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Resident Other Fees"
         verbose_name_plural = "Resident Other Fees"
+
+
+class ActivityFee(models.Model):
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="activity_fees"
+    )
+    name = models.CharField(max_length=120, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    price = models.FloatField(default=0)
+    image = ProcessedImageField(
+        upload_to=activity_fees_image_thumbnail,
+        processors=[ResizeToFill(1000, 750)],
+        format="JPEG",
+        options={"quality": 60},
+    )
+    price_type = models.CharField(
+        max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
+    )
+
+    def __str__(self):
+        return str(self.name) + " - " + str(self.stay.property_name)
+
+    class Meta:
+        verbose_name = "Activity Fee"
+        verbose_name_plural = "Activity Fees"
 
 
 class OtherFeesNonResident(models.Model):
@@ -1210,6 +1246,7 @@ class OtherFeesNonResident(models.Model):
         null=True,
         default="ADULT",
     )
+    is_park_fee = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Non-Resident Other Fees"

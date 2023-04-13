@@ -196,6 +196,16 @@ urlpatterns = [
         PartnerStaysListView.as_view(),
         name="partner-stays-list",
     ),
+    path(
+        "partner-stays/<int:pk>/",
+        PartnerStaysDetailView.as_view(),
+        name="partner-stays-detail",
+    ),
+    path(
+        "partner-stays/<stay_slug>/activities/",
+        ActivityFeesListCreateView.as_view(),
+        name="activity-fees-list-create",
+    ),
     path("send-request-mail/", RequestMail.as_view(), name="send-request-mail"),
     path(
         "room-types/<room_type_slug>/bookings/",
