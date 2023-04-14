@@ -117,6 +117,7 @@ else:
         "https://www.windastays.com",
         "http://localhost:3000",
         "https://windastays.com",
+        "https://windapartner.vercel.app",
     ]
 
 
