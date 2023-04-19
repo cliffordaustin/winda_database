@@ -471,25 +471,6 @@ class StayAdmin(NestedModelAdmin):
             {"fields": ("contact_name", "contact_email", "contact_phone", "company")},
         ),
         (
-            "Standard pricing",
-            {
-                "fields": (
-                    "standard",
-                    "price_non_resident",
-                    "price",
-                )
-            },
-        ),
-        (
-            "Price Per House",
-            {
-                "fields": (
-                    "per_house",
-                    "per_house_price",
-                )
-            },
-        ),
-        (
             "Policies",
             {
                 "fields": (
