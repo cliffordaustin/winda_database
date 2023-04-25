@@ -9,8 +9,13 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from phonenumber_field.modelfields import PhoneNumberField
 from activities.models import Activities
-from core.utils import lodge_image_thumbnail, activity_fees_image_thumbnail
+from core.utils import (
+    lodge_image_thumbnail,
+    activity_fees_image_thumbnail,
+    lodge_price_data_file,
+)
 from django.utils import timezone
+from django.core.validators import FileExtensionValidator
 from datetime import datetime, timedelta, date
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -351,6 +356,12 @@ class Stays(models.Model):
         blank=True,
         null=True,
         help_text="Select the dates you won't be available ' , '",
+    )
+    lodge_price_data_pdf = models.FileField(
+        upload_to=lodge_price_data_file,
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
     )
     in_homepage = models.BooleanField(default=False)
     has_options = models.BooleanField(default=False)

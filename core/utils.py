@@ -22,6 +22,10 @@ def activity_fees_image_thumbnail(instance, filename):
     return f"activity_fee_images/{instance.id}/{filename}"
 
 
+def lodge_price_data_file(instance, filename):
+    return f"lodge_price_data/{instance.id}/{filename}"
+
+
 def transportation_image_thumbnail(instance, filename):
     return f"transportation_images/{instance.id}/{filename}"
 

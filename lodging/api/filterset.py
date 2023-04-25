@@ -67,7 +67,12 @@ class StayFilter(filters.FilterSet):
         #     "theme",
         # ]
 
-        exclude = ["tags", "unavailable_dates", "contact_emails"]
+        exclude = [
+            "tags",
+            "unavailable_dates",
+            "contact_emails",
+            "lodge_price_data_pdf",
+        ]
 
 
 class BookingsFilter(filters.FilterSet):
