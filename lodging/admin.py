@@ -513,6 +513,7 @@ class StayAdmin(NestedModelAdmin):
                     "is_kaleidoscope_event",
                     "has_holiday_package",
                     "distance_from_venue",
+                    "is_an_event",
                     "has_min_date",
                     "date_starts_from_ninth",
                 )
