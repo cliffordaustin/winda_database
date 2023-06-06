@@ -18,6 +18,7 @@ from rest_framework.response import Response
 from rest_framework import generics, serializers, status
 from django.db.models import F, Value, CharField
 from django.conf import settings
+from django.contrib.sessions.backends.db import SessionStore
 
 from rest_framework_bulk import (
     ListBulkCreateUpdateDestroyAPIView,
@@ -100,6 +101,40 @@ class StaysListView(generics.ListAPIView):
             ).all()
 
         return queryset
+
+#review
+class UpdateStayView(APIView):
+    def post(self, request):
+        stay_id = request.data.get("stay_id")
+        session_id = request.session
+        print("Creating new session", session_id)
+        user_id = request.user.id if request.user.is_authenticated else None
+
+        if not stay_id:
+            return Response(
+                {"error": "Missing stay ID"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        stay = generics.get_object_or_404(Stays, id=stay_id)
+
+        try:
+            if user_id:
+                # User is logged in
+                stay.user_added_to_calculate.add(user_id)
+            elif session_id:
+                if session_id is None:
+                    # Create a new session if it doesn't exist
+
+                    request.session.create()
+                    session_id = request.session.session_key
+                # User is not logged in
+                stay.annonymous_added_to_calculate.add(session_id)
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        return Response({"success": True})
 
 
 class HighlightedStaysListView(generics.ListAPIView):
@@ -382,7 +417,7 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
 
         availabilities = serializer.save(room_type=room_type)
 
-        for (data, availability) in zip(self.request.data, availabilities):
+        for data, availability in zip(self.request.data, availabilities):
             for item in data["room_resident_guest_availabilities"]:
                 RoomAvailabilityResidentGuest.objects.create(
                     room_availability_resident=availability, **item
@@ -397,7 +432,7 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
 
         availabilities = serializer.save(room_type=room_type)
 
-        for (data, availability) in zip(self.request.data, availabilities):
+        for data, availability in zip(self.request.data, availabilities):
             for item in data["room_resident_guest_availabilities"]:
                 RoomAvailabilityResidentGuest.objects.update_or_create(
                     room_availability_resident=availability,
@@ -456,7 +491,7 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
 
         availabilities = serializer.save(room_type=room_type)
 
-        for (data, availability) in zip(self.request.data, availabilities):
+        for data, availability in zip(self.request.data, availabilities):
             for item in data["room_non_resident_guest_availabilities"]:
                 RoomAvailabilityNonResidentGuest.objects.create(
                     room_availability_non_resident=availability, **item
@@ -471,7 +506,7 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
 
         availabilities = serializer.save(room_type=room_type)
 
-        for (data, availability) in zip(self.request.data, availabilities):
+        for data, availability in zip(self.request.data, availabilities):
             for item in data["room_non_resident_guest_availabilities"]:
                 RoomAvailabilityNonResidentGuest.objects.update_or_create(
                     room_availability_non_resident=availability,
@@ -679,7 +714,6 @@ class StayImageDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsUserStayInstance]
 
     def get_queryset(self):
-
         stay_slug = self.kwargs.get("stay_slug")
         if stay_slug is not None:
             stay = generics.get_object_or_404(Stays, slug=stay_slug)
@@ -757,7 +791,6 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [ObjectPermission]
 
     def get_queryset(self):
-
         stay_slug = self.kwargs.get("stay_slug")
         if stay_slug is not None:
             stay = generics.get_object_or_404(Stays, slug=stay_slug)

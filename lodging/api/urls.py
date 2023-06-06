@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
+    path("stays/add-to-calculate/", UpdateStayView.as_view(), name="stays-calculate"),
     path(
         "highlighted-stays/",
         HighlightedStaysListView.as_view(),

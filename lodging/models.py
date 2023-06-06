@@ -8,6 +8,7 @@ from django.conf import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.sessions.models import Session
 from activities.models import Activities
 from core.utils import (
     lodge_image_thumbnail,
@@ -362,6 +363,13 @@ class Stays(models.Model):
         blank=True,
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
+    )
+    # review
+    user_added_to_calculate = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="user_added_to_calculate"
+    )
+    annonymous_added_to_calculate = models.ManyToManyField(
+        Session, blank=True, related_name="annonymous_added_to_calculate"
     )
     in_homepage = models.BooleanField(default=False)
     has_options = models.BooleanField(default=False)
@@ -907,18 +915,21 @@ class OtherFeesResident(models.Model):
         Stays, on_delete=models.CASCADE, related_name="other_fees_resident"
     )
     name = models.CharField(max_length=120, blank=True, null=True)
+    adult_price = models.FloatField(default=0)
+    child_price = models.FloatField(default=0)
+    teen_price = models.FloatField(default=0)
+
     price = models.FloatField(default=0)
-    resident_fee_type = models.CharField(
-        max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
-    )
-    guest_type = models.CharField(
-        max_length=120,
-        choices=FEE_GUEST_OPTIONS,
-        blank=True,
-        null=True,
-        default="ADULT",
-    )
-    is_park_fee = models.BooleanField(default=False)
+    # resident_fee_type = models.CharField(
+    #     max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
+    # )
+    # guest_type = models.CharField(
+    #     max_length=120,
+    #     choices=FEE_GUEST_OPTIONS,
+    #     blank=True,
+    #     null=True,
+    #     default="ADULT",
+    # )
 
     class Meta:
         verbose_name = "Resident Other Fees"
@@ -955,18 +966,21 @@ class OtherFeesNonResident(models.Model):
         Stays, on_delete=models.CASCADE, related_name="other_fees_non_resident"
     )
     name = models.CharField(max_length=120, blank=True, null=True)
+    adult_price = models.FloatField(default=0)
+    child_price = models.FloatField(default=0)
+    teen_price = models.FloatField(default=0)
+
     price = models.FloatField(default=0)
-    nonresident_fee_type = models.CharField(
-        max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
-    )
-    guest_type = models.CharField(
-        max_length=120,
-        choices=FEE_GUEST_OPTIONS,
-        blank=True,
-        null=True,
-        default="ADULT",
-    )
-    is_park_fee = models.BooleanField(default=False)
+    # nonresident_fee_type = models.CharField(
+    #     max_length=120, choices=FEE_OPTIONS, blank=True, null=True, default="PER PERSON"
+    # )
+    # guest_type = models.CharField(
+    #     max_length=120,
+    #     choices=FEE_GUEST_OPTIONS,
+    #     blank=True,
+    #     null=True,
+    #     default="ADULT",
+    # )
 
     class Meta:
         verbose_name = "Non-Resident Other Fees"

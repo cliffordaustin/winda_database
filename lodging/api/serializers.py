@@ -252,6 +252,22 @@ class StaysSerializer(serializers.ModelSerializer):
 
     has_user_saved = serializers.SerializerMethodField()
     saved_count = serializers.SerializerMethodField()
+    # review
+    has_user_added_to_calculate = serializers.SerializerMethodField()
+
+    def get_has_user_added_to_calculate(self, instance):
+        request = self.context.get("request")
+        user = request.user
+        session = request.session.session_key if request.session else None
+
+        if user.is_authenticated:
+            return instance.user_added_to_calculate.filter(id=user.id).exists()
+        elif session:
+            return instance.annonymous_added_to_calculate.filter(
+                session_key=session
+            ).exists()
+        else:
+            return False
 
     def get_count_total_review_rates(self, instance):
         return instance.reviews.aggregate(Sum("rate"))["rate__sum"]
@@ -289,7 +305,7 @@ class StaysSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stays
-        fields = "__all__"
+        exclude = ["user_added_to_calculate", "annonymous_added_to_calculate"]
 
     def get_is_user_stay(self, instance):
         request = self.context.get("request")
