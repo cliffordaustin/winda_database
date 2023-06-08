@@ -102,7 +102,8 @@ class StaysListView(generics.ListAPIView):
 
         return queryset
 
-#review
+
+# review
 class UpdateStayView(APIView):
     def post(self, request):
         stay_id = request.data.get("stay_id")
@@ -334,6 +335,21 @@ class ActivityFeesListCreateView(generics.ListCreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         serializer.save(stay=stay)
+
+
+class ActivityFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ActivityFeesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(
+            Stays, slug=stay_slug, is_partner_property=True
+        )
+
+        queryset = ActivityFee.objects.filter(stay=stay)
+
+        return queryset
 
 
 class OtherFeesNonResidentListView(generics.ListCreateAPIView):

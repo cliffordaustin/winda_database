@@ -942,11 +942,13 @@ class ActivityFee(models.Model):
     )
     name = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    price = models.FloatField(default=0)
+    price = models.FloatField(default=0, help_text="for non-resident")
+    resident_price = models.FloatField(default=0, help_text="for resident")
     image = ProcessedImageField(
         upload_to=activity_fees_image_thumbnail,
         processors=[ResizeToFill(1000, 750)],
         format="JPEG",
+        blank=True,
         options={"quality": 60},
     )
     price_type = models.CharField(

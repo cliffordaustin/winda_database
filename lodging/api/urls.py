@@ -207,6 +207,11 @@ urlpatterns = [
         ActivityFeesListCreateView.as_view(),
         name="activity-fees-list-create",
     ),
+    path(
+        "partner-stays/<stay_slug>/activities/<int:pk>/",
+        ActivityFeesDetailView.as_view(),
+        name="activity-fees-detail",
+    ),
     path("send-request-mail/", RequestMail.as_view(), name="send-request-mail"),
     path(
         "room-types/<room_type_slug>/bookings/",
