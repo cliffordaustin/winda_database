@@ -885,6 +885,7 @@ class RoomAvailabilityResidentGuest(models.Model):
         related_name="room_resident_guest_availabilities",
     )
     name = models.CharField(max_length=120, blank=True, null=True)
+    season = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     age_group = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
@@ -1010,6 +1011,7 @@ class RoomAvailabilityNonResidentGuest(models.Model):
         related_name="room_non_resident_guest_availabilities",
     )
     name = models.CharField(max_length=120, blank=True, null=True)
+    season = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     age_group = models.CharField(max_length=120, blank=True, null=True)
     price = models.FloatField(default=0)
