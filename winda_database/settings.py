@@ -140,8 +140,6 @@ TEMPLATES = [
     },
 ]
 
-SESSION_COOKIE_DOMAIN = "localhost"
-
 WSGI_APPLICATION = "winda_database.wsgi.application"
 
 AUTHENTICATION_BACKENDS = [
