@@ -193,14 +193,12 @@ class PartnerStaysListView(generics.ListAPIView):
         if list_ids:
             queryset = Stays.objects.filter(
                 query,
-                is_active=True,
                 is_partner_property=True,
                 id__in=list_ids.split(","),
             ).all()
         else:
             queryset = Stays.objects.filter(
                 query,
-                is_active=True,
                 is_partner_property=True,
             ).all()
 
