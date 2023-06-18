@@ -173,6 +173,8 @@ class Stays(models.Model):
         help_text="If no name, enter a short description of the "
         + "accommodation. Eg A lovely place located at the lake side",
         verbose_name="Name or description",
+        blank=True,
+        null=True,
     )
     property_name = models.CharField(
         max_length=250,
@@ -304,7 +306,11 @@ class Stays(models.Model):
     bathrooms = models.IntegerField(blank=True, null=True)
 
     pricing_type = models.CharField(
-        max_length=100, choices=PRICING_TYPE, default="REASONABLE"
+        max_length=100,
+        choices=PRICING_TYPE,
+        default="REASONABLE",
+        blank=True,
+        null=True,
     )
 
     contact_name = models.CharField(max_length=250, blank=True, null=True)
@@ -317,7 +323,7 @@ class Stays(models.Model):
     contact_phone = PhoneNumberField(blank=True)
     company = models.CharField(max_length=250, blank=True, null=True)
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     is_an_event = models.BooleanField(default=False)
     is_kaleidoscope_event = models.BooleanField(default=False)
