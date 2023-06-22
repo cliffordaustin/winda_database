@@ -153,6 +153,16 @@ urlpatterns = [
         name="room-availability-detail",
     ),
     path(
+        "room-types/<slug>/delete-resident-availability/",
+        RoomAvailabilityResidentDeleteView.as_view(),
+        name="room-resident-availability-delete",
+    ),
+    path(
+        "room-types/<slug>/delete-nonresident-availability/",
+        RoomAvailabilityNonResidentDeleteView.as_view(),
+        name="room-nonresident-availability-delete",
+    ),
+    path(
         "room-types/<room_type_slug>/add-availability/",
         RoomAvailabilityCreateView.as_view(),
         name="room-availability-create",

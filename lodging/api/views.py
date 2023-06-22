@@ -563,6 +563,32 @@ class RoomAvailabilityDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
+class RoomAvailabilityResidentDeleteView(generics.DestroyAPIView):
+    serializer_class = RoomTypeSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = RoomType.objects.all()
+    lookup_field = "slug"
+
+    def perform_destroy(self, instance):
+        room_type_slug = self.kwargs.get("slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        RoomAvailabilityResident.objects.filter(room_type=room_type).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RoomAvailabilityNonResidentDeleteView(generics.DestroyAPIView):
+    serializer_class = RoomTypeSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = RoomType.objects.all()
+    lookup_field = "slug"
+
+    def perform_destroy(self, instance):
+        room_type_slug = self.kwargs.get("slug")
+        room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
+        RoomAvailabilityNonResident.objects.filter(room_type=room_type).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class RoomAvailabilityCreateView(generics.CreateAPIView):
     serializer_class = RoomAvailabilitySerializer
     queryset = RoomAvailability.objects.all()
