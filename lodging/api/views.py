@@ -210,7 +210,7 @@ class PartnerStaysDetailView(generics.RetrieveAPIView):
     queryset = Stays.objects.filter(is_partner_property=True)
 
 
-class UserStaysEmailDetailView(generics.RetrieveUpdateAPIView):
+class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StaysSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "slug"
@@ -742,7 +742,9 @@ class StayImageCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
-        stay_queryset = Stays.objects.filter(slug=stay_slug, user=self.request.user)
+        stay_queryset = Stays.objects.filter(
+            slug=stay_slug, contact_email=self.request.user.email
+        )
 
         if not stay_queryset.exists():
             raise PermissionDenied("You can't add an image to this stay.")

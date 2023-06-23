@@ -5,7 +5,10 @@ class IsUserStayInstance(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif obj.stay.user == request.user:
+        elif (
+            obj.stay.user == request.user
+            or obj.stay.contact_email == request.user.email
+        ):
             return True
 
 
