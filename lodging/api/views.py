@@ -164,30 +164,43 @@ class UserStays(generics.ListAPIView):
 
 
 class UserStaysEmail(generics.ListAPIView):
-    serializer_class = StaysSerializer
+    serializer_class = LodgeStaySerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         email = self.request.user.email
-        return Stays.objects.filter(contact_email=email)
-
-
-class PartnerStaysListView(generics.ListAPIView):
-    serializer_class = PartnerStaySerializer
-
-    def get_queryset(self):
-        queryset = (
-            Stays.objects.filter(is_partner_property=True)
+        return (
+            Stays.objects.filter(contact_email=email)
             .select_related("user")
             .prefetch_related(
                 "stay_images",
+            )
+        )
+
+
+class PartnerStaysDetailView(generics.ListAPIView):
+    serializer_class = PartnerStaySerializer
+
+    def get_queryset(self):
+        list_ids = self.kwargs.get("list_ids")
+        list_ids = list_ids.split(",")
+        queryset = (
+            Stays.objects.filter(is_partner_property=True, id__in=list_ids)
+            .select_related("user")
+            .prefetch_related(
                 "activity_fees",
                 "other_fees_resident",
                 "other_fees_non_resident",
             )
         )
-        # list of stay id
-        list_ids = self.request.GET.get("list_ids")
+
+        return queryset
+
+
+class PartnerStaysListView(generics.ListAPIView):
+    serializer_class = LodgeStaySerializer
+
+    def get_queryset(self):
         querystring = self.request.GET.get("search")
 
         query = Q()  # empty Q object
@@ -200,22 +213,6 @@ class PartnerStaysListView(generics.ListAPIView):
                 # 'or' the queries together
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
 
-        if list_ids:
-            queryset = (
-                Stays.objects.filter(
-                    query,
-                    is_partner_property=True,
-                    id__in=list_ids.split(","),
-                )
-                .select_related("user")
-                .prefetch_related(
-                    "stay_images",
-                    "activity_fees",
-                    "other_fees_resident",
-                    "other_fees_non_resident",
-                )
-                .all()
-            )
         else:
             queryset = (
                 Stays.objects.filter(
@@ -225,19 +222,11 @@ class PartnerStaysListView(generics.ListAPIView):
                 .select_related("user")
                 .prefetch_related(
                     "stay_images",
-                    "activity_fees",
-                    "other_fees_resident",
-                    "other_fees_non_resident",
                 )
                 .all()
             )
 
         return queryset
-
-
-class PartnerStaysDetailView(generics.RetrieveAPIView):
-    serializer_class = StaysSerializer
-    queryset = Stays.objects.filter(is_partner_property=True)
 
 
 class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):

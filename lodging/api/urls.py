@@ -208,7 +208,7 @@ urlpatterns = [
         name="partner-stays-list",
     ),
     path(
-        "partner-stays/<int:pk>/",
+        "partner-stays/<list_ids>/",
         PartnerStaysDetailView.as_view(),
         name="partner-stays-detail",
     ),
