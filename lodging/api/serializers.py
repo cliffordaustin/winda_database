@@ -224,6 +224,28 @@ class RoomTypeSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class PartnerStaySerializer(serializers.ModelSerializer):
+    stay_images = StayImageSerializer(many=True, read_only=True)
+    activity_fees = ActivityFeesSerializer(read_only=True, many=True)
+    other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
+    other_fees_non_resident = OtherFeesNonResidentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Stays
+        fields = [
+            "user",
+            "id",
+            "slug",
+            "is_partner_property",
+            "property_name",
+            "location",
+            "stay_images",
+            "activity_fees",
+            "other_fees_resident",
+            "other_fees_non_resident",
+        ]
+
+
 class StaysSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     stay_images = StayImageSerializer(many=True, read_only=True)

@@ -19,6 +19,7 @@ from rest_framework import generics, serializers, status
 from django.db.models import F, Value, CharField
 from django.conf import settings
 from django.contrib.sessions.backends.db import SessionStore
+from django.db.models import Prefetch
 
 from rest_framework_bulk import (
     ListBulkCreateUpdateDestroyAPIView,
@@ -172,11 +173,19 @@ class UserStaysEmail(generics.ListAPIView):
 
 
 class PartnerStaysListView(generics.ListAPIView):
-    serializer_class = StaysSerializer
-    pagination_class = PartnerStayPagination
+    serializer_class = PartnerStaySerializer
 
     def get_queryset(self):
-        queryset = Stays.objects.filter(is_partner_property=True)
+        queryset = (
+            Stays.objects.filter(is_partner_property=True)
+            .select_related("user")
+            .prefetch_related(
+                "stay_images",
+                "activity_fees",
+                "other_fees_resident",
+                "other_fees_non_resident",
+            )
+        )
         # list of stay id
         list_ids = self.request.GET.get("list_ids")
         querystring = self.request.GET.get("search")
@@ -192,16 +201,36 @@ class PartnerStaysListView(generics.ListAPIView):
                 query |= Q(location__icontains=word) | Q(city__icontains=word)
 
         if list_ids:
-            queryset = Stays.objects.filter(
-                query,
-                is_partner_property=True,
-                id__in=list_ids.split(","),
-            ).all()
+            queryset = (
+                Stays.objects.filter(
+                    query,
+                    is_partner_property=True,
+                    id__in=list_ids.split(","),
+                )
+                .select_related("user")
+                .prefetch_related(
+                    "stay_images",
+                    "activity_fees",
+                    "other_fees_resident",
+                    "other_fees_non_resident",
+                )
+                .all()
+            )
         else:
-            queryset = Stays.objects.filter(
-                query,
-                is_partner_property=True,
-            ).all()
+            queryset = (
+                Stays.objects.filter(
+                    query,
+                    is_partner_property=True,
+                )
+                .select_related("user")
+                .prefetch_related(
+                    "stay_images",
+                    "activity_fees",
+                    "other_fees_resident",
+                    "other_fees_non_resident",
+                )
+                .all()
+            )
 
         return queryset
 
@@ -261,28 +290,34 @@ class RoomTypeDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class RoomTypeListView(generics.ListAPIView):
+    queryset = RoomType.objects.all()
     serializer_class = RoomTypeSerializer
 
-    def get_queryset(self):
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        queryset = RoomType.objects.filter(stay=stay)
+        queryset = queryset.filter(stay=stay)
 
-        # num_of_rooms_resident = self.request.query_params.get("num_of_rooms_resident")
-        # num_of_rooms_non_resident = self.request.query_params.get(
-        #     "num_of_rooms_non_resident"
-        # )
         start_date = self.request.query_params.get("start_date")
         end_date = self.request.query_params.get("end_date")
 
         if start_date and end_date:
-            queryset = RoomType.objects.filter(
-                stay=stay,
-                room_resident_availabilities__date__range=[start_date, end_date],
-                room_non_resident_availabilities__date__range=[start_date, end_date],
-            ).distinct()
-
+            queryset = queryset.filter(stay=stay).prefetch_related(
+                Prefetch(
+                    "room_resident_availabilities",
+                    queryset=RoomAvailabilityResident.objects.filter(
+                        date__range=[start_date, end_date]
+                    ),
+                ),
+                Prefetch(
+                    "room_non_resident_availabilities",
+                    queryset=RoomAvailabilityNonResident.objects.filter(
+                        date__range=[start_date, end_date]
+                    ),
+                ),
+            )
         return queryset
 
 
