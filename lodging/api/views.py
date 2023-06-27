@@ -1,5 +1,5 @@
 import re
-from lodging.api.pagination import Pagination, StayPagination
+from lodging.api.pagination import Pagination, StayPagination, PartnerStayPagination
 from .serializers import *
 from lodging.models import *
 from rest_framework import generics
@@ -173,6 +173,7 @@ class UserStaysEmail(generics.ListAPIView):
 
 class PartnerStaysListView(generics.ListAPIView):
     serializer_class = StaysSerializer
+    pagination_class = PartnerStayPagination
 
     def get_queryset(self):
         queryset = Stays.objects.filter(is_partner_property=True)
