@@ -176,6 +176,10 @@ class UserStaysEmail(generics.ListAPIView):
                 "stay_images",
             )
         )
+    
+class TestPartnerStaysListView(generics.ListAPIView):
+    serializer_class = StaysSerializer
+    queryset = Stays.objects.filter(is_partner_property=True)
 
 
 class PartnerStaysDetailView(generics.ListAPIView):

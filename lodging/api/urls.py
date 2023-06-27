@@ -203,6 +203,11 @@ urlpatterns = [
         name="user-stays-detail-email",
     ),
     path(
+        "test-partner-stays/",
+        TestPartnerStaysListView.as_view(),
+        name="test-partner-stays-list",
+    ),
+    path(
         "partner-stays/",
         PartnerStaysListView.as_view(),
         name="partner-stays-list",
