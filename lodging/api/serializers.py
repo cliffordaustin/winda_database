@@ -241,6 +241,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
             "activity_fees",
             "other_fees_resident",
             "other_fees_non_resident",
+            "lodge_price_data_pdf",
         ]
 
 
@@ -258,6 +259,7 @@ class LodgeStaySerializer(serializers.ModelSerializer):
             "location",
             "stay_images",
             "contact_email",
+            "lodge_price_data_pdf",
         ]
 
 
