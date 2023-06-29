@@ -917,6 +917,21 @@ class RoomAvailabilityNonResident(models.Model):
         verbose_name_plural = "Room availabilities Non-Resident"
 
 
+class ParkFees(models.Model):
+    stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="park_fees")
+    name = models.CharField(max_length=120, blank=True, null=True)
+    resident_adult_price = models.FloatField(default=0)
+    resident_child_price = models.FloatField(default=0)
+    resident_teen_price = models.FloatField(default=0)
+    non_resident_adult_price = models.FloatField(default=0)
+    non_resident_child_price = models.FloatField(default=0)
+    non_resident_teen_price = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name = "Park Fees"
+        verbose_name_plural = "Park Fees"
+
+
 class OtherFeesResident(models.Model):
     stay = models.ForeignKey(
         Stays, on_delete=models.CASCADE, related_name="other_fees_resident"

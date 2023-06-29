@@ -176,7 +176,8 @@ class UserStaysEmail(generics.ListAPIView):
                 "stay_images",
             )
         )
-    
+
+
 class TestPartnerStaysListView(generics.ListAPIView):
     serializer_class = StaysSerializer
     queryset = Stays.objects.filter(is_partner_property=True)
@@ -205,30 +206,21 @@ class PartnerStaysListView(generics.ListAPIView):
     serializer_class = LodgeStaySerializer
 
     def get_queryset(self):
-        querystring = self.request.GET.get("search")
+        search_query = self.request.GET.get("search", "")
+        print(search_query)
 
-        query = Q()  # empty Q object
-
-        if querystring:
-            querystring = querystring.split(",")[0]
-            words = re.split(r"[^A-Za-z']+", querystring)
-
-            for word in words:
-                # 'or' the queries together
-                query |= Q(location__icontains=word) | Q(city__icontains=word)
-
-        else:
-            queryset = (
-                Stays.objects.filter(
-                    query,
-                    is_partner_property=True,
-                )
-                .select_related("user")
-                .prefetch_related(
-                    "stay_images",
-                )
-                .all()
+        queryset = (
+            Stays.objects.filter(
+                Q(location__icontains=search_query)
+                | Q(property_name__icontains=search_query),
+                is_partner_property=True,
             )
+            .select_related("user")
+            .prefetch_related(
+                "stay_images",
+            )
+            .all()
+        )
 
         return queryset
 
@@ -362,6 +354,41 @@ class ActivityFeesListCreateView(generics.ListCreateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         serializer.save(stay=stay)
+
+
+class ParkFeesListCreateView(generics.ListCreateAPIView):
+    serializer_class = ParkFeesSerializer
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(
+            Stays, slug=stay_slug, is_partner_property=True
+        )
+
+        queryset = ParkFees.objects.filter(stay=stay)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        serializer.save(stay=stay)
+
+
+class ParkFeesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ParkFeesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(
+            Stays, slug=stay_slug, is_partner_property=True
+        )
+
+        queryset = ParkFees.objects.filter(stay=stay)
+
+        return queryset
 
 
 class ActivityFeesDetailView(generics.RetrieveUpdateDestroyAPIView):

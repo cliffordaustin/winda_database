@@ -202,6 +202,12 @@ class OtherFeesNonResidentSerializer(BulkSerializerMixin, serializers.ModelSeria
         exclude = ["stay"]
 
 
+class ParkFeesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParkFees
+        exclude = ["stay"]
+
+
 class ActivityFeesSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ActivityFee

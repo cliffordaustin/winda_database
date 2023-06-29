@@ -223,6 +223,16 @@ urlpatterns = [
         name="activity-fees-list-create",
     ),
     path(
+        "partner-stays/<stay_slug>/park-fees/",
+        ParkFeesListCreateView.as_view(),
+        name="park-fees-list-create",
+    ),
+    path(
+        "partner-stays/<stay_slug>/park-fees/<int:pk>/",
+        ParkFeesDetailView.as_view(),
+        name="park-fees-detail",
+    ),
+    path(
         "partner-stays/<stay_slug>/activities/<int:pk>/",
         ActivityFeesDetailView.as_view(),
         name="activity-fees-detail",
