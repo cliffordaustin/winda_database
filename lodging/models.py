@@ -813,6 +813,7 @@ class RoomType(models.Model):
     child_capacity = models.IntegerField(default=0)
     infant_capacity = models.IntegerField(default=0)
     package = models.CharField(max_length=120, choices=PACKAGE, default="ALL INCLUSIVE")
+    package_description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
