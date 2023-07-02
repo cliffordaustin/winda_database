@@ -809,10 +809,10 @@ class RoomType(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True, editable=False)
     stay = models.ForeignKey(Stays, on_delete=models.CASCADE, related_name="room_types")
     name = models.CharField(max_length=120, blank=True, null=True)
-    capacity = models.IntegerField(default=2)
+    capacity = models.IntegerField(default=0)
     child_capacity = models.IntegerField(default=0)
     infant_capacity = models.IntegerField(default=0)
-    package = models.CharField(max_length=120, choices=PACKAGE, default="ALL INCLUSIVE")
+    package = models.CharField(max_length=120, default="ALL INCLUSIVE")
     package_description = models.TextField(blank=True, null=True)
 
     def __str__(self):
