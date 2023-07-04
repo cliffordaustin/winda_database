@@ -479,19 +479,26 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
             raise PermissionDenied("You are not the owner of this stay")
 
         # check if date already exists then delete it
-        for data in self.request.data:
-            date = data["date"]
-            RoomAvailabilityResident.objects.filter(
-                room_type=room_type, date=date
-            ).delete()
+        dates_to_delete = [data["date"] for data in self.request.data]
+
+        RoomAvailabilityResident.objects.filter(
+            room_type=room_type, date__in=dates_to_delete
+        ).delete()
 
         availabilities = serializer.save(room_type=room_type)
 
+        resident_guest_list = []
+
         for data, availability in zip(self.request.data, availabilities):
             for item in data["room_resident_guest_availabilities"]:
-                RoomAvailabilityResidentGuest.objects.create(
+                resident_guest = RoomAvailabilityResidentGuest(
                     room_availability_resident=availability, **item
                 )
+                resident_guest_list.append(resident_guest)
+
+        RoomAvailabilityResidentGuest.objects.bulk_create(
+            resident_guest_list, batch_size=100
+        )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
@@ -553,19 +560,26 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
             raise PermissionDenied("You are not the owner of this stay")
 
         # check if date already exists then delete it
-        for data in self.request.data:
-            date = data["date"]
-            RoomAvailabilityNonResident.objects.filter(
-                room_type=room_type, date=date
-            ).delete()
+        dates_to_delete = [data["date"] for data in self.request.data]
+
+        RoomAvailabilityNonResident.objects.filter(
+            room_type=room_type, date__in=dates_to_delete
+        ).delete()
 
         availabilities = serializer.save(room_type=room_type)
 
+        non_resident_guest_list = []
+
         for data, availability in zip(self.request.data, availabilities):
             for item in data["room_non_resident_guest_availabilities"]:
-                RoomAvailabilityNonResidentGuest.objects.create(
+                non_resident_guest = RoomAvailabilityNonResidentGuest(
                     room_availability_non_resident=availability, **item
                 )
+                non_resident_guest_list.append(non_resident_guest)
+
+        RoomAvailabilityNonResidentGuest.objects.bulk_create(
+            non_resident_guest_list, batch_size=100
+        )
 
     def perform_update(self, serializer):
         room_type_slug = self.kwargs.get("room_type_slug")
