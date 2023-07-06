@@ -118,6 +118,7 @@ else:
         "http://localhost:3000",
         "https://windastays.com",
         "https://windapartner.vercel.app",
+        "https://www.safaripricer.com",
     ]
 
 
