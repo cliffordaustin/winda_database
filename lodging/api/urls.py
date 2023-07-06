@@ -243,4 +243,5 @@ urlpatterns = [
         BookingsListView.as_view(),
         name="room-booking-list",
     ),
+    path("schedule-demo/", ScheduleDemo.as_view(), name="schedule-demo"),
 ]

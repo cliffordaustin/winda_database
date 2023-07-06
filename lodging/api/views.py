@@ -1246,3 +1246,31 @@ class SaveStaysDeleteView(generics.DestroyAPIView):
 
         if save_queryset.exists():
             save_queryset.delete()
+
+
+class ScheduleDemo(APIView):
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST":
+            message = EmailMessage(
+                to=[settings.DEFAULT_FROM_EMAIL],
+            )
+            message.template_id = "4934533"
+            message.from_email = None
+            message.merge_data = {
+                request.data["email"]: {
+                    "first_name": request.data["first_name"],
+                    "last_name": request.data["last_name"],
+                    "user_email": request.data["email"],
+                    "message": request.data["message"],
+                },
+            }
+
+            message.merge_global_data = {
+                "first_name": request.data["first_name"],
+                "last_name": request.data["last_name"],
+                "user_email": request.data["email"],
+                "message": request.data["message"],
+            }
+            message.send(fail_silently=True)
+
+            return Response({"message": "Mail sent successfully"})
