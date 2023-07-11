@@ -230,10 +230,17 @@ class RoomTypeSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class RoomTypeDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomType
+        exclude = ["stay"]
+
+
 class PartnerStaySerializer(serializers.ModelSerializer):
     activity_fees = ActivityFeesSerializer(read_only=True, many=True)
     other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
     other_fees_non_resident = OtherFeesNonResidentSerializer(many=True, read_only=True)
+    stay_images = StayImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Stays
@@ -247,6 +254,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
             "activity_fees",
             "other_fees_resident",
             "other_fees_non_resident",
+            "stay_images",
             "lodge_price_data_pdf",
         ]
 

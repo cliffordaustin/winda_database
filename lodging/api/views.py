@@ -196,6 +196,7 @@ class PartnerStaysDetailView(generics.ListAPIView):
                 "activity_fees",
                 "other_fees_resident",
                 "other_fees_non_resident",
+                "stay_images",
             )
         )
 
@@ -226,7 +227,7 @@ class PartnerStaysListView(generics.ListAPIView):
 
 
 class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = StaysSerializer
+    serializer_class = LodgeStaySerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "slug"
 
@@ -238,7 +239,9 @@ class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
         email = self.request.user.email
 
         if slug is not None:
-            queryset = Stays.objects.filter(slug=slug, contact_email=email)
+            queryset = Stays.objects.filter(slug=slug, contact_email=email).select_related("user").prefetch_related(
+                "stay_images",
+            )
         return queryset
 
 
@@ -303,6 +306,36 @@ class RoomTypeListView(generics.ListAPIView):
                     ),
                 ),
             )
+        return queryset
+    
+
+class RoomTypeDetailListView(generics.ListAPIView):
+    queryset = RoomType.objects.all()
+    serializer_class = RoomTypeDetailSerializer
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        queryset = queryset.filter(stay=stay)
+        return queryset
+    
+
+class RoomTypeListDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RoomType.objects.all()
+    serializer_class = RoomTypeDetailSerializer
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        stay_slug = self.kwargs.get("stay_slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        if stay.contact_email != self.request.user.email:
+            raise PermissionDenied("You are not the owner of this stay")
+
+        queryset = RoomType.objects.filter(stay=stay)
+
         return queryset
 
 

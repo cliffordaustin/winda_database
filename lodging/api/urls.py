@@ -123,6 +123,16 @@ urlpatterns = [
         name="room-type-detail",
     ),
     path(
+        "stays/<stay_slug>/room-detail-types/",
+        RoomTypeDetailListView.as_view(),
+        name="room-detail-type-list",
+    ),
+    path(
+        "stays/<stay_slug>/room-types/<slug>/",
+        RoomTypeListDetailView.as_view(),
+        name="room-detail-type-detail",
+    ),
+    path(
         "room-types/<room_type_slug>/availabilities/",
         RoomAvailabilityListView.as_view(),
         name="room-availability-list",
