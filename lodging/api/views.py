@@ -325,7 +325,7 @@ class RoomTypeDetailListView(generics.ListAPIView):
 class RoomTypeListDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = RoomType.objects.all()
     serializer_class = RoomTypeDetailSerializer
-    lookup_field = "slug"
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         stay_slug = self.kwargs.get("stay_slug")
@@ -710,6 +710,17 @@ class RoomAvailabilityCreateView(generics.CreateAPIView):
 
         serializer.save(room_type=room_type)
 
+
+class RoomAvailabilityResidentGuestDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = RoomAvailabilityResidentGuestSerializer
+    queryset = RoomAvailabilityResidentGuest.objects.all()
+    permission_classes = [IsAuthenticated]
+
+
+class RoomAvailabilityNonResidentGuestDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = RoomAvailabilityNonResidentGuestSerializer
+    queryset = RoomAvailabilityNonResidentGuest.objects.all()
+    permission_classes = [IsAuthenticated]
 
 class BookingsCreateView(generics.CreateAPIView):
     serializer_class = BookingsSerializer

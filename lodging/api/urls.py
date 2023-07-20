@@ -128,7 +128,7 @@ urlpatterns = [
         name="room-detail-type-list",
     ),
     path(
-        "stays/<stay_slug>/room-types/<slug>/",
+        "stays/<stay_slug>/room-detail-types/<int:pk>/",
         RoomTypeListDetailView.as_view(),
         name="room-detail-type-detail",
     ),
@@ -176,6 +176,16 @@ urlpatterns = [
         "room-types/<room_type_slug>/add-availability/",
         RoomAvailabilityCreateView.as_view(),
         name="room-availability-create",
+    ),
+    path(
+        "resident-guests/<int:pk>/",
+        RoomAvailabilityResidentGuestDetailView.as_view(),
+        name="resident-guest-detail",
+    ),
+    path(
+        "nonresident-guests/<int:pk>/",
+        RoomAvailabilityNonResidentGuestDetailView.as_view(),
+        name="nonresident-guest-detail",
     ),
     path(
         "stays/<stay_slug>/resident-other-fees/",
