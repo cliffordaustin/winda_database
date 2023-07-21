@@ -205,10 +205,13 @@ class PartnerStaysDetailView(generics.ListAPIView):
 
 class PartnerStaysListView(generics.ListAPIView):
     serializer_class = LodgeStaySerializer
+    ordering_fields = [
+        "date_posted"
+    ]
+    pagination_class = PartnerStayPagination
 
     def get_queryset(self):
         search_query = self.request.GET.get("search", "")
-        print(search_query)
 
         queryset = (
             Stays.objects.filter(
