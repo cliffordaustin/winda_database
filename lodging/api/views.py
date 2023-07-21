@@ -200,6 +200,9 @@ class PartnerStaysDetailView(generics.ListAPIView):
             )
         )
 
+        # order queryset based on the list_ids
+        queryset = sorted(queryset, key=lambda x: list_ids.index(str(x.id)))
+
         return queryset
 
 
