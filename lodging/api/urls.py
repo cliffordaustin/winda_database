@@ -4,7 +4,8 @@ from .views import *
 
 urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
-    path("stays/add-to-calculate/", UpdateStayView.as_view(), name="stays-calculate"),
+    path("stays/<slug>/update-agents/", UserStayEmailUpdateAgentsView.as_view(), name="stays-update-agents"),
+    path("stays/<slug>/remove-agent/", UserStayEmailRemoveAgentsView.as_view(), name="stays-remove-agent"),
     path(
         "highlighted-stays/",
         HighlightedStaysListView.as_view(),
@@ -216,6 +217,11 @@ urlpatterns = [
         "user-stays-email/",
         UserStaysEmail.as_view(),
         name="user-stays-email",
+    ),
+    path(
+        "user-stays-email/<slug>/agents/",
+        UserStayEmailAgentListView.as_view(),
+        name="user-stays-email-agents",
     ),
     path(
         "user-stays-email/<slug>/",

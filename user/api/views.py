@@ -23,6 +23,15 @@ class UserProfileView(generics.ListAPIView):
         user = self.request.user.email
 
         return CustomUser.objects.filter(email=user)
+    
+
+class AgentsListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    pagination_class = None
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(is_agent=True)
 
 
 class UserProfileDetailView(generics.RetrieveUpdateAPIView):

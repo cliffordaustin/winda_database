@@ -370,18 +370,15 @@ class Stays(models.Model):
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
     )
-    # review
-    user_added_to_calculate = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="user_added_to_calculate"
-    )
-    annonymous_added_to_calculate = models.ManyToManyField(
-        Session, blank=True, related_name="annonymous_added_to_calculate"
-    )
+    
     in_homepage = models.BooleanField(default=False)
     has_options = models.BooleanField(default=False)
     is_partner_property = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
+    agents = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="agents"
+    )
 
     def __str__(self):
         return f"{self.user} - {self.property_name} - {self.name}"

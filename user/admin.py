@@ -68,6 +68,7 @@ class UserAdmin(BaseUserAdmin):
                     "is_admin",
                     "is_staff",
                     "is_partner",
+                    "is_agent",
                     "is_superuser",
                 )
             },
@@ -91,6 +92,7 @@ class UserAdmin(BaseUserAdmin):
                     "email_verified",
                     "is_admin",
                     "is_partner",
+                    "is_agent",
                     "is_staff",
                     "is_superuser",
                 ),

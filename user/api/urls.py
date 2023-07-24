@@ -4,10 +4,12 @@ from .views import (
     UserProfileView,
     EmailConfirmation,
     CheckEmailConfirmation,
+    AgentsListView,
 )
 
 urlpatterns = [
     path("user/", UserProfileView.as_view(), name="user"),
+    path("agents/", AgentsListView.as_view(), name="agents"),
     path("user/<int:pk>/", UserProfileDetailView.as_view(), name="user-detail"),
     path(
         "sendconfirmationemail/",

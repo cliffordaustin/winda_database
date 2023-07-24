@@ -15,8 +15,7 @@ from lodging.models import Review
 from activities.models import Review as ActivityReview
 from django.db.models import Sum
 
-from transport.api.serializers import TransportSerializer
-from transport.models import Transportation
+from user.api.serializer import UserSerializer
 
 from rest_framework_bulk import (
     BulkListSerializer,
@@ -254,6 +253,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
             "activity_fees",
             "other_fees_resident",
             "other_fees_non_resident",
+            "agents",
             "stay_images",
             "lodge_price_data_pdf",
         ]
@@ -261,6 +261,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
 
 class LodgeStaySerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
+    number_of_agents = serializers.SerializerMethodField()
 
     class Meta:
         model = Stays
@@ -273,8 +274,13 @@ class LodgeStaySerializer(serializers.ModelSerializer):
             "location",
             "stay_images",
             "contact_email",
+            "agents",
             "lodge_price_data_pdf",
+            "number_of_agents",
         ]
+    
+    def get_number_of_agents(self, instance):
+        return instance.agents.count()
 
 
 class StaysSerializer(serializers.ModelSerializer):
@@ -305,22 +311,6 @@ class StaysSerializer(serializers.ModelSerializer):
 
     has_user_saved = serializers.SerializerMethodField()
     saved_count = serializers.SerializerMethodField()
-    # review
-    has_user_added_to_calculate = serializers.SerializerMethodField()
-
-    def get_has_user_added_to_calculate(self, instance):
-        request = self.context.get("request")
-        user = request.user
-        session = request.session.session_key if request.session else None
-
-        if user.is_authenticated:
-            return instance.user_added_to_calculate.filter(id=user.id).exists()
-        elif session:
-            return instance.annonymous_added_to_calculate.filter(
-                session_key=session
-            ).exists()
-        else:
-            return False
 
     def get_count_total_review_rates(self, instance):
         return instance.reviews.aggregate(Sum("rate"))["rate__sum"]
@@ -358,7 +348,7 @@ class StaysSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stays
-        exclude = ["user_added_to_calculate", "annonymous_added_to_calculate"]
+        fields = "__all__"
 
     def get_is_user_stay(self, instance):
         request = self.context.get("request")
