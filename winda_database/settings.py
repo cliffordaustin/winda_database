@@ -220,7 +220,7 @@ FRONTEND_URL = ""
 if DEBUG:
     FRONTEND_URL = "http://localhost:3000"
 else:
-    FRONTEND_URL = "https://www.winda.guide"
+    FRONTEND_URL = "https://www.safaripricer.com"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -235,14 +235,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 
-# SOCAILACCOUNT_PROVIDERS = {
-#     "google": {
-#         "APP": {
-#             "client_id": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"),
-#             "secret": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"),
-#         }
-#     }
-# }
+SOCAILACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"),
+            "secret": os.environ.get("WINDA_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"),
+        }
+    }
+}
+
 
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
 
@@ -262,9 +263,11 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 # AWS_SES_REGION_NAME = "eu-west-2"
 # AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
-ACCOUNT_EMAIL_VERIFICATION = None
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 110
 OLD_PASSWORD_FIELD_ENABLED = True
-# ACCOUNT_ADAPTER = "winda_database.adapter.DefaultAccountAdapterCustom"
+ACCOUNT_ADAPTER = "winda_database.adapter.DefaultAccountAdapterCustom"
 
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_AUTHENTICATION_METHOD = "email"

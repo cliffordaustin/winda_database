@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from user.views import GoogleLogin, FacebookLogin
-from rest_auth.registration.views import VerifyEmailView
+from .adapter import VerifyEmailView
 from recommended_trip.views import export
 
 urlpatterns = [
@@ -34,7 +34,7 @@ urlpatterns = [
     path("api/v1/", include("curated_trip.api.urls")),
     path("api/v1/", include("blog.api.urls")),
     re_path(
-        r"^account-confirm-email/(?P<key>[-:\w]+)/$",
+        r"api/v1/account-confirm-email/(?P<key>[-:\w]+)/$",
         VerifyEmailView.as_view(),
         name="account_confirm_email",
     ),

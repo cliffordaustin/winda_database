@@ -1,20 +1,24 @@
 # from django.core.mail import EmailMessage, send_mail
-
+import json
 from anymail.message import EmailMessage
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
 
 from allauth.account.signals import email_confirmed
 
-
 @receiver(user_signed_up)
-def populate_profile(user, sociallogin=None, **kwargs):
+def populate_profile(request, user, sociallogin=None, **kwargs):
     if sociallogin:
         if sociallogin.account.provider == "google":
             user_data = user.socialaccount_set.filter(provider="google")[0].extra_data
             avatar_url = user_data["picture"]
 
             user.avatar_url = avatar_url
+            if request.method =='POST':
+                is_agent = request.POST.get('is_agent') == 'true'
+                is_partner = request.POST.get('is_partner') == 'true'
+                user.is_agent = is_agent
+                user.is_partner = is_partner
             user.save()
 
 
