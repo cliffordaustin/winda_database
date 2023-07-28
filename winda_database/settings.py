@@ -152,6 +152,7 @@ AUTH_USER_MODEL = "user.CustomUser"
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "user.api.serializer.RegisterSerializer",
+    # 'PASSWORD_RESET_SERIALIZER':'winda_database.adapter.CustomPasswordResetSerializer',
 }
 
 # Database

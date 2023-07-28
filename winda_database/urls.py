@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from user.views import GoogleLogin, FacebookLogin
 from .adapter import VerifyEmailView
 from recommended_trip.views import export
+from rest_auth.views import PasswordResetConfirmView, PasswordResetView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -41,6 +42,14 @@ urlpatterns = [
     path("api/v1/rest-auth/", include("dj_rest_auth.urls")),
     path("api/v1/rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/v1/rest-auth/password/change/", include("dj_rest_auth.urls")),
+    path('api/v1/rest-auth/password/reset/',
+         PasswordResetView.as_view(),
+         name='rest_password_reset'
+         ),
+
+    path('api/v1/rest-auth/password/reset/confirm/<uidb64>/<token>/',
+         PasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
     path("api/v1/rest-auth/logout/", include("dj_rest_auth.urls")),
     path("accounts/", include("allauth.urls")),
     path("api/v1/auth/google/", GoogleLogin.as_view(), name="google-login"),

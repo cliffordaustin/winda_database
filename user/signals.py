@@ -5,6 +5,7 @@ from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
 
 from allauth.account.signals import email_confirmed
+from django.conf import settings
 
 @receiver(user_signed_up)
 def populate_profile(request, user, sociallogin=None, **kwargs):
@@ -26,5 +27,27 @@ def populate_profile(request, user, sociallogin=None, **kwargs):
 def email_confirmed_(request, email_address, **kwargs):
     user = email_address.user
     user.email_verified = True
+
+    if (user.is_agent):
+        email = user.email
+        message = EmailMessage(
+                to=[settings.DEFAULT_FROM_EMAIL],
+            )
+        message.template_id = "4982885"
+        message.from_email = None
+        message.merge_data = {
+            email: {
+                "first_name": user.first_name or "",
+                "last_name": user.last_name or "",
+                "user_email": user.email,
+            },
+        }
+
+        message.merge_global_data = {
+            "first_name": user.first_name or "",
+            "last_name": user.last_name or "",
+            "user_email": user.email,
+        }
+        message.send(fail_silently=True)
 
     user.save()
