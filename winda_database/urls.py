@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from user.views import GoogleLogin, FacebookLogin
+from user.api.views import CustomLoginView
 from .adapter import VerifyEmailView
 from recommended_trip.views import export
 from rest_auth.views import PasswordResetConfirmView, PasswordResetView
@@ -40,6 +41,7 @@ urlpatterns = [
         name="account_confirm_email",
     ),
     path("api/v1/rest-auth/", include("dj_rest_auth.urls")),
+    path('api/v1/custom/login/', CustomLoginView.as_view(), name='my_custom_login'),
     path("api/v1/rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/v1/rest-auth/password/change/", include("dj_rest_auth.urls")),
     path('api/v1/rest-auth/password/reset/',
