@@ -18,6 +18,10 @@ def lodge_image_thumbnail(instance, filename):
     return f"lodge_images/{instance.id}/{filename}"
 
 
+def agent_document_file(instance, filename):
+    return f"agent_documents/{instance.id}/{filename}"
+
+
 def activity_fees_image_thumbnail(instance, filename):
     return f"activity_fee_images/{instance.id}/{filename}"
 

@@ -12,6 +12,7 @@ from django.contrib.sessions.models import Session
 from activities.models import Activities
 from core.utils import (
     lodge_image_thumbnail,
+    agent_document_file,
     activity_fees_image_thumbnail,
     lodge_price_data_file,
 )
@@ -377,7 +378,7 @@ class Stays(models.Model):
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
     agents = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="agents"
+        'Agents', blank=True, related_name="agents"
     )
 
     def __str__(self):
@@ -386,6 +387,30 @@ class Stays(models.Model):
     class Meta:
         verbose_name = "Stay"
         verbose_name_plural = "Stays"
+
+class Agents(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="agent_access",
+    )
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="agent_access"
+    )
+    document = models.FileField(
+        upload_to=agent_document_file,
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
+    )
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user} - {self.stay}"
+
+    class Meta:
+        verbose_name = "Agent Access"
+        verbose_name_plural = "Agent Access"
 
 
 class PrivateSafari(models.Model):

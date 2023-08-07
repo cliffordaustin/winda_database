@@ -157,7 +157,7 @@ class PartnerStaysDetailView(generics.ListAPIView):
         list_ids = list_ids.split(",")
         user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
         queryset = (
-            Stays.objects.filter(is_partner_property=True, id__in=list_ids, agents=user)
+            Stays.objects.filter(is_partner_property=True, id__in=list_ids, agents__user=user)
             .select_related("user")
             .prefetch_related(
                 "activity_fees",
@@ -169,6 +169,37 @@ class PartnerStaysDetailView(generics.ListAPIView):
 
         # order queryset based on the list_ids
         queryset = sorted(queryset, key=lambda x: list_ids.index(str(x.id)))
+
+        return queryset
+    
+
+class PartnerStaysWithoutContractView(generics.ListAPIView):
+    serializer_class = LodgeStayWaitingForApprovalSerializer
+    ordering_fields = [
+        "date_posted"
+    ]
+    pagination_class = PartnerStayPagination
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        search_query = self.request.GET.get("search", "")
+        user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
+
+        queryset = (
+            Stays.objects.filter(
+                Q(location__icontains=search_query)
+                | Q(property_name__icontains=search_query),
+                is_partner_property=True,
+            )
+            .exclude(
+                agents__approved=True
+            )
+            .select_related("user")
+            .prefetch_related(
+                "stay_images",
+            )
+            .all()
+        )
 
         return queryset
 
@@ -190,7 +221,8 @@ class PartnerStaysListView(generics.ListAPIView):
                 Q(location__icontains=search_query)
                 | Q(property_name__icontains=search_query),
                 is_partner_property=True,
-                agents=user,
+                agents__user=user,
+                agents__approved=True,
             )
             .select_related("user")
             .prefetch_related(
@@ -222,14 +254,31 @@ class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
     
 
 class UserStayEmailAgentListView(generics.ListAPIView):
-    serializer_class = UserSerializer
+    serializer_class = AgentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         slug = self.kwargs.get("slug")
         email = self.request.user.email
         queryset = generics.get_object_or_404(Stays, slug=slug, contact_email=email)
-        return queryset.agents.all()
+        return queryset.agents.filter(approved=True)
+    
+
+class UserStayEmailAgentNotVerifiedListView(generics.ListAPIView):
+    serializer_class = AgentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        email = self.request.user.email
+        queryset = generics.get_object_or_404(Stays, slug=slug, contact_email=email)
+        return queryset.agents.filter(approved=False)
+    
+
+class AgentAccessDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AgentSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Agents.objects.all()
     
     
 class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):
@@ -254,19 +303,57 @@ class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):
         instance = serializer.save()
         agent_id = self.request.data.get("agent_id")
         agent_id = int(agent_id)
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
         user = generics.get_object_or_404(CustomUser, id=agent_id)
+        agent = Agents.objects.create(user=user, stay=stay, approved=True)
         if instance.contact_email != self.request.user.email:
             raise PermissionDenied("You are not the owner of this stay")
         if user.is_agent == False:
             raise PermissionDenied("This user is not an agent")
         
         # check if agent is already added
-        if user in instance.agents.all():
-            Response(
-                {"message": "This agent is already added"},
-            )
+        if instance.agents.filter(user=user).exists():
+            agent_obj = instance.agents.get(user=user)
+            instance.agents.remove(agent_obj)
+            agent_obj.delete()
+
         
-        instance.agents.add(user)
+        instance.agents.add(agent)
+        instance.save()
+        return instance
+    
+
+class UserStayEmailUpdateAgentsWithFileView(generics.UpdateAPIView):
+    serializer_class = LodgeStaySerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        queryset = Stays.objects.filter(slug=slug).select_related("user").prefetch_related(
+                "stay_images",
+            )
+
+        return queryset
+    
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        user = self.request.user
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+        document = self.request.data.get("document")
+        agent = Agents.objects.create(user=user, stay=stay, document=document, approved=False)
+        if user.is_agent == False:
+            raise PermissionDenied("This user is not an agent")
+        
+        # check if agent is already added
+        if instance.agents.filter(user=user).exists():
+            agent_obj = instance.agents.get(user=user)
+            instance.agents.remove(agent_obj)
+            agent_obj.delete()
+        
+        instance.agents.add(agent)
         instance.save()
         return instance
     
@@ -293,17 +380,18 @@ class UserStayEmailRemoveAgentsView(generics.UpdateAPIView):
         instance = serializer.save()
         agent_id = self.request.data.get("agent_id")
         agent_id = int(agent_id)
-        user = generics.get_object_or_404(CustomUser, id=agent_id)
+        agent = generics.get_object_or_404(Agents, id=agent_id)
         if instance.contact_email != self.request.user.email:
             raise PermissionDenied("You are not the owner of this stay")
-        if user.is_agent == False:
+        if agent.user.is_agent == False:
             raise PermissionDenied("This user is not an agent")
         
         # check if agent is already added
-        if user not in instance.agents.all():
+        if agent not in instance.agents.all():
             raise ValidationError("This agent is not added")
         
-        instance.agents.remove(user)
+        instance.agents.remove(agent)
+        agent.delete()
         instance.save()
         return instance
 

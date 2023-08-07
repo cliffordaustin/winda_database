@@ -235,6 +235,13 @@ class RoomTypeDetailSerializer(serializers.ModelSerializer):
         exclude = ["stay"]
 
 
+class AgentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Agents
+        exclude = ["stay"]
+
+
 class PartnerStaySerializer(serializers.ModelSerializer):
     activity_fees = ActivityFeesSerializer(read_only=True, many=True)
     other_fees_resident = OtherFeesResidentSerializer(many=True, read_only=True)
@@ -281,6 +288,35 @@ class LodgeStaySerializer(serializers.ModelSerializer):
     
     def get_number_of_agents(self, instance):
         return instance.agents.count()
+    
+
+class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
+    stay_images = StayImageSerializer(many=True, read_only=True)
+    agent_access_request_made = serializers.SerializerMethodField()
+    agent_access_request_approved = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Stays
+        fields = [
+            "user",
+            "id",
+            "slug",
+            "is_partner_property",
+            "property_name",
+            "location",
+            "stay_images",
+            "contact_email",
+            "agents",
+            "lodge_price_data_pdf",
+            "agent_access_request_made",
+            "agent_access_request_approved",
+        ]
+    
+    def get_agent_access_request_made(self, instance):
+        return instance.agents.filter(user=self.context['request'].user).exists()
+    
+    def get_agent_access_request_approved(self, instance):
+        return instance.agents.filter(user=self.context['request'].user, approved=True).exists()
 
 
 class StaysSerializer(serializers.ModelSerializer):
