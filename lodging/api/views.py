@@ -10,7 +10,7 @@ from .permissions import IsUserStayInstance, ObjectPermission, IsUserRoomStayIns
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from .filterset import StayFilter, ReviewFilter, BookingsFilter
-from django.db.models import Q
+from django.db.models import Q, Subquery
 from lodging.models import Review
 from rest_framework.validators import ValidationError
 from rest_framework.views import APIView
@@ -185,6 +185,10 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
         search_query = self.request.GET.get("search", "")
         user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
 
+        approved_agents = Agents.objects.filter(
+            approved=True, user=user
+        )
+
         queryset = (
             Stays.objects.filter(
                 Q(location__icontains=search_query)
@@ -192,7 +196,7 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
                 is_partner_property=True,
             )
             .exclude(
-                Q(agents__user=user) & Q(agents__approved=True)
+                Q(agents__in=approved_agents)
             )
             .select_related("user")
             .prefetch_related(
