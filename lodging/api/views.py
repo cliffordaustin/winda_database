@@ -192,7 +192,7 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
                 is_partner_property=True,
             )
             .exclude(
-                agents__approved=True
+                Q(agents__user=user) & Q(agents__approved=True)
             )
             .select_related("user")
             .prefetch_related(
