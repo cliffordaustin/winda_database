@@ -189,6 +189,10 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
             approved=True, user=user
         )
 
+        approved_agents_by_email = AgentsByEmail.objects.filter(
+            email=user.email
+        )
+
         queryset = (
             Stays.objects.filter(
                 Q(location__icontains=search_query)
@@ -196,7 +200,7 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
                 is_partner_property=True,
             )
             .exclude(
-                Q(agents__in=approved_agents)
+                Q(agents__in=approved_agents) | Q(agents_by_email__in=approved_agents_by_email),
             )
             .select_related("user")
             .prefetch_related(
@@ -224,9 +228,9 @@ class PartnerStaysListView(generics.ListAPIView):
             Stays.objects.filter(
                 Q(location__icontains=search_query)
                 | Q(property_name__icontains=search_query),
+                Q(agents__user=user,
+                agents__approved=True) | Q(agents_by_email__email=user.email),
                 is_partner_property=True,
-                agents__user=user,
-                agents__approved=True,
             )
             .select_related("user")
             .prefetch_related(
@@ -311,8 +315,6 @@ class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
         user = generics.get_object_or_404(CustomUser, id=agent_id)
         agent = Agents.objects.create(user=user, stay=stay, approved=True)
-        if instance.contact_email != self.request.user.email:
-            raise PermissionDenied("You are not the owner of this stay")
         if user.is_agent == False:
             raise PermissionDenied("This user is not an agent")
         
@@ -362,6 +364,119 @@ class UserStayEmailUpdateAgentsWithFileView(generics.UpdateAPIView):
         return instance
     
 
+class AgentAccessByEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AgentByEmailSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = AgentsByEmail.objects.all()
+
+
+class UserAgentAccessByEmailListView(generics.ListAPIView):
+    serializer_class = AgentByEmailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_qs = []
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        for obj in AgentsByEmail.objects.filter(stay=stay):
+            if CustomUser.objects.filter(email=obj.email).exists():
+                user_qs.append(
+                    {
+                        "id": obj.id,
+                        "user": CustomUser.objects.get(email=obj.email),
+                    }
+                )
+
+        return user_qs
+    
+
+class UserAgentAccessByEmailNotVerifiedListView(generics.ListAPIView):
+    serializer_class = AgentByEmailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_qs = []
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        for obj in AgentsByEmail.objects.filter(stay=stay):
+            if not CustomUser.objects.filter(email=obj.email).exists():
+                user_qs.append(obj)
+
+        return user_qs
+
+
+class CheckAgentByEmailExistsView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        if AgentsByEmail.objects.filter(email=email).exists():
+            return Response({"exists": True}, status=status.HTTP_200_OK)
+        else:
+            return Response({"exists": False}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+
+class AddAgentToStayView(generics.UpdateAPIView):
+    serializer_class = LodgeStaySerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        queryset = Stays.objects.filter(slug=slug).select_related("user").prefetch_related(
+                "stay_images",
+            )
+
+        return queryset
+    
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+        email = self.request.data.get("email")
+        
+        if CustomUser.objects.filter(email=email).exists() and stay.agents.filter(user__email=email).exists() != True:
+            user = generics.get_object_or_404(CustomUser, email=email)
+            if user.is_agent == False:
+                return
+            agent = Agents.objects.create(user=user, stay=stay, approved=True)
+            instance.agents.add(agent)
+            instance.save()
+            return instance
+        elif CustomUser.objects.filter(email=email).exists() and stay.agents.filter(user__email=email).exists() == True:
+            return
+        else:
+            if instance.agents_by_email.filter(email=email).exists():
+                return
+            
+            agents_by_email = AgentsByEmail.objects.create(email=email, stay=stay)
+
+            encoded_email = self.request.data.get("encoded_email")
+            
+            activate_url = f"http://localhost:3000/partner/signin/agent/{encoded_email}" if settings.DEBUG else f"https://www.safaripricer.com/partner/signin/agent/{encoded_email}"
+
+            message = EmailMessage(
+                to=(email, ),
+            )
+            message.template_id = "5032694"
+            message.from_email = None
+            message.merge_data = {
+                email: {
+                    "activate_url": activate_url
+                },
+            }
+
+            message.merge_global_data = {
+                "activate_url": activate_url
+            }
+            message.send()
+            
+            instance.agents_by_email.add(agents_by_email)
+            instance.save()
+            return instance
+    
+
 class UserStayEmailRemoveAgentsView(generics.UpdateAPIView):
     serializer_class = LodgeStaySerializer
     permission_classes = [IsAuthenticated]
@@ -385,8 +500,6 @@ class UserStayEmailRemoveAgentsView(generics.UpdateAPIView):
         agent_id = self.request.data.get("agent_id")
         agent_id = int(agent_id)
         agent = generics.get_object_or_404(Agents, id=agent_id)
-        if instance.contact_email != self.request.user.email:
-            raise PermissionDenied("You are not the owner of this stay")
         if agent.user.is_agent == False:
             raise PermissionDenied("This user is not an agent")
         
