@@ -290,6 +290,23 @@ class LodgeStaySerializer(serializers.ModelSerializer):
         return instance.agents.count()
     
 
+class DetailStaySerializer(serializers.ModelSerializer):
+    stay_images = StayImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Stays
+        fields = [
+            "user",
+            "id",
+            "slug",
+            "property_name",
+            "location",
+            "stay_images",
+            "in_homepage",
+            "has_options"
+        ]
+    
+
 class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
     agent_access_request_made = serializers.SerializerMethodField()
