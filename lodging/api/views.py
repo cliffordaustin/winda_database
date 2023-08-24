@@ -236,7 +236,7 @@ class PartnerStaysListView(generics.ListAPIView):
             .prefetch_related(
                 "stay_images",
             )
-            .all()
+            .all().distinct()
         )
 
         return queryset
