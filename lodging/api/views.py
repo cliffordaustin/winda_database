@@ -164,7 +164,7 @@ class PartnerStaysDetailView(generics.ListAPIView):
                 "other_fees_resident",
                 "other_fees_non_resident",
                 "stay_images",
-            )
+            ).all().distinct()
         )
 
         # order queryset based on the list_ids
