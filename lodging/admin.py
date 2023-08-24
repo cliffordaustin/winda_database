@@ -488,6 +488,7 @@ class StayAdmin(NestedModelAdmin):
                     "pricing_type",
                     "is_partner_property",
                     "lodge_price_data_pdf",
+                    "agents_by_email",
                     "in_homepage",
                     "has_options",
                     "sheety_url",
