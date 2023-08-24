@@ -300,6 +300,7 @@ class DetailStaySerializer(serializers.ModelSerializer):
             "id",
             "slug",
             "property_name",
+            "name",
             "location",
             "stay_images",
             "in_homepage",
@@ -334,6 +335,92 @@ class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
     
     def get_agent_access_request_approved(self, instance):
         return instance.agents.filter(user=self.context['request'].user, approved=True).exists()
+
+
+class DetailStayWithAmenitiesSerializer(serializers.ModelSerializer):
+    stay_images = StayImageSerializer(many=True, read_only=True)
+    private_safari = PrivateSafariSerializer(read_only=True)
+    shared_safari = SharedSafariSerializer(read_only=True)
+    all_inclusive = AllInclusiveSerializer(read_only=True)
+    other_options = OtherOptionSerializer(read_only=True, many=True)
+    extras_included = ExtrasIncludedSerializer(many=True, read_only=True)
+    facts = FactsSerializer(many=True, read_only=True)
+    inclusions = InclusionsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Stays
+        fields = [
+            "user",
+            "id",
+            "slug",
+            "country",
+            "description",
+            "unique_about_place",
+            "city",
+            "property_name",
+            "other_options",
+            "name",
+            "location",
+            "type_of_stay",
+            "capacity",
+            "rooms",
+            "beds",
+            "bathrooms",
+            "tags",
+            "longitude",
+            "latitude",
+            "in_homepage",
+            "has_options",
+            "stay_images",
+            "extras_included",
+            "other_options",
+            "private_safari",
+            "shared_safari",
+            "all_inclusive",
+            "facts",
+            "inclusions",
+
+            #Amenities
+            "swimming_pool",
+            "hot_tub",
+            "sauna",
+            "gym",
+            "patio",
+            "terrace",
+            "balcony",
+            "firepit",
+            "barbecue_grill",
+            "outdoor_dining_area",
+            "spa",
+            "wifi",
+            "parking",
+            "tv",
+            "air_conditioning",
+            "heating",
+            "kitchen",
+            "fridge",
+            "laundry",
+            "washing_machine",
+            "dedicated_working_area",
+            "smoke_alarm",
+            "first_aid_kit",
+            "medical_service_on_site",
+            "carbon_monoxide_detector",
+            "lockable_room",
+            "bar",
+            "restaurant",
+            "giftshop",
+            "photography_room",
+            "themed_room",
+            "pet_friendly",
+            "barber_shop",
+            "beauty_salon",
+            "purified_drinking_water",
+            "firewood",
+            "conference_center",
+            "ensuite_room",
+            "library",
+        ]
 
 
 class StaysSerializer(serializers.ModelSerializer):

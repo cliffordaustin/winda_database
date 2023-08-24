@@ -283,6 +283,32 @@ class AgentAccessDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AgentSerializer
     permission_classes = [IsAuthenticated]
     queryset = Agents.objects.all()
+
+
+class HiglighedDetailStayListView(generics.ListAPIView):
+    serializer_class = DetailStaySerializer
+
+    def get_queryset(self):
+        return Stays.objects.filter(in_homepage=True, has_options=True).select_related("user").prefetch_related(
+                "stay_images",
+            )
+    
+class HiglighedDetailStayRetrieveView(generics.RetrieveAPIView):
+    serializer_class = DetailStayWithAmenitiesSerializer
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        return Stays.objects.filter(in_homepage=True, has_options=True, slug=slug).select_related("user").prefetch_related(
+                "stay_images",
+                "extras_included",
+                "other_options",
+                "private_safari",
+                "shared_safari",
+                "all_inclusive",
+                "facts",
+                "inclusions",
+            )
     
     
 class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):

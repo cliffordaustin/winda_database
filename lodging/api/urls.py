@@ -13,6 +13,16 @@ urlpatterns = [
         name="highlighted-stays-list",
     ),
     path(
+        "highlighted-detail-stays/",
+        HiglighedDetailStayListView.as_view(),
+        name="highlighted-detail-stays-list",
+    ),
+    path(
+        "highlighted-detail-stays/<slug>/",
+        HiglighedDetailStayRetrieveView.as_view(),
+        name="highlighted-detail-stays-retrieve",
+    ),
+    path(
         "highlighted-stays/<slug>/",
         HighlightedStaysDetailView.as_view(),
         name="highlighted-stays-detail",
