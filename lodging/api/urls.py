@@ -5,6 +5,7 @@ from .views import *
 urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
     path("stays/<slug>/update-agents/", UserStayEmailUpdateAgentsView.as_view(), name="stays-update-agents"),
+    path("stays/<slug>/update-agents-email/", AddAgentToStayView.as_view(), name="stays-update-agents-email"),
     path("stays/<slug>/update-agents-with-file/", UserStayEmailUpdateAgentsWithFileView.as_view(), name="stays-update-agents-with-file"),
     path("stays/<slug>/remove-agent/", UserStayEmailRemoveAgentsView.as_view(), name="stays-remove-agent"),
     path(
@@ -235,6 +236,16 @@ urlpatterns = [
         name="user-stays-email-agents",
     ),
     path(
+        "user-stays-email/<slug>/user-agents-email/",
+        UserAgentAccessByEmailListView.as_view(),
+        name="user-agents-email",
+    ),
+    path(
+        "user-stays-email/<slug>/not-user-agents-email/",
+        UserAgentAccessByEmailNotVerifiedListView.as_view(),
+        name="not-user-agents-email",
+    ),
+    path(
         "user-stays-email/<slug>/agents-not-verified/",
         UserStayEmailAgentNotVerifiedListView.as_view(),
         name="user-stays-not-verified-email-agents",
@@ -254,6 +265,12 @@ urlpatterns = [
         "partner-stays/",
         PartnerStaysListView.as_view(),
         name="partner-stays-list",
+    ),
+    path(
+        "agent-access-by-email/<int:pk>/", AgentAccessByEmailDetailView.as_view(), name="agent-access-by-email-detail"
+    ),
+    path(
+        "agent-access-by-email/check-email/", CheckAgentByEmailExistsView.as_view(), name="check-agent-by-email-exists"
     ),
     path(
         "partner-stays/<list_ids>/",

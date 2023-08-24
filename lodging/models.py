@@ -380,6 +380,9 @@ class Stays(models.Model):
     agents = models.ManyToManyField(
         'Agents', blank=True, related_name="agents"
     )
+    agents_by_email = models.ManyToManyField(
+        'AgentsByEmail', blank=True, related_name="agents_by_email"
+    )
 
     def __str__(self):
         return f"{self.user} - {self.property_name} - {self.name}"
@@ -387,6 +390,21 @@ class Stays(models.Model):
     class Meta:
         verbose_name = "Stay"
         verbose_name_plural = "Stays"
+    
+
+class AgentsByEmail(models.Model):
+    email = models.EmailField(max_length=250, blank=True, null=True)
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="agents_email"
+    )
+
+    def __str__(self):
+        return f"{self.email} - {self.stay}"
+
+    class Meta:
+        verbose_name = "Agent By Email"
+        verbose_name_plural = "Agents By Email"
+
 
 class Agents(models.Model):
     user = models.ForeignKey(
