@@ -157,7 +157,9 @@ class PartnerStaysDetailView(generics.ListAPIView):
         list_ids = list_ids.split(",")
         user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
         queryset = (
-            Stays.objects.filter(is_partner_property=True, id__in=list_ids, agents__user=user)
+            Stays.objects.filter(Q(agents__user=user,
+                agents__approved=True) | Q(agents_by_email__email=user.email), 
+                is_partner_property=True, id__in=list_ids)
             .select_related("user")
             .prefetch_related(
                 "activity_fees",
