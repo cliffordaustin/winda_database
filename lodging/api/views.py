@@ -695,13 +695,13 @@ class RoomTypeListView(generics.ListAPIView):
                     "room_resident_availabilities",
                     queryset=RoomAvailabilityResident.objects.filter(
                         date__range=[start_date, end_date]
-                    ),
+                    ).order_by("date"),
                 ),
                 Prefetch(
                     "room_non_resident_availabilities",
                     queryset=RoomAvailabilityNonResident.objects.filter(
                         date__range=[start_date, end_date]
-                    ),
+                    ).order_by("date"),
                 ),
             )
         return queryset
