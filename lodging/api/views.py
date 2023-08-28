@@ -136,7 +136,7 @@ class UserStaysEmail(generics.ListAPIView):
     def get_queryset(self):
         email = self.request.user.email
         return (
-            Stays.objects.filter(contact_email=email)
+            Stays.objects.filter(property_access__email=email)
             .select_related("user")
             .prefetch_related(
                 "stay_images",
@@ -255,7 +255,7 @@ class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
         email = self.request.user.email
 
         if slug is not None:
-            queryset = Stays.objects.filter(slug=slug, contact_email=email).select_related("user").prefetch_related(
+            queryset = Stays.objects.filter(slug=slug, property_access__email=email).select_related("user").prefetch_related(
                 "stay_images",
             )
         return queryset
@@ -268,7 +268,7 @@ class UserStayEmailAgentListView(generics.ListAPIView):
     def get_queryset(self):
         slug = self.kwargs.get("slug")
         email = self.request.user.email
-        queryset = generics.get_object_or_404(Stays, slug=slug, contact_email=email)
+        queryset = generics.get_object_or_404(Stays, slug=slug, property_access__email=email)
         return queryset.agents.filter(approved=True)
     
 
@@ -279,7 +279,7 @@ class UserStayEmailAgentNotVerifiedListView(generics.ListAPIView):
     def get_queryset(self):
         slug = self.kwargs.get("slug")
         email = self.request.user.email
-        queryset = generics.get_object_or_404(Stays, slug=slug, contact_email=email)
+        queryset = generics.get_object_or_404(Stays, slug=slug, property_access__email=email)
         return queryset.agents.filter(approved=False)
     
 
@@ -302,7 +302,7 @@ class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):
         email = self.request.user.email
 
         if slug is not None:
-            queryset = Stays.objects.filter(slug=slug, contact_email=email).select_related("user").prefetch_related(
+            queryset = Stays.objects.filter(slug=slug, property_access__email=email).select_related("user").prefetch_related(
                 "stay_images",
             )
         return queryset
@@ -389,6 +389,43 @@ class UserAgentAccessByEmailListView(generics.ListAPIView):
                 )
 
         return user_qs
+
+
+class PropertyAccessListView(generics.ListAPIView):
+    serializer_class = PropertyAccessSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_qs = []
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        for obj in PropertyAccess.objects.filter(stay=stay).exclude(email=stay.user.email):
+            if CustomUser.objects.filter(email=obj.email).exists():
+                user_qs.append(
+                    {
+                        "id": obj.id,
+                        "user": CustomUser.objects.get(email=obj.email),
+                    }
+                )
+
+        return user_qs
+    
+
+class ProperyAccessNotVerifiedListView(generics.ListAPIView):
+    serializer_class = PropertyAccessSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_qs = []
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+        for obj in PropertyAccess.objects.filter(stay=stay):
+            if not CustomUser.objects.filter(email=obj.email).exists():
+                user_qs.append(obj)
+
+        return user_qs
     
 
 class UserAgentAccessByEmailNotVerifiedListView(generics.ListAPIView):
@@ -414,7 +451,69 @@ class CheckAgentByEmailExistsView(APIView):
             return Response({"exists": True}, status=status.HTTP_200_OK)
         else:
             return Response({"exists": False}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CheckPropertyAccessExistsView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        if PropertyAccess.objects.filter(email=email).exists():
+            return Response({"exists": True}, status=status.HTTP_200_OK)
+        else:
+            return Response({"exists": False}, status=status.HTTP_404_NOT_FOUND)
     
+
+class PropertyAccessDetailView(generics.DestroyAPIView):
+    serializer_class = PropertyAccessSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = PropertyAccess.objects.all()
+
+
+class PropertyAccessCreateView(generics.CreateAPIView):
+    serializer_class = PropertyAccessSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        email = self.request.data.get("email")
+        stay_slug = self.kwargs.get("slug")
+        stay = generics.get_object_or_404(Stays, slug=stay_slug)
+
+
+        if PropertyAccess.objects.filter(email=email, stay=stay).exists():
+            return
+        
+        else:
+            if not CustomUser.objects.filter(email=email).exists():
+                encoded_email = self.request.data.get("encoded_email")
+
+                activate_url = f"http://localhost:3000/partner/signin/{encoded_email}" if settings.DEBUG else f"https://www.safaripricer.com/partner/signin/{encoded_email}"
+
+                message = EmailMessage(
+                    to=(email, ),
+                )
+                message.template_id = "5044128"
+                message.from_email = None
+                message.merge_data = {
+                    email: {
+                        "activate_url": activate_url
+                    },
+                }
+
+                message.merge_global_data = {
+                    "activate_url": activate_url
+                }
+                message.send(fail_silently=True)
+
+                property_access = PropertyAccess.objects.create(
+                    email=email,
+                    stay=stay,
+                )
+            
+            else:
+                property_access = PropertyAccess.objects.create(
+                    email=email,
+                    stay=stay,
+                )
+            
     
 
 class AddAgentToStayView(generics.UpdateAPIView):
@@ -463,14 +562,16 @@ class AddAgentToStayView(generics.UpdateAPIView):
             message.from_email = None
             message.merge_data = {
                 email: {
-                    "activate_url": activate_url
+                    "activate_url": activate_url,
+                    "property_name": stay.property_name,
                 },
             }
 
             message.merge_global_data = {
-                "activate_url": activate_url
+                "activate_url": activate_url,
+                "property_name": stay.property_name,
             }
-            message.send()
+            message.send(fail_silently=True)
             
             instance.agents_by_email.add(agents_by_email)
             instance.save()
@@ -490,7 +591,7 @@ class UserStayEmailRemoveAgentsView(generics.UpdateAPIView):
         email = self.request.user.email
 
         if slug is not None:
-            queryset = Stays.objects.filter(slug=slug, contact_email=email).select_related("user").prefetch_related(
+            queryset = Stays.objects.filter(slug=slug, property_access__email=email).select_related("user").prefetch_related(
                 "stay_images",
             )
         return queryset
@@ -523,7 +624,7 @@ class RoomTypeCreateView(generics.CreateAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        if stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         serializer.save(stay=stay)
@@ -538,7 +639,7 @@ class RoomTypeDetailView(generics.RetrieveUpdateDestroyAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        if stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         queryset = RoomType.objects.filter(stay=stay)
@@ -600,7 +701,7 @@ class RoomTypeListDetailView(generics.RetrieveUpdateDestroyAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        if stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         queryset = RoomType.objects.filter(stay=stay)
@@ -777,7 +878,7 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         # check if date already exists then delete it
@@ -806,7 +907,7 @@ class RoomAvailabilityResidentView(ListBulkCreateUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         availabilities = serializer.save(room_type=room_type)
@@ -858,7 +959,7 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         # check if date already exists then delete it
@@ -887,7 +988,7 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         availabilities = serializer.save(room_type=room_type)
@@ -927,7 +1028,7 @@ class RoomAvailabilityDetailView(generics.RetrieveUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         queryset = RoomAvailability.objects.filter(room_type=room_type)
@@ -974,7 +1075,7 @@ class RoomAvailabilityCreateView(generics.CreateAPIView):
         if date:
             RoomAvailability.objects.filter(room_type=room_type, date=date).delete()
 
-        if room_type.stay.contact_email != self.request.user.email:
+        if not PropertyAccess.objects.filter(stay=room_type.stay, email=self.request.user.email).exists():
             raise PermissionDenied("You are not the owner of this stay")
 
         serializer.save(room_type=room_type)
@@ -1126,7 +1227,7 @@ class StayImageCreateView(generics.CreateAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
         stay_queryset = Stays.objects.filter(
-            slug=stay_slug, contact_email=self.request.user.email
+            slug=stay_slug, property_access__email=self.request.user.email
         )
 
         if not stay_queryset.exists():

@@ -7,7 +7,7 @@ class IsUserStayInstance(permissions.BasePermission):
             return True
         elif (
             obj.stay.user == request.user
-            or obj.stay.contact_email == request.user.email
+            or request.user.email in obj.stay.contact_email
         ):
             return True
 
