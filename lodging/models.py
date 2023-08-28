@@ -390,6 +390,20 @@ class Stays(models.Model):
     class Meta:
         verbose_name = "Stay"
         verbose_name_plural = "Stays"
+
+
+class PropertyAccess(models.Model):
+    email = models.EmailField(max_length=250, blank=True, null=True)
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="property_access"
+    )
+
+    def __str__(self):
+        return f"{self.email} - {self.stay}"
+    
+    class Meta:
+        verbose_name = "Property Access"
+        verbose_name_plural = "Property Access"
     
 
 class AgentsByEmail(models.Model):

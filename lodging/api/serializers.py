@@ -247,6 +247,12 @@ class AgentByEmailSerializer(serializers.ModelSerializer):
         model = AgentsByEmail
         exclude = ["stay"]
 
+class PropertyAccessSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = PropertyAccess
+        exclude = ["stay"]
+
 
 class PartnerStaySerializer(serializers.ModelSerializer):
     activity_fees = ActivityFeesSerializer(read_only=True, many=True)
@@ -287,7 +293,6 @@ class LodgeStaySerializer(serializers.ModelSerializer):
             "property_name",
             "location",
             "stay_images",
-            "contact_email",
             "agents",
             "agents_by_email",
             "lodge_price_data_pdf",
@@ -295,7 +300,7 @@ class LodgeStaySerializer(serializers.ModelSerializer):
         ]
     
     def get_number_of_agents(self, instance):
-        return instance.agents.count()
+        return instance.agents.count() + instance.agents_by_email.count()
     
 
 class DetailStaySerializer(serializers.ModelSerializer):
@@ -331,7 +336,6 @@ class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
             "property_name",
             "location",
             "stay_images",
-            "contact_email",
             "agents",
             "agents_by_email",
             "lodge_price_data_pdf",

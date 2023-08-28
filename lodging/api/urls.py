@@ -6,6 +6,7 @@ urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
     path("stays/<slug>/update-agents/", UserStayEmailUpdateAgentsView.as_view(), name="stays-update-agents"),
     path("stays/<slug>/update-agents-email/", AddAgentToStayView.as_view(), name="stays-update-agents-email"),
+    path("stays/<slug>/update-property-access/", PropertyAccessCreateView.as_view(), name="stays-update-property-access"),
     path("stays/<slug>/update-agents-with-file/", UserStayEmailUpdateAgentsWithFileView.as_view(), name="stays-update-agents-with-file"),
     path("stays/<slug>/remove-agent/", UserStayEmailRemoveAgentsView.as_view(), name="stays-remove-agent"),
     path(
@@ -246,9 +247,24 @@ urlpatterns = [
         name="not-user-agents-email",
     ),
     path(
+        "user-stays-email/<slug>/verified-property-access/",
+        PropertyAccessListView.as_view(),
+        name="verified-property-access",
+    ),
+    path(
+        "user-stays-email/<slug>/not-verified-property-access/",
+        ProperyAccessNotVerifiedListView.as_view(),
+        name="not-verified-property-access",
+    ),
+    path(
         "user-stays-email/<slug>/agents-not-verified/",
         UserStayEmailAgentNotVerifiedListView.as_view(),
         name="user-stays-not-verified-email-agents",
+    ),
+    path(
+        "property-access/<int:pk>/",
+        PropertyAccessDetailView.as_view(),
+        name="property-access-detail",
     ),
     path("agent-access/<int:pk>/", AgentAccessDetailView.as_view(), name="agent-access-detail"),
     path(
@@ -271,6 +287,9 @@ urlpatterns = [
     ),
     path(
         "agent-access-by-email/check-email/", CheckAgentByEmailExistsView.as_view(), name="check-agent-by-email-exists"
+    ),
+    path(
+        "property-access/check-email/", CheckPropertyAccessExistsView.as_view(), name="check-property-access-exists"
     ),
     path(
         "partner-stays/<list_ids>/",
