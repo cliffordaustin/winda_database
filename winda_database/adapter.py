@@ -108,10 +108,6 @@ class CustomAllAuthPasswordResetForm(AllAuthPasswordResetForm):
                 'password_reset_url': url,
                 'request': request,
             }
-            # if app_settings.AUTHENTICATION_METHOD != app_settings.AuthenticationMethod.EMAIL:
-            #     context['username'] = user_username(user)
-            # get_adapter(request).send_mail('account/email/password_reset_key',
-            #                                email, context)
         return self.cleaned_data['email']
 
 class CustomPasswordResetSerializer(PasswordResetSerializer):
@@ -125,8 +121,6 @@ class PasswordResetView(GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        # Create a serializer with request.data
-        print("hello")
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

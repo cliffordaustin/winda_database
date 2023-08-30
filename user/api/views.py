@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsUserProfile
-from .serializer import UserSerializer
+from .serializer import UserSerializer, RegisterSerializer
 from user.models import CustomUser
 
 from rest_framework.views import APIView
@@ -13,6 +13,8 @@ from rest_framework.generics import get_object_or_404
 from allauth.account.admin import EmailAddress
 from rest_framework.exceptions import APIException
 from rest_auth.views import LoginView
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 
 class UserProfileView(generics.ListAPIView):
@@ -43,6 +45,24 @@ class UserProfileDetailView(generics.RetrieveUpdateAPIView):
         user = self.request.user.email
 
         return CustomUser.objects.filter(email=user)
+    
+
+class CreateUserView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.save(request, invitation=True)
+
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response(
+            {"key": token.key},
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class EmailConfirmation(APIView):
@@ -71,7 +91,6 @@ class EmailConfirmation(APIView):
                     },
                     status=status.HTTP_403_FORBIDDEN,
                 )
-
 
 class CheckEmailConfirmation(APIView):
     permission_classes = [AllowAny]

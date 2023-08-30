@@ -6,6 +6,10 @@ from rest_framework import serializers
 from user.models import CustomUser
 from mixpanel import Mixpanel
 from django.conf import settings
+from allauth.account.admin import EmailAddress
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework import status
 
 import os
 
@@ -94,7 +98,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "email": self.validated_data.get("email", ""),
         }
 
-    def save(self, request):
+    def save(self, request, invitation=False):
         adapter = get_adapter()
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
@@ -103,8 +107,17 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.profile_pic = self.cleaned_data.get("profile_pic")
         user.is_partner = self.cleaned_data.get("is_partner")
         user.is_agent = self.cleaned_data.get("is_agent")
+        user.set_password(self.cleaned_data.get("password1"))
         setup_user_email(request, user, [])
         user.save()
+
+        if invitation:
+            email_address = EmailAddress.objects.get(
+                user=user
+            )
+
+            email_address.verified = True
+            email_address.save()
 
         if settings.DEBUG is not True:
             mp.alias(user.email, user.email)

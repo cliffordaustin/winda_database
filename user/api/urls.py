@@ -5,6 +5,7 @@ from .views import (
     EmailConfirmation,
     CheckEmailConfirmation,
     AgentsListView,
+    CreateUserView,
 )
 
 urlpatterns = [
@@ -21,4 +22,6 @@ urlpatterns = [
         CheckEmailConfirmation.as_view(),
         name="check-email-confirmation",
     ),
+
+    path("user/registration/create/", CreateUserView.as_view(), name="create-user"),
 ]
