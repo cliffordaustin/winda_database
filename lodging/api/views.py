@@ -33,6 +33,11 @@ class StaysCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        stay = serializer.save(user=self.request.user)
+        property_access = PropertyAccess.objects.get_or_create(
+            email=self.request.user.email,
+            stay=stay,
+        )
         serializer.save(user=self.request.user)
 
 
