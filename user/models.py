@@ -8,6 +8,23 @@ from core.utils import profile_image_thumbnail
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import Resize, ResizeToFill
+import uuid
+
+
+class AbstractBaseModel(models.Model):
+    """
+    Base abstract model, that has `uuid` instead of `id` and includes `created_at`, `updated_at` fields.
+    """
+
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField("Created at", auto_now_add=True)
+    updated_at = models.DateTimeField("Updated at", auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {self.uuid}>"
 
 
 class UserManger(BaseUserManager):
@@ -37,8 +54,13 @@ class UserManger(BaseUserManager):
         return user
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=255, unique=True)
+class CustomUser(AbstractBaseUser, AbstractBaseModel, PermissionsMixin):
+    email = models.EmailField(
+        max_length=255,
+        unique=True,
+        verbose_name="Email or Username",
+        help_text="This is either a user's email or aws cognito user id",
+    )
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     instagram_username = models.CharField(max_length=120, blank=True, null=True)

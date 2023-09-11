@@ -15,6 +15,23 @@ from rest_framework.exceptions import APIException
 from rest_auth.views import LoginView
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
+
+
+class UserProfileAPIView(RetrieveModelMixin, GenericAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def get_object(self):
+        return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        """
+        User profile
+        Get profile of current logged in user.
+        """
+        return self.retrieve(request, *args, **kwargs)
 
 
 class UserProfileView(generics.ListAPIView):

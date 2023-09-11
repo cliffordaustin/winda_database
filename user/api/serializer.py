@@ -28,18 +28,7 @@ def get_ip(request):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            "id",
-            "email",
-            "first_name",
-            "last_name",
-            "profile_pic",
-            "is_partner",
-            "is_agent",
-            "avatar_url",
-            "instagram_username",
-            "tiktok_username",
-        ]
+        fields = "__all__"
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -112,9 +101,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         if invitation:
-            email_address = EmailAddress.objects.get(
-                user=user
-            )
+            email_address = EmailAddress.objects.get(user=user)
 
             email_address.verified = True
             email_address.save()

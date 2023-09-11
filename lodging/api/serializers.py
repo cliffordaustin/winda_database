@@ -237,18 +237,31 @@ class RoomTypeDetailSerializer(serializers.ModelSerializer):
 
 class AgentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = Agents
         exclude = ["stay"]
 
+
 class AgentByEmailSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = AgentsByEmail
         exclude = ["stay"]
 
+
+class AgentDiscountRateSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = AgentDiscountRate
+        exclude = ["stay"]
+
+
 class PropertyAccessSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = PropertyAccess
         exclude = ["stay"]
@@ -272,8 +285,6 @@ class PartnerStaySerializer(serializers.ModelSerializer):
             "activity_fees",
             "other_fees_resident",
             "other_fees_non_resident",
-            "agents",
-            "agents_by_email",
             "stay_images",
             "lodge_price_data_pdf",
         ]
@@ -293,15 +304,13 @@ class LodgeStaySerializer(serializers.ModelSerializer):
             "property_name",
             "location",
             "stay_images",
-            "agents",
-            "agents_by_email",
             "lodge_price_data_pdf",
             "number_of_agents",
         ]
-    
+
     def get_number_of_agents(self, instance):
-        return instance.agents.count() + instance.agents_by_email.count()
-    
+        return instance.agent_access.count()
+
 
 class DetailStaySerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
@@ -317,9 +326,9 @@ class DetailStaySerializer(serializers.ModelSerializer):
             "location",
             "stay_images",
             "in_homepage",
-            "has_options"
+            "has_options",
         ]
-    
+
 
 class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
@@ -336,18 +345,18 @@ class LodgeStayWaitingForApprovalSerializer(serializers.ModelSerializer):
             "property_name",
             "location",
             "stay_images",
-            "agents",
-            "agents_by_email",
             "lodge_price_data_pdf",
             "agent_access_request_made",
             "agent_access_request_approved",
         ]
-    
+
     def get_agent_access_request_made(self, instance):
-        return instance.agents.filter(user=self.context['request'].user).exists()
-    
+        return instance.agent_access.filter(user=self.context["request"].user).exists()
+
     def get_agent_access_request_approved(self, instance):
-        return instance.agents.filter(user=self.context['request'].user, approved=True).exists()
+        return instance.agent_access.filter(
+            user=self.context["request"].user, approved=True
+        ).exists()
 
 
 class DetailStayWithAmenitiesSerializer(serializers.ModelSerializer):
@@ -392,8 +401,7 @@ class DetailStayWithAmenitiesSerializer(serializers.ModelSerializer):
             "all_inclusive",
             "facts",
             "inclusions",
-
-            #Amenities
+            # Amenities
             "swimming_pool",
             "hot_tub",
             "sauna",

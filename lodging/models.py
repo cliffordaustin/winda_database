@@ -371,18 +371,12 @@ class Stays(models.Model):
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
     )
-    
+
     in_homepage = models.BooleanField(default=False)
     has_options = models.BooleanField(default=False)
     is_partner_property = models.BooleanField(default=False)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(auto_now=True)
-    agents = models.ManyToManyField(
-        'Agents', blank=True, related_name="agents"
-    )
-    agents_by_email = models.ManyToManyField(
-        'AgentsByEmail', blank=True, related_name="agents_by_email"
-    )
 
     def __str__(self):
         return f"{self.user} - {self.property_name} - {self.name}"
@@ -397,20 +391,25 @@ class PropertyAccess(models.Model):
     stay = models.ForeignKey(
         Stays, on_delete=models.CASCADE, related_name="property_access"
     )
+    invitation_code = models.CharField(max_length=250, blank=True, null=True)
+    accepted_invite = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.email} - {self.stay}"
-    
+
     class Meta:
         verbose_name = "Property Access"
         verbose_name_plural = "Property Access"
-    
+
 
 class AgentsByEmail(models.Model):
     email = models.EmailField(max_length=250, blank=True, null=True)
     stay = models.ForeignKey(
         Stays, on_delete=models.CASCADE, related_name="agents_email"
     )
+    contract_rate = models.FloatField(blank=True, null=True)
+    invitation_code = models.CharField(max_length=250, blank=True, null=True)
+    accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.email} - {self.stay}"
@@ -418,6 +417,23 @@ class AgentsByEmail(models.Model):
     class Meta:
         verbose_name = "Agent By Email"
         verbose_name_plural = "Agents By Email"
+
+
+class AgentDiscountRate(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    stay = models.ForeignKey(
+        Stays, on_delete=models.CASCADE, related_name="agent_discount_rate"
+    )
+    percentage = models.FloatField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.stay} - {self.percentage}"
+
+    class Meta:
+        verbose_name = "Agent Discount Rate"
+        verbose_name_plural = "Agent Discount Rates"
 
 
 class Agents(models.Model):
@@ -435,6 +451,7 @@ class Agents(models.Model):
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
     )
+    contract_rate = models.FloatField(blank=True, null=True)
     approved = models.BooleanField(default=False)
 
     def __str__(self):

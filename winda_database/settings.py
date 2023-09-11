@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import json
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,10 +90,49 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    "DEFAULT_PERMISSION_CLASSES": ("core.api.permissions.DenyAny",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+    ),
 }
+
+
+COGNITO_AWS_REGION = "eu-west-2"
+COGNITO_USER_POOL = "eu-west-2_yuwnSe3Jo"
+COGNITO_AUDIENCE = None
+COGNITO_POOL_URL = (
+    None  # will be set few lines of code later, if configuration provided
+)
+
+rsa_keys = {}
+
+if COGNITO_AWS_REGION and COGNITO_USER_POOL:
+    COGNITO_POOL_URL = (
+        f"https://cognito-idp.{COGNITO_AWS_REGION}.amazonaws.com/{COGNITO_USER_POOL}"
+    )
+    pool_jwks_url = f"{COGNITO_POOL_URL}/.well-known/jwks.json"
+
+    try:
+        response = requests.get(pool_jwks_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors (e.g., 404)
+
+        rsa_keys = response.json()
+        rsa_keys = {key["kid"]: json.dumps(key) for key in rsa_keys["keys"]}
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that might occur during the HTTP request.
+        print(f"Error fetching JWKS from Cognito: {str(e)}")
+
+
+JWT_AUTH = {
+    "JWT_PAYLOAD_GET_USERNAME_HANDLER": "core.api.jwt.get_username_from_payload_handler",
+    "JWT_DECODE_HANDLER": "core.api.jwt.cognito_jwt_decode_handler",
+    "JWT_PUBLIC_KEY": rsa_keys,
+    "JWT_ALGORITHM": "RS256",
+    "JWT_AUDIENCE": COGNITO_AUDIENCE,
+    "JWT_ISSUER": COGNITO_POOL_URL,
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -100,6 +141,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -144,8 +186,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "winda_database.wsgi.application"
 
 AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.RemoteUserBackend",
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 AUTH_USER_MODEL = "user.CustomUser"

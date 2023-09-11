@@ -4,11 +4,51 @@ from .views import *
 
 urlpatterns = [
     path("stays/", StaysListView.as_view(), name="stays-list"),
-    path("stays/<slug>/update-agents/", UserStayEmailUpdateAgentsView.as_view(), name="stays-update-agents"),
-    path("stays/<slug>/update-agents-email/", AddAgentToStayView.as_view(), name="stays-update-agents-email"),
-    path("stays/<slug>/update-property-access/", PropertyAccessCreateView.as_view(), name="stays-update-property-access"),
-    path("stays/<slug>/update-agents-with-file/", UserStayEmailUpdateAgentsWithFileView.as_view(), name="stays-update-agents-with-file"),
-    path("stays/<slug>/remove-agent/", UserStayEmailRemoveAgentsView.as_view(), name="stays-remove-agent"),
+    path(
+        "stays/<slug>/update-agents/",
+        UserStayEmailUpdateAgentsView.as_view(),
+        name="stays-update-agents",
+    ),
+    path(
+        "stays/<slug>/agent-discounts/",
+        AgentDiscountRateListCreateView.as_view(),
+        name="agent-discount-rate-list-create",
+    ),
+    path(
+        "stays/<slug>/agent-discounts/<int:pk>/",
+        AgentDiscountRateDetailView.as_view(),
+        name="agent-discount-rate-detail-view",
+    ),
+    path(
+        "stays/<slug>/update-agents-email/",
+        AddAgentToStayView.as_view(),
+        name="stays-update-agents-email",
+    ),
+    path(
+        "stays/<slug>/update-property-access/",
+        PropertyAccessCreateView.as_view(),
+        name="stays-update-property-access",
+    ),
+    path(
+        "stays/<slug>/update-agents-with-file/",
+        UserStayEmailUpdateAgentsWithFileView.as_view(),
+        name="stays-update-agents-with-file",
+    ),
+    path(
+        "remove-agent/<int:pk>/",
+        UserStayEmailRemoveAgentsView.as_view(),
+        name="stays-remove-agent",
+    ),
+    path(
+        "add-agent-from-invite/",
+        AddAgentFromInviteView.as_view(),
+        name="add-agent-from-invite",
+    ),
+    path(
+        "accept-property-invite/",
+        AcceptPropertyInviteView.as_view(),
+        name="accept-property-invite",
+    ),
     path(
         "highlighted-stays/",
         HighlightedStaysListView.as_view(),
@@ -266,7 +306,11 @@ urlpatterns = [
         PropertyAccessDetailView.as_view(),
         name="property-access-detail",
     ),
-    path("agent-access/<int:pk>/", AgentAccessDetailView.as_view(), name="agent-access-detail"),
+    path(
+        "agent-access/<int:pk>/",
+        AgentAccessDetailView.as_view(),
+        name="agent-access-detail",
+    ),
     path(
         "user-stays-email/<slug>/",
         UserStaysEmailDetailView.as_view(),
@@ -283,13 +327,19 @@ urlpatterns = [
         name="partner-stays-list",
     ),
     path(
-        "agent-access-by-email/<int:pk>/", AgentAccessByEmailDetailView.as_view(), name="agent-access-by-email-detail"
+        "agent-access-by-email/<int:pk>/",
+        AgentAccessByEmailDetailView.as_view(),
+        name="agent-access-by-email-detail",
     ),
     path(
-        "agent-access-by-email/check-email/", CheckAgentByEmailExistsView.as_view(), name="check-agent-by-email-exists"
+        "agent-access-by-email/check-invitation/",
+        CheckAgentByEmailExistsView.as_view(),
+        name="check-agent-by-email-exists",
     ),
     path(
-        "property-access/check-email/", CheckPropertyAccessExistsView.as_view(), name="check-property-access-exists"
+        "property-access/check-invitation/",
+        CheckPropertyAccessExistsView.as_view(),
+        name="check-property-access-exists",
     ),
     path(
         "partner-stays/<list_ids>/",
