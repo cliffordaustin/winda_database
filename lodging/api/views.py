@@ -148,7 +148,7 @@ class UserStaysEmail(generics.ListAPIView):
             .select_related("user")
             .prefetch_related(
                 "stay_images",
-            )
+            ).distinct()
         )
 
 
