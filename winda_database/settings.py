@@ -97,8 +97,8 @@ REST_FRAMEWORK = {
 }
 
 
-COGNITO_AWS_REGION = "eu-west-2"
-COGNITO_USER_POOL = "eu-west-2_yuwnSe3Jo"
+COGNITO_AWS_REGION = os.environ.get("COGNITO_AWS_REGION")
+COGNITO_USER_POOL = os.environ.get("COGNITO_USER_POOL")
 COGNITO_AUDIENCE = None
 COGNITO_POOL_URL = (
     None  # will be set few lines of code later, if configuration provided
