@@ -293,6 +293,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
 class LodgeStaySerializer(serializers.ModelSerializer):
     stay_images = StayImageSerializer(many=True, read_only=True)
     number_of_agents = serializers.SerializerMethodField()
+    has_property_access = serializers.SerializerMethodField()
 
     class Meta:
         model = Stays
@@ -306,10 +307,20 @@ class LodgeStaySerializer(serializers.ModelSerializer):
             "stay_images",
             "lodge_price_data_pdf",
             "number_of_agents",
+            "has_property_access",
         ]
 
     def get_number_of_agents(self, instance):
         return instance.agent_access.count()
+
+    def get_has_property_access(self, instance):
+        request = self.context.get("request")
+        return (
+            instance.property_access.filter(email=request.user.email).exists()
+            or instance.user == request.user
+            or instance.agents_email.filter(email=request.user.email).exists()
+            or instance.agent_access.filter(user=request.user, approved=True).exists()
+        )
 
 
 class DetailStaySerializer(serializers.ModelSerializer):

@@ -227,6 +227,44 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
         return queryset
 
 
+class CombinedPartnerStaysListView(generics.ListAPIView):
+    serializer_class = LodgeStaySerializer
+    ordering_fields = ["date_posted"]
+    pagination_class = PartnerStayPagination
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        search_query = self.request.GET.get("search", "")
+        user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
+
+        queryset = (
+            Stays.objects.filter(
+                Q(location__icontains=search_query)
+                | Q(property_name__icontains=search_query),
+                is_partner_property=True,
+            )
+            .select_related("user")
+            .prefetch_related(
+                "stay_images",
+            )
+            .all()
+            .distinct()
+        )
+
+        queryset = sorted(
+            queryset,
+            key=lambda x: (
+                x.agent_access.filter(user=user).exists()
+                or x.agents_email.filter(email=user.email).exists()
+                or x.property_access.filter(email=user.email).exists()
+                or x.user == user
+            ),
+            reverse=True,
+        )
+
+        return queryset
+
+
 class PartnerStaysListView(generics.ListAPIView):
     serializer_class = LodgeStaySerializer
     ordering_fields = ["date_posted"]

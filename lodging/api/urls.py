@@ -327,6 +327,11 @@ urlpatterns = [
         name="partner-stays-list",
     ),
     path(
+        "all-partner-stays/",
+        CombinedPartnerStaysListView.as_view(),
+        name="all-partner-stays-list",
+    ),
+    path(
         "agent-access-by-email/<int:pk>/",
         AgentAccessByEmailDetailView.as_view(),
         name="agent-access-by-email-detail",
