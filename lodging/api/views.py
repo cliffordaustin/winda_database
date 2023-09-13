@@ -148,7 +148,8 @@ class UserStaysEmail(generics.ListAPIView):
             .select_related("user")
             .prefetch_related(
                 "stay_images",
-            ).distinct()
+            )
+            .distinct()
         )
 
 
@@ -650,12 +651,14 @@ class AddAgentFromInviteView(APIView):
             approved=True,
             stay=agent_by_email.stay,
             contract_rate=agent_by_email.contract_rate,
+            resident_contract_rate=agent_by_email.resident_contract_rate,
         )
 
         AgentDiscountRate.objects.create(
             user=self.request.user,
             stay=agent_by_email.stay,
             percentage=agent_by_email.contract_rate,
+            resident_percentage=agent_by_email.resident_contract_rate,
         )
         agent_by_email.accepted = True
         agent_by_email.save()
@@ -732,6 +735,7 @@ class AddAgentToStayView(generics.UpdateAPIView):
                 return
 
             invitation_code = uuid.uuid4()
+            resident_contract_rate = self.request.data.get("resident_contract_rate")
             encoded_email = self.request.data.get("encoded_email")
 
             agents_by_email = AgentsByEmail.objects.create(
@@ -739,6 +743,7 @@ class AddAgentToStayView(generics.UpdateAPIView):
                 stay=stay,
                 invitation_code=invitation_code,
                 contract_rate=contract_rate,
+                resident_contract_rate=resident_contract_rate,
             )
 
             activate_url = (

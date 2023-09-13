@@ -408,6 +408,7 @@ class AgentsByEmail(models.Model):
         Stays, on_delete=models.CASCADE, related_name="agents_email"
     )
     contract_rate = models.FloatField(blank=True, null=True)
+    resident_contract_rate = models.FloatField(blank=True, null=True)
     invitation_code = models.CharField(max_length=250, blank=True, null=True)
     accepted = models.BooleanField(default=False)
 
@@ -425,6 +426,7 @@ class AgentDiscountRate(models.Model):
         Stays, on_delete=models.CASCADE, related_name="agent_discount_rate"
     )
     percentage = models.FloatField(blank=True, null=True)
+    resident_percentage = models.FloatField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
 
@@ -452,6 +454,7 @@ class Agents(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
     )
     contract_rate = models.FloatField(blank=True, null=True)
+    resident_contract_rate = models.FloatField(blank=True, null=True)
     approved = models.BooleanField(default=False)
 
     def __str__(self):
