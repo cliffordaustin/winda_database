@@ -1202,10 +1202,10 @@ class RoomAvailabilityNonResidentView(ListBulkCreateUpdateDestroyAPIView):
         room_type_slug = self.kwargs.get("room_type_slug")
         room_type = generics.get_object_or_404(RoomType, slug=room_type_slug)
 
-        if not PropertyAccess.objects.filter(
-            stay=room_type.stay, email=self.request.user.email
-        ).exists():
-            raise PermissionDenied("You are not the owner of this stay")
+        # if not PropertyAccess.objects.filter(
+        #     stay=room_type.stay, email=self.request.user.email
+        # ).exists():
+        #     raise PermissionDenied("You are not the owner of this stay")
 
         # check if date already exists then delete it
         dates_to_delete = [data["date"] for data in self.request.data]
