@@ -168,10 +168,6 @@ class PartnerStaysDetailView(generics.ListAPIView):
         user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
         queryset = (
             Stays.objects.filter(
-                Q(agent_access__user=user, agent_access__approved=True)
-                | Q(agents_email__email=user.email)
-                | Q(property_access__email=user.email)
-                | Q(user=self.request.user),
                 is_partner_property=True,
                 id__in=list_ids,
             )
@@ -236,7 +232,10 @@ class CombinedPartnerStaysListView(generics.ListAPIView):
 
     def get_queryset(self):
         search_query = self.request.GET.get("search", "")
+        contracts = self.request.GET.get("contracts", "")
         user = generics.get_object_or_404(CustomUser, id=self.request.user.id)
+
+        approved_agents = Agents.objects.filter(approved=True, user=user)
 
         queryset = (
             Stays.objects.filter(
@@ -251,6 +250,14 @@ class CombinedPartnerStaysListView(generics.ListAPIView):
             .all()
             .distinct()
         )
+
+        if contracts == "1":
+            queryset = queryset.filter(
+                Q(agent_access__in=approved_agents)
+                | Q(agents_email__email=user.email)
+                | Q(property_access__email=user.email)
+                | Q(user=user),
+            ).distinct()
 
         queryset = sorted(
             queryset,
@@ -781,7 +788,14 @@ class AgentDiscountRateListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         stay_slug = self.kwargs.get("slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
-        return AgentDiscountRate.objects.filter(stay=stay, user=self.request.user)
+        queryset = AgentDiscountRate.objects.filter(
+            stay=stay, user=self.request.user
+        ).order_by("-start_date")
+
+        # # sort queryset by start_date
+        # queryset = sorted(queryset, key=lambda x: x.start_date, reverse=True)
+
+        return queryset
 
     def perform_create(self, serializer):
         stay_slug = self.kwargs.get("slug")
@@ -917,10 +931,10 @@ class RoomTypeListDetailView(generics.RetrieveUpdateDestroyAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
-        if not PropertyAccess.objects.filter(
-            stay=stay, email=self.request.user.email
-        ).exists():
-            raise PermissionDenied("You are not the owner of this stay")
+        # if not PropertyAccess.objects.filter(
+        #     stay=stay, email=self.request.user.email
+        # ).exists():
+        #     raise PermissionDenied("You are not the owner of this stay")
 
         queryset = RoomType.objects.filter(stay=stay)
 
