@@ -5,6 +5,7 @@ from .serializers import *
 from recommended_trip.models import *
 from .pagination import TripPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django.db.models import Q
 import re
@@ -13,6 +14,7 @@ import re
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TripSerializer
     lookup_field = "slug"
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = SingleTrip.objects.all()
@@ -28,6 +30,7 @@ class TripListView(generics.ListCreateAPIView):
     filterset_class = RecommendedTripFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = TripPagination
+    permission_classes = [AllowAny]
 
     ordering_fields = [
         "name",
@@ -64,6 +67,7 @@ class AllTripsListView(generics.ListAPIView):
         "created_at",
     ]
     ordering = ["price_non_resident"]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = SingleTrip.objects.filter(is_active=True)
@@ -85,11 +89,13 @@ class AllTripsListView(generics.ListAPIView):
 class RequestCustomTripListCreatView(generics.ListCreateAPIView):
     serializer_class = RequestCustomTripSerializer
     queryset = RequestCustomTrip.objects.all()
+    permission_classes = [AllowAny]
 
 
 class RequestInfoListCreatView(generics.ListCreateAPIView):
     serializer_class = RequestInfoSerializer
     queryset = RequestInfo.objects.all()
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         trip_slug = self.kwargs.get("slug")

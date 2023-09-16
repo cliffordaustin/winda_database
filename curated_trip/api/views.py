@@ -11,13 +11,15 @@ import re
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from anymail.message import EmailMessage
+
 
 # curated trip views
 class CuratedTripDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CuratedTripSerializer
     lookup_field = "slug"
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = CuratedTrip.objects.all()
@@ -32,6 +34,7 @@ class CuratedTripListView(generics.ListCreateAPIView):
     serializer_class = CuratedTripSerializer
     filterset_class = RecommendedTripFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    permission_classes = [AllowAny]
 
     ordering_fields = [
         "name",
@@ -57,6 +60,7 @@ class CuratedTripListView(generics.ListCreateAPIView):
 
 class LocationListView(generics.ListAPIView):
     serializer_class = CuratedTripLocationsSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         trip_slug = self.kwargs.get("trip_slug")
@@ -67,6 +71,7 @@ class LocationListView(generics.ListAPIView):
 class BookedTripCreateAPIView(generics.CreateAPIView):
     queryset = BookedTrip.objects.all()
     serializer_class = BookedTripSerializer
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         trip_slug = self.kwargs.get("trip_slug")
@@ -120,6 +125,7 @@ class BookedTripCreateAPIView(generics.CreateAPIView):
 class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):
     serializer_class = RequestInfoOnCustomTripSerializer
     queryset = RequestInfoOnCustomTrip.objects.all()
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         trip_slug = self.kwargs.get("slug")
@@ -131,6 +137,7 @@ class RequestInfoOnCustomTripListCreatView(generics.ListCreateAPIView):
 class EbookEmailCreateView(generics.CreateAPIView):
     serializer_class = EbookEmailSerializer
     queryset = EbookEmail.objects.all()
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         if EbookEmail.objects.filter(email=self.request.data["email"]).exists():
@@ -144,6 +151,7 @@ class EbookEmailCreateView(generics.CreateAPIView):
 class TripWizardCreateView(generics.CreateAPIView):
     serializer_class = TripWizardSerializer
     queryset = TripWizard.objects.all()
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         serializer.save()
