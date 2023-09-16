@@ -360,6 +360,7 @@ class AgentAccessDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class HiglighedDetailStayListView(generics.ListAPIView):
     serializer_class = DetailStaySerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return (
@@ -374,6 +375,7 @@ class HiglighedDetailStayListView(generics.ListAPIView):
 class HiglighedDetailStayRetrieveView(generics.RetrieveAPIView):
     serializer_class = DetailStayWithAmenitiesSerializer
     lookup_field = "slug"
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         slug = self.kwargs.get("slug")
@@ -1661,6 +1663,7 @@ class OrderCreateView(generics.CreateAPIView):
 class EventCreateView(generics.CreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         stay_slug = self.kwargs.get("stay_slug")
@@ -1711,6 +1714,7 @@ class EventCreateView(generics.CreateAPIView):
 class LodgePackageBookingCreateView(generics.CreateAPIView):
     queryset = LodgePackageBooking.objects.all()
     serializer_class = LodgePackageBookingSerializer
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         stay_slug = self.kwargs.get("stay_slug")
