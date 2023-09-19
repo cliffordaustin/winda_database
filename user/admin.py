@@ -52,7 +52,7 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ("first_name", "last_name", "primary_email", "is_admin")
+    list_display = ("first_name", "last_name", "primary_email", "email", "is_admin")
     list_filter = ("is_admin", "is_superuser")
     fieldsets = (
         (
