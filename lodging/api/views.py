@@ -140,7 +140,7 @@ class UserStaysEmail(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        email = self.request.user.email
+        email = self.request.user.primary_email
         return (
             Stays.objects.filter(
                 Q(property_access__email=email) | Q(user=self.request.user)
@@ -200,7 +200,9 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
 
         approved_agents = Agents.objects.filter(approved=True, user=user)
 
-        approved_agents_by_email = AgentsByEmail.objects.filter(email=user.email)
+        approved_agents_by_email = AgentsByEmail.objects.filter(
+            email=user.primary_email
+        )
 
         queryset = (
             Stays.objects.filter(
@@ -211,7 +213,7 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
             .exclude(
                 Q(agent_access__in=approved_agents)
                 | Q(agents_email__in=approved_agents_by_email)
-                | Q(property_access__email=user.email)
+                | Q(property_access__email=user.primary_email)
                 | Q(user=user),
             )
             .select_related("user")
@@ -255,7 +257,7 @@ class CombinedPartnerStaysListView(generics.ListAPIView):
             queryset = queryset.filter(
                 Q(agent_access__in=approved_agents)
                 | Q(agents_email__email=user.email)
-                | Q(property_access__email=user.email)
+                | Q(property_access__email=user.primary_email)
                 | Q(user=user),
             ).distinct()
 
@@ -264,7 +266,7 @@ class CombinedPartnerStaysListView(generics.ListAPIView):
             key=lambda x: (
                 x.agent_access.filter(user=user).exists()
                 or x.agents_email.filter(email=user.email).exists()
-                or x.property_access.filter(email=user.email).exists()
+                or x.property_access.filter(email=user.primary_email).exists()
                 or x.user == user
             ),
             reverse=True,
@@ -492,11 +494,11 @@ class UserAgentAccessByEmailListView(generics.ListAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         for obj in AgentsByEmail.objects.filter(stay=stay):
-            if CustomUser.objects.filter(email=obj.email).exists():
+            if CustomUser.objects.filter(primary_email=obj.email).exists():
                 user_qs.append(
                     {
                         "id": obj.id,
-                        "user": CustomUser.objects.get(email=obj.email),
+                        "user": CustomUser.objects.get(primary_email=obj.email),
                     }
                 )
 
@@ -513,13 +515,13 @@ class PropertyAccessListView(generics.ListAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         for obj in PropertyAccess.objects.filter(stay=stay).exclude(
-            email=stay.user.email
+            email=stay.user.primary_email
         ):
-            if CustomUser.objects.filter(email=obj.email).exists():
+            if CustomUser.objects.filter(primary_email=obj.email).exists():
                 user_qs.append(
                     {
                         "id": obj.id,
-                        "user": CustomUser.objects.get(email=obj.email),
+                        "user": CustomUser.objects.get(primary_email=obj.email),
                     }
                 )
 
@@ -536,7 +538,7 @@ class ProperyAccessNotVerifiedListView(generics.ListAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         for obj in PropertyAccess.objects.filter(stay=stay):
-            if not CustomUser.objects.filter(email=obj.email).exists():
+            if not CustomUser.objects.filter(primary_email=obj.email).exists():
                 user_qs.append(obj)
 
         return user_qs
@@ -552,7 +554,7 @@ class UserAgentAccessByEmailNotVerifiedListView(generics.ListAPIView):
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
 
         for obj in AgentsByEmail.objects.filter(stay=stay, accepted=False):
-            if not CustomUser.objects.filter(email=obj.email).exists():
+            if not CustomUser.objects.filter(primary_email=obj.email).exists():
                 user_qs.append(obj)
 
         return user_qs
@@ -605,7 +607,7 @@ class PropertyAccessCreateView(generics.CreateAPIView):
             return
 
         else:
-            if not CustomUser.objects.filter(email=email).exists():
+            if not CustomUser.objects.filter(primary_email=email).exists():
                 invitation_code = uuid.uuid4()
                 encoded_email = self.request.data.get("encoded_email")
 
@@ -692,7 +694,7 @@ class AcceptPropertyInviteView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         property_access.accepted_invite = True
-        property_access.email = self.request.user.email
+        property_access.email = self.request.user.primary_email
         property_access.save()
         return Response(
             {"message": "Property added successfully"}, status=status.HTTP_200_OK
@@ -723,20 +725,25 @@ class AddAgentToStayView(generics.UpdateAPIView):
         email = self.request.data.get("email")
         contract_rate = self.request.data.get("contract_rate")
         contract_rate = float(contract_rate)
+        resident_contract_rate = self.request.data.get("resident_contract_rate")
 
         if (
-            CustomUser.objects.filter(email=email).exists()
-            and stay.agents.filter(user__email=email).exists() != True
+            CustomUser.objects.filter(primary_email=email).exists()
+            and Agents.objects.filter(user__primary_email=email).exists() != True
         ):
-            user = generics.get_object_or_404(CustomUser, email=email)
+            user = generics.get_object_or_404(CustomUser, primary_email=email)
             agent = Agents.objects.create(
-                user=user, stay=stay, approved=True, contract_rate=contract_rate
+                user=user,
+                stay=stay,
+                approved=True,
+                contract_rate=contract_rate,
+                resident_contract_rate=resident_contract_rate,
             )
             instance.save()
             return instance
         elif (
             CustomUser.objects.filter(email=email).exists()
-            and stay.agents.filter(user__email=email).exists() == True
+            and Agents.objects.filter(user__primary_email=email).exists() == True
         ):
             return
         else:
@@ -744,7 +751,7 @@ class AddAgentToStayView(generics.UpdateAPIView):
                 return
 
             invitation_code = uuid.uuid4()
-            resident_contract_rate = self.request.data.get("resident_contract_rate")
+
             encoded_email = self.request.data.get("encoded_email")
 
             agents_by_email = AgentsByEmail.objects.create(

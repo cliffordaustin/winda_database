@@ -6,7 +6,8 @@ from .views import (
     CheckEmailConfirmation,
     AgentsListView,
     CreateUserView,
-    UserProfileAPIView
+    UserProfileAPIView,
+    UpdateUserProfileAPIView,
 )
 
 urlpatterns = [
@@ -23,7 +24,11 @@ urlpatterns = [
         CheckEmailConfirmation.as_view(),
         name="check-email-confirmation",
     ),
-
     path("user/registration/create/", CreateUserView.as_view(), name="create-user"),
-    path('user-profile/', UserProfileAPIView.as_view(), name='user-profile'),
+    path("user-profile/", UserProfileAPIView.as_view(), name="user-profile"),
+    path(
+        "update-userprofile/",
+        UpdateUserProfileAPIView.as_view(),
+        name="update-user",
+    ),
 ]

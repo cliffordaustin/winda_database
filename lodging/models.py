@@ -458,7 +458,7 @@ class Agents(models.Model):
     approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user} - {self.stay}"
+        return f"{self.user.primary_email} - {self.stay}"
 
     class Meta:
         verbose_name = "Agent Access"

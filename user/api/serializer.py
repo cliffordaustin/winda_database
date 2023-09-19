@@ -28,7 +28,17 @@ def get_ip(request):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        exclude = [
+            "password",
+            "last_login",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+            "groups",
+            "user_permissions",
+            "created_at",
+            "updated_at",
+        ]
 
 
 class RegisterSerializer(serializers.ModelSerializer):

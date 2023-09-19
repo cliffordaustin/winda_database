@@ -52,10 +52,21 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ("first_name", "last_name", "email", "is_admin")
+    list_display = ("first_name", "last_name", "primary_email", "is_admin")
     list_filter = ("is_admin", "is_superuser")
     fieldsets = (
-        (None, {"fields": ("email", "password", "first_name", "last_name")}),
+        (
+            None,
+            {
+                "fields": (
+                    "email",
+                    "primary_email",
+                    "password",
+                    "first_name",
+                    "last_name",
+                )
+            },
+        ),
         (
             "Personal info",
             {"fields": ["profile_pic", "instagram_username", "tiktok_username"]},
@@ -86,6 +97,7 @@ class UserAdmin(BaseUserAdmin):
                     "instagram_username",
                     "tiktok_username",
                     "email",
+                    "primary_email",
                     "profile_pic",
                     "password1",
                     "password2",
@@ -99,8 +111,8 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    search_fields = ("email", "first_name", "last_name")
-    ordering = ("email", "first_name", "last_name", "email_verified")
+    search_fields = ("email", "primary_email", "first_name", "last_name")
+    ordering = ("email", "primary_email", "first_name", "last_name", "email_verified")
     filter_horizontal = ()
 
 

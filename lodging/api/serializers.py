@@ -294,7 +294,7 @@ class PartnerStaySerializer(serializers.ModelSerializer):
     def get_has_property_access(self, instance):
         request = self.context.get("request")
         return (
-            instance.property_access.filter(email=request.user.email).exists()
+            instance.property_access.filter(email=request.user.primary_email).exists()
             or instance.user == request.user
             or instance.agents_email.filter(email=request.user.email).exists()
             or instance.agent_access.filter(user=request.user, approved=True).exists()
@@ -327,7 +327,7 @@ class LodgeStaySerializer(serializers.ModelSerializer):
     def get_has_property_access(self, instance):
         request = self.context.get("request")
         return (
-            instance.property_access.filter(email=request.user.email).exists()
+            instance.property_access.filter(email=request.user.primary_email).exists()
             or instance.user == request.user
             or instance.agents_email.filter(email=request.user.email).exists()
             or instance.agent_access.filter(user=request.user, approved=True).exists()

@@ -61,6 +61,9 @@ class CustomUser(AbstractBaseUser, AbstractBaseModel, PermissionsMixin):
         verbose_name="Email or Username",
         help_text="This is either a user's email or aws cognito user id",
     )
+    primary_email = models.EmailField(
+        max_length=255, blank=True, null=True, verbose_name="Primary Email"
+    )
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     instagram_username = models.CharField(max_length=120, blank=True, null=True)
