@@ -1,11 +1,13 @@
 from rest_framework import generics
 from .serializers import *
 from blog.models import *
+from rest_framework.permissions import AllowAny
 
 
 class BlogDetailView(generics.RetrieveAPIView):
     serializer_class = BlogSerializer
     lookup_field = "slug"
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Blog.objects.filter(is_active=True)
@@ -18,6 +20,7 @@ class BlogDetailView(generics.RetrieveAPIView):
 
 class BlogListView(generics.ListAPIView):
     serializer_class = BlogSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return Blog.objects.filter(is_active=True).order_by("-id")

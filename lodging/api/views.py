@@ -44,7 +44,7 @@ class StaysCreateView(generics.CreateAPIView):
 
 class StaysDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StaysSerializer
-    permission_classes = [ObjectPermission]
+    permission_classes = [AllowAny]
     lookup_field = "slug"
 
     def get_queryset(self):
@@ -72,6 +72,7 @@ class StaysListView(generics.ListAPIView):
         "bathrooms",
     ]
     pagination_class = StayPagination
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Stays.objects.filter(
@@ -143,7 +144,8 @@ class UserStaysEmail(generics.ListAPIView):
         email = self.request.user.primary_email
         return (
             Stays.objects.filter(
-                Q(property_access__email=email) | Q(user=self.request.user), is_partner_property=True,
+                Q(property_access__email=email) | Q(user=self.request.user),
+                is_partner_property=True,
             )
             .select_related("user")
             .prefetch_related(
@@ -1425,6 +1427,7 @@ class AllStaysListView(generics.ListAPIView):
         "bathrooms",
     ]
     ordering = []
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Stays.objects.filter(
@@ -1515,6 +1518,7 @@ class ReviewListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = ["date_posted", "rate"]
     pagination_class = Pagination
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Review.objects.all()
@@ -1530,6 +1534,7 @@ class ReviewListView(generics.ListAPIView):
 class CreateStayViews(generics.CreateAPIView):
     serializer_class = StayViewsSerializer
     queryset = Views.objects.all()
+    permission_classes = [AllowAny]
 
     def get_user_ip(self, request):
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
