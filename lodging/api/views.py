@@ -143,7 +143,7 @@ class UserStaysEmail(generics.ListAPIView):
         email = self.request.user.primary_email
         return (
             Stays.objects.filter(
-                Q(property_access__email=email) | Q(user=self.request.user)
+                Q(property_access__email=email) | Q(user=self.request.user), is_partner_property=True,
             )
             .select_related("user")
             .prefetch_related(
