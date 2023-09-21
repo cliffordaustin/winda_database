@@ -141,10 +141,11 @@ class UserStaysEmail(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        email = self.request.user.primary_email
         return (
             Stays.objects.filter(
-                Q(property_access__email=email) | Q(user=self.request.user),
+                Q(property_access__email=self.request.user.email)
+                | Q(property_access__email=self.request.user.primary_email)
+                | Q(user=self.request.user),
                 is_partner_property=True,
             )
             .select_related("user")
@@ -215,6 +216,7 @@ class PartnerStaysWithoutContractView(generics.ListAPIView):
             .exclude(
                 Q(agent_access__in=approved_agents)
                 | Q(agents_email__in=approved_agents_by_email)
+                | Q(property_access__email=user.email)
                 | Q(property_access__email=user.primary_email)
                 | Q(user=user),
             )
@@ -259,6 +261,7 @@ class CombinedPartnerStaysListView(generics.ListAPIView):
             queryset = queryset.filter(
                 Q(agent_access__in=approved_agents)
                 | Q(agents_email__email=user.email)
+                | Q(property_access__email=user.email)
                 | Q(property_access__email=user.primary_email)
                 | Q(user=user),
             ).distinct()
@@ -294,6 +297,7 @@ class PartnerStaysListView(generics.ListAPIView):
                 Q(agent_access__user=user, agent_access__approved=True)
                 | Q(agents_email__email=user.email)
                 | Q(property_access__email=user.email)
+                | Q(property_access__email=user.primary_email)
                 | Q(user=user),
                 is_partner_property=True,
             )
@@ -317,12 +321,14 @@ class UserStaysEmailDetailView(generics.RetrieveUpdateDestroyAPIView):
         slug = self.kwargs.get("slug")
 
         queryset = Stays.objects.filter(user=self.request.user, slug=slug)
-        email = self.request.user.email
+        email = self.request.user.primary_email
 
         if slug is not None:
             queryset = (
                 Stays.objects.filter(
-                    Q(property_access__email=email) | Q(user=self.request.user),
+                    Q(property_access__email=email)
+                    | Q(property_access__email=self.request.user.email)
+                    | Q(user=self.request.user),
                     slug=slug,
                 )
                 .select_related("user")
@@ -413,7 +419,11 @@ class UserStayEmailUpdateAgentsView(generics.UpdateAPIView):
 
         if slug is not None:
             queryset = (
-                Stays.objects.filter(slug=slug, property_access__email=email)
+                Stays.objects.filter(
+                    Q(property_access__email=self.request.user.email)
+                    | Q(property_access__email=self.request.user.primary_email),
+                    slug=slug,
+                )
                 .select_related("user")
                 .prefetch_related(
                     "stay_images",
@@ -790,6 +800,82 @@ class AddAgentToStayView(generics.UpdateAPIView):
 
             instance.save()
             return instance
+
+
+class ResendAgentInviteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, serializer):
+        agent_id = self.request.data.get("agent_id")
+        agent_id = int(agent_id)
+        agent_by_email = generics.get_object_or_404(AgentsByEmail, id=agent_id)
+        invitation_code = agent_by_email.invitation_code
+        encoded_email = self.request.data.get("encoded_email")
+
+        activate_url = (
+            f"http://localhost:3000/signin/agent/{invitation_code}/{encoded_email}"
+            if settings.DEBUG
+            else f"https://www.safaripricer.com/signin/agent/{invitation_code}/{encoded_email}"
+        )
+
+        message = EmailMessage(
+            to=(agent_by_email.email,),
+        )
+        message.template_id = "5032694"
+        message.from_email = None
+        message.merge_data = {
+            agent_by_email.email: {
+                "activate_url": activate_url,
+                "property_name": agent_by_email.stay.property_name,
+            },
+        }
+
+        message.merge_global_data = {
+            "activate_url": activate_url,
+            "property_name": agent_by_email.stay.property_name,
+        }
+        message.send(fail_silently=True)
+        return Response(
+            {"message": "Invitation resent successfully"}, status=status.HTTP_200_OK
+        )
+
+
+class ResendPropertyInviteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, serializer):
+        property_access_id = self.request.data.get("property_access_id")
+        property_access_id = int(property_access_id)
+        property_access = generics.get_object_or_404(
+            PropertyAccess, id=property_access_id
+        )
+        invitation_code = property_access.invitation_code
+        encoded_email = self.request.data.get("encoded_email")
+
+        activate_url = (
+            f"http://localhost:3000/signin/property/{invitation_code}/{encoded_email}"
+            if settings.DEBUG
+            else f"https://www.safaripricer.com/signin/property/{invitation_code}/{encoded_email}"
+        )
+
+        message = EmailMessage(
+            to=(property_access.email,),
+        )
+        message.template_id = "5044128"
+        message.from_email = None
+        message.merge_data = {
+            property_access.email: {
+                "activate_url": activate_url,
+            },
+        }
+
+        message.merge_global_data = {
+            "activate_url": activate_url,
+        }
+        message.send(fail_silently=True)
+        return Response(
+            {"message": "Invitation resent successfully"}, status=status.HTTP_200_OK
+        )
 
 
 class AgentDiscountRateListCreateView(generics.ListCreateAPIView):
@@ -1491,7 +1577,9 @@ class StayImageCreateView(generics.CreateAPIView):
         stay_slug = self.kwargs.get("stay_slug")
         stay = generics.get_object_or_404(Stays, slug=stay_slug)
         stay_queryset = Stays.objects.filter(
-            slug=stay_slug, property_access__email=self.request.user.email
+            Q(property_access__email=self.request.user.email)
+            | Q(property_access__email=self.request.user.primary_email),
+            slug=stay_slug,
         )
 
         if not stay_queryset.exists():

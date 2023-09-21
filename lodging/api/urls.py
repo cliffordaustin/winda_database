@@ -25,6 +25,16 @@ urlpatterns = [
         name="stays-update-agents-email",
     ),
     path(
+        "resend-agents-email/",
+        ResendAgentInviteView.as_view(),
+        name="resend-agents-email",
+    ),
+    path(
+        "resend-property-email/",
+        ResendPropertyInviteView.as_view(),
+        name="resend-property-email",
+    ),
+    path(
         "stays/<slug>/update-property-access/",
         PropertyAccessCreateView.as_view(),
         name="stays-update-property-access",
