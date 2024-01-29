@@ -28,7 +28,12 @@ SECRET_KEY = os.environ.get("WINDA_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("WINDA_DEBUG_VALUE") == "True"
 
-ALLOWED_HOSTS = ["winda-database.herokuapp.com", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "winda-database.herokuapp.com",
+    "127.0.0.1",
+    "localhost",
+    "172.20.10.5",
+]
 
 
 INSTALLED_APPS = [
@@ -151,6 +156,7 @@ if DEBUG:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "http://localhost:3001",
+        "http://172.20.10.5:3000",
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
